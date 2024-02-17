@@ -11,6 +11,11 @@ import {StyleSheet} from 'react-native';
 import * as eva from '@eva-design/eva';
 import {ApplicationProvider, Layout, Text} from '@ui-kitten/components';
 
+/*
+ * Branding...
+ */
+import {default as theme} from './affectsai-theme.json'; // <-- Import app theme
+import {default as mapping} from './affectsai-theme-mapping.json'; // <-- Import app mapping
 
 type SectionProps = PropsWithChildren<{
   title: string;
@@ -19,14 +24,15 @@ type SectionProps = PropsWithChildren<{
 function HomeScreen(): React.JSX.Element {
   return (
     <Layout style={styles.sectionTitle}>
-      <Text category="h1">HELLO</Text>
+      <Text category="h1">Welcome to UI Kitten</Text>
+      <Text>Welcome to UI Kitten</Text>
     </Layout>
   );
 }
 
 function App(): React.JSX.Element {
   return (
-    <ApplicationProvider {...eva} theme={eva.light}>
+    <ApplicationProvider {...eva} theme={{...eva.light, ...theme}} customMapping={mapping}>
       <HomeScreen />
     </ApplicationProvider>
   );
