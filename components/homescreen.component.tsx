@@ -8,6 +8,7 @@ import {
 } from '@ui-kitten/components';
 import {SafeAreaView, ImageProps, StyleSheet} from 'react-native';
 import {styles, HomeScreenNavigationProp} from './types.tsx';
+import {ThemeContext} from './theme-context.tsx';
 
 const HeartIcon = (
   props?: Partial<ImageProps>,
@@ -16,6 +17,8 @@ const HeartIcon = (
 export function HomeScreen({
   navigation,
 }: HomeScreenNavigationProp): React.JSX.Element {
+  const themeContext = React.useContext(ThemeContext);
+
   const navigateDetails = () => {
     navigation.navigate('Details');
   };
@@ -25,7 +28,15 @@ export function HomeScreen({
       <TopNavigation title="MyApp" alignment="center" />
       <Divider />
       <Layout style={styles.container}>
-        <Button onPress={navigateDetails} accessoryLeft={HeartIcon}>OPEN DETAILS</Button>
+        <Button
+          style={styles.button}
+          onPress={navigateDetails}
+          accessoryLeft={HeartIcon}>
+          Open Details
+        </Button>
+        <Button style={styles.button} onPress={themeContext.toggleTheme}>
+          Switch Theme
+        </Button>
       </Layout>
     </SafeAreaView>
   );

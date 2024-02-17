@@ -25,7 +25,7 @@ export const styles = StyleSheet.create({
   text: {
     textAlign: 'center',
   },
-  likeButton: {
+  button: {
     marginVertical: 16,
   },
 });
