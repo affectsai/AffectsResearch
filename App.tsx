@@ -6,10 +6,18 @@
  */
 
 import React from 'react';
-import {StyleSheet} from 'react-native';
+import {StyleSheet, ImageProps} from 'react-native';
 
 import * as eva from '@eva-design/eva';
-import {ApplicationProvider, Layout, Text} from '@ui-kitten/components';
+import {
+  ApplicationProvider,
+  Button,
+  Icon,
+  IconRegistry,
+  Layout,
+  Text,
+} from '@ui-kitten/components';
+import {EvaIconsPack} from '@ui-kitten/eva-icons';
 
 /*
  * Branding...
@@ -17,40 +25,51 @@ import {ApplicationProvider, Layout, Text} from '@ui-kitten/components';
 import {default as theme} from './affectsai-theme.json'; // <-- Import app theme
 import {default as mapping} from './affectsai-theme-mapping.json'; // <-- Import app mapping
 
-type SectionProps = PropsWithChildren<{
-  title: string;
-}>;
+/**
+ * Use any valid `name` property from eva icons (e.g `github`, or `heart-outline`)
+ * https://akveo.github.io/eva-icons
+ */
+const HeartIcon = (
+  props?: Partial<ImageProps>,
+): React.ReactElement<ImageProps> => <Icon {...props} name="heart" />;
 
 function HomeScreen(): React.JSX.Element {
   return (
-    <Layout style={styles.sectionTitle}>
+    <Layout style={styles.container}>
       <Text category="h1">Welcome to UI Kitten</Text>
       <Text>Welcome to UI Kitten</Text>
+      <Button style={styles.likeButton} accessoryLeft={HeartIcon}>
+        LIKE
+      </Button>
     </Layout>
   );
 }
 
 function App(): React.JSX.Element {
   return (
-    <ApplicationProvider {...eva} theme={{...eva.light, ...theme}} customMapping={mapping}>
-      <HomeScreen />
-    </ApplicationProvider>
+    <>
+      <IconRegistry icons={EvaIconsPack} />
+      <ApplicationProvider
+        {...eva}
+        theme={{...eva.light, ...theme}}
+        customMapping={mapping}>
+        <HomeScreen />
+      </ApplicationProvider>
+    </>
   );
 }
 
 const styles = StyleSheet.create({
-  sectionContainer: {
-    marginTop: 32,
-    paddingHorizontal: 24,
+  container: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
-  sectionTitle: {flex: 1, justifyContent: 'center', alignItems: 'center'},
-  sectionDescription: {
-    marginTop: 8,
-    fontSize: 18,
-    fontWeight: '400',
+  text: {
+    textAlign: 'center',
   },
-  highlight: {
-    fontWeight: '700',
+  likeButton: {
+    marginVertical: 16,
   },
 });
 
