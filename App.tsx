@@ -6,41 +6,25 @@
  */
 
 import React from 'react';
-import * as eva from '@eva-design/eva';
-import {ApplicationProvider, IconRegistry} from '@ui-kitten/components';
-import {EvaIconsPack} from '@ui-kitten/eva-icons';
+
 
 /*
- * Branding...
+ * Redux...
  */
-import {ThemeContext} from './components/theme-context.tsx';
-import {default as affectsai_theme} from './affectsai-theme.json'; // <-- Import app theme
-import {default as affectsai_mapping} from './affectsai-theme-mapping.json'; // <-- Import app mapping
+import { Provider } from 'react-redux';
+import store from './store';
 
 /*
  * screens
  */
-import {AppNavigator} from './components/navigation.component';
+import { MainComponent } from './components/main.component.tsx';
 
 function App(): React.JSX.Element {
-  const [theme, setTheme] = React.useState('light');
-
-  const toggleTheme = () => {
-    const nextTheme = theme === 'light' ? 'dark' : 'light';
-    setTheme(nextTheme);
-  };
-
   return (
     <>
-      <IconRegistry icons={EvaIconsPack} />
-      <ThemeContext.Provider value={{theme, toggleTheme}}>
-        <ApplicationProvider
-          {...eva}
-          theme={{...eva[theme], ...affectsai_theme}}
-          customMapping={affectsai_mapping}>
-          <AppNavigator />
-        </ApplicationProvider>
-      </ThemeContext.Provider>
+      <Provider store={store}>
+        <MainComponent />
+      </Provider>
     </>
   );
 }
