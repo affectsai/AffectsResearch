@@ -25,25 +25,10 @@ import {EvaIconsPack} from '@ui-kitten/eva-icons';
 import {default as theme} from './affectsai-theme.json'; // <-- Import app theme
 import {default as mapping} from './affectsai-theme-mapping.json'; // <-- Import app mapping
 
-/**
- * Use any valid `name` property from eva icons (e.g `github`, or `heart-outline`)
- * https://akveo.github.io/eva-icons
+/*
+ * screens
  */
-const HeartIcon = (
-  props?: Partial<ImageProps>,
-): React.ReactElement<ImageProps> => <Icon {...props} name="heart" />;
-
-function HomeScreen(): React.JSX.Element {
-  return (
-    <Layout style={styles.container}>
-      <Text category="h1">Welcome to UI Kitten</Text>
-      <Text>Welcome to UI Kitten</Text>
-      <Button style={styles.likeButton} accessoryLeft={HeartIcon}>
-        LIKE
-      </Button>
-    </Layout>
-  );
-}
+import {AppNavigator} from './components/navigation.component';
 
 function App(): React.JSX.Element {
   return (
@@ -53,24 +38,10 @@ function App(): React.JSX.Element {
         {...eva}
         theme={{...eva.light, ...theme}}
         customMapping={mapping}>
-        <HomeScreen />
+        <AppNavigator />
       </ApplicationProvider>
     </>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  text: {
-    textAlign: 'center',
-  },
-  likeButton: {
-    marginVertical: 16,
-  },
-});
 
 export default App;
