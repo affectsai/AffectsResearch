@@ -5,7 +5,7 @@
  * @format
  */
 
-import React, { useCallback } from "react";
+import React from "react";
 
 
 /*
@@ -18,29 +18,8 @@ import store from './store';
  * screens
  */
 import { MainComponent } from './components/main.component';
-import { useFonts } from "expo-font";
-import * as SplashScreen from "expo-splash-screen";
-import AppLoading from "expo-app-loading";
 
-SplashScreen.preventAutoHideAsync().then(()=>{console.log('ok');});
-
-
-function App(): React.JSX.Element | null {
-  const [fontsLoaded, fontError] = useFonts({
-    'Montserrat-SemiBold': require('./assets/fonts/Montserrat-SemiBold.ttf'),
-    'Montserrat-Regular': require('./assets/fonts/Montserrat-Regular.ttf'),
-  });
-  const onLayoutRootView = useCallback(async () => {
-    console.log('callback');
-    if (fontsLoaded || fontError) {
-      await SplashScreen.hideAsync();
-    }
-  }, [fontsLoaded, fontError]);
-
-  if (!fontsLoaded && !fontError) {
-    return <AppLoading/>;
-  }
-
+function App(): React.JSX.Element {
   return (
     <>
       <Provider store={store}>

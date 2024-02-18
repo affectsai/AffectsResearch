@@ -29,7 +29,7 @@ export function HomeScreen({
 
   return (
     <SafeAreaView style={{flex: 1}}>
-      <TopNavigation title="MyApp" alignment="center" />
+      <TopNavigation title="Affects Research" alignment="center" />
       <Divider />
       <Layout style={styles.container}>
         <Button

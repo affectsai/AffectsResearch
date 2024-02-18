@@ -17,8 +17,6 @@ const HomeNavigator = () => (
 
 export const AppNavigator = () => (
   <NavigationContainer>
-      <StatusBar/>
-
       <HomeNavigator />
   </NavigationContainer>
 );
