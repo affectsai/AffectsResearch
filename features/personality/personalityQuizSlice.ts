@@ -1,9 +1,8 @@
 import {createSlice} from "@reduxjs/toolkit";
-import * as eva from "@eva-design/eva";
 
 interface PersonalityQuizState {
   currentQuestion: number;
-  currentAnswers: (number|undefined)[];
+  currentAnswers: (number)[];
   // surveyQuestions: Map<number,string>;
 }
 
@@ -107,6 +106,69 @@ export const selectQuizAnswers = (state: { bigfive: PersonalityQuizState }) => s
 export const selectCurrentQuestion = (state: { bigfive: PersonalityQuizState }) => state.bigfive.currentQuestion;
 
 export const selectCurrentResponse = (state: { bigfive: PersonalityQuizState }) => state.bigfive.currentAnswers[state.bigfive.currentQuestion];
+
+const scaleScore = (x: number) => (x/10*4+1);
+const reverseScaleScore = (x: number) => {return 6 - scaleScore(x)};
+const score = ( x:number, reverse: boolean = false) => {
+  return reverse?reverseScaleScore(x):scaleScore(x);
+}
+
+export const selectExtraversionScore = (state: { bigfive: PersonalityQuizState }) => {
+  console.log('Scoring Extraversion')
+  return score(state.bigfive.currentAnswers[0]) +
+      score(state.bigfive.currentAnswers[5], true) +
+      score(state.bigfive.currentAnswers[10]) +
+      score(state.bigfive.currentAnswers[15]) +
+      score(state.bigfive.currentAnswers[20], true) +
+      score(state.bigfive.currentAnswers[25]) +
+      score(state.bigfive.currentAnswers[30], true) +
+      score(state.bigfive.currentAnswers[35]);
+}
+export const selectAgreeablenessScore = (state: { bigfive: PersonalityQuizState }) => {
+  return score(state.bigfive.currentAnswers[1], true) +
+      score(state.bigfive.currentAnswers[6], false ) +
+      score(state.bigfive.currentAnswers[11], true) +
+      score(state.bigfive.currentAnswers[16], false) +
+      score(state.bigfive.currentAnswers[21], false) +
+      score(state.bigfive.currentAnswers[26], true) +
+      score(state.bigfive.currentAnswers[31], false) +
+      score(state.bigfive.currentAnswers[33], true) +
+      score(state.bigfive.currentAnswers[41], false);
+}
+export const selectConscientiousnessScore = (state: { bigfive: PersonalityQuizState }) => {
+  return score(state.bigfive.currentAnswers[2], false) +
+      score(state.bigfive.currentAnswers[7], true ) +
+      score(state.bigfive.currentAnswers[12], false) +
+      score(state.bigfive.currentAnswers[17], true) +
+      score(state.bigfive.currentAnswers[22], true) +
+      score(state.bigfive.currentAnswers[27], false) +
+      score(state.bigfive.currentAnswers[32], false) +
+      score(state.bigfive.currentAnswers[37], false) +
+      score(state.bigfive.currentAnswers[42], true);
+}
+export const selectNeuroticismScore = (state: { bigfive: PersonalityQuizState }) => {
+  return score(state.bigfive.currentAnswers[3], false) +
+      score(state.bigfive.currentAnswers[8], true ) +
+      score(state.bigfive.currentAnswers[13], false) +
+      score(state.bigfive.currentAnswers[18], false) +
+      score(state.bigfive.currentAnswers[23], true) +
+      score(state.bigfive.currentAnswers[28], false) +
+      score(state.bigfive.currentAnswers[33], true) +
+      score(state.bigfive.currentAnswers[38], false)
+}
+export const selectOpennessScore = (state: { bigfive: PersonalityQuizState }) => {
+  return score(state.bigfive.currentAnswers[4], false) +
+      score(state.bigfive.currentAnswers[9], false ) +
+      score(state.bigfive.currentAnswers[14], false) +
+      score(state.bigfive.currentAnswers[19], false) +
+      score(state.bigfive.currentAnswers[24], false) +
+      score(state.bigfive.currentAnswers[29], false) +
+      score(state.bigfive.currentAnswers[34], true) +
+      score(state.bigfive.currentAnswers[39], false) +
+      score(state.bigfive.currentAnswers[40], true) +
+      score(state.bigfive.currentAnswers[43], false);
+}
+
 export default personalityQuizSlice.reducer;
 
 

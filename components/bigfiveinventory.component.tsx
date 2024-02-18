@@ -20,7 +20,11 @@ import {
     previousQuestion,
     selectQuizAnswers,
     selectCurrentQuestion,
-    selectCurrentResponse, surveyQuestions
+    selectCurrentResponse,
+    surveyQuestions,
+    selectExtraversionScore,
+    selectAgreeablenessScore,
+    selectConscientiousnessScore, selectNeuroticismScore, selectOpennessScore
 } from "../features/personality/personalityQuizSlice";
 
 const makeHeader = (title: string, description: string) => {
@@ -74,11 +78,17 @@ export function BigFiveInventoryScreen({
     const currentAnswers = useSelector(selectQuizAnswers);
     const currentResponse = useSelector(selectCurrentResponse);
 
+    const extraversion = useSelector(selectExtraversionScore)
+    const agreeableness = useSelector(selectAgreeablenessScore);
+    const conscientiousness = useSelector(selectConscientiousnessScore);
+    const neuroticism = useSelector(selectNeuroticismScore);
+    const openness = useSelector(selectOpennessScore);
+
     const defaultRating: number = 5;
     const min = useSharedValue(0);
     const max = useSharedValue(10);
-    let progress = useSharedValue(currentResponse || defaultRating)
-    const [chosenValue, setChosenValue] = useState(currentResponse || defaultRating);
+    let progress = useSharedValue(currentResponse)
+    const [chosenValue, setChosenValue] = useState(currentResponse);
 
     const navigateBack = () => {
         navigation.goBack();
@@ -86,18 +96,19 @@ export function BigFiveInventoryScreen({
 
     useEffect(() => {
         console.log(currentAnswers);
-        console.log(currentQuestion);
-        console.log(currentResponse);
-        setChosenValue(currentResponse || defaultRating);
+        console.log(`extraversion: ${extraversion}`);
+        console.log(`agreeableness: ${agreeableness}`);
+        console.log(`conscientiousness: ${conscientiousness}`);
+        console.log(`neuroticism: ${neuroticism}`);
+        console.log(`openness: ${openness}`);
+        setChosenValue(currentResponse );
     }, [currentQuestion, currentAnswers, currentResponse])
 
     useEffect(() => {
-        console.log(`Chosen Value: ${chosenValue}`);
         progress.value = chosenValue;
     }, [chosenValue])
 
     useEffect(() => {
-        console.log(`Progress: ${progress.value}`);
         console.log(surveyQuestions.get(currentQuestion+1))
     }, [progress])
 
@@ -130,17 +141,32 @@ export function BigFiveInventoryScreen({
                     header={makeHeader('I see myself as someone who...', surveyQuestions.get(currentQuestion+1))}
                     footer={makeFooter(nextButtonCallback, backButtonCallback)}>
                     <Slider
-                        style={styles.container}
+                        style={styles.surveySlider}
                         progress={progress}
                         minimumValue={min}
                         maximumValue={max}
+                        bubbleMaxWidth={500}
                         bubble={(x) => {
-                            return Math.round(x).toString();
+                            let desc = "Strongly Disagree";
+                            let val = Math.round(x);
+                            if (val <= 1)
+                                desc = "Strongly Disagree";
+                            else if (val <= 3)
+                                desc = "Somewhat disagree";
+                            else if (val <= 6)
+                                desc = "Neither agree nor disagree";
+                            else if (val <= 8)
+                                desc = "Somewhat agree";
+                            else if (val <= 10)
+                                desc = "Strongly Agree";
+
+                            return `${val} - ${desc}`;
                         }}
                         onValueChange={(x) => {
                             progress.value = x
                         }}
                         onSlidingComplete={(x) => {
+                            progress.value = Math.round(x);
                             setChosenValue(Math.round(x));
                         }}
                     />

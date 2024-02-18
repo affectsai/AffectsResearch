@@ -43,7 +43,8 @@ export const styles = StyleSheet.create({
   },
   card: {
     margin: 20,
-    width: "95%"
+    width: "95%",
+    justifyContent: 'center',
   },
   footerContainer: {
     flexDirection: 'row',
@@ -51,6 +52,12 @@ export const styles = StyleSheet.create({
   },
   footerControl: {
     marginHorizontal: 2,
+  },
+  surveySlider: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: "#ffffff",
   },
 });
 
