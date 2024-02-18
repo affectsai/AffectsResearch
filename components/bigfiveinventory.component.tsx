@@ -20,7 +20,7 @@ import {
     previousQuestion,
     selectQuizAnswers,
     selectCurrentQuestion,
-    selectCurrentResponse
+    selectCurrentResponse, surveyQuestions
 } from "../features/personality/personalityQuizSlice";
 
 const makeHeader = (title: string, description: string) => {
@@ -37,8 +37,7 @@ const makeHeader = (title: string, description: string) => {
 }
 
 
-
-type ButtonCallback = (() => void)|undefined;
+type ButtonCallback = (() => void) | undefined;
 
 const makeFooter = (nextCallback: ButtonCallback, previousCallback: ButtonCallback) => {
     return (props: ViewProps): React.ReactElement => (
@@ -68,76 +67,29 @@ const makeFooter = (nextCallback: ButtonCallback, previousCallback: ButtonCallba
 
 
 export function BigFiveInventoryScreen({
-  navigation,
-}: BigFiveScreenNavigationProp): React.JSX.Element {
+                                           navigation,
+                                       }: BigFiveScreenNavigationProp): React.JSX.Element {
     const dispatch = useDispatch();
     const currentQuestion = useSelector(selectCurrentQuestion);
     const currentAnswers = useSelector(selectQuizAnswers);
-    const currentResponse = useSelector(selectCurrentResponse)
-    const [x, setX] = useState(currentResponse||1);
-    const [chosenValue, setChosenValue] = useState(currentResponse||1);
+    const currentResponse = useSelector(selectCurrentResponse);
 
-    const min = useSharedValue(1);
+    const defaultRating: number = 5;
+    const min = useSharedValue(0);
     const max = useSharedValue(10);
-    let progress = useSharedValue(currentResponse||1)
+    let progress = useSharedValue(currentResponse || defaultRating)
+    const [chosenValue, setChosenValue] = useState(currentResponse || defaultRating);
 
-  const navigateBack = () => {
-    navigation.goBack();
-  };
-
-  const surveyQuestions = [
-      "Is talkative",
-      "Tends to find fault with other",
-      "Does a thorough job",
-      "Is depressed, blue",
-      "Is original, comes up with new ideas",
-      "Is reserved",
-      "Is helpful and unselfish with others",
-      "Can be somewhat careless",
-      "Is relaxed, handles stress well",
-      "Is curious about many different things",
-      "Is full of energy",
-      "Starts quarrels with others",
-      "Is a reliable worker",
-      "Can be tense",
-      "Is ingenious, a deep thinker",
-      "Generates a lot of enthusiasm",
-      "Has a forgiving nature",
-      "Tends to be disorganized",
-      "Worries a lot",
-      "Has an active imagination",
-      "Tends to be quiet",
-      "Is generally trusting",
-      "Tends to be lazy",
-      "Is emotionally stable, not easily upset",
-      "Is inventive",
-      "Has an assertive personality",
-      "Can be cold and aloof",
-      "Perseveres until the task in finished",
-      "Can be moody",
-      "Values artistic, aesthetic experiences",
-      "Is sometimes shy, inhibited",
-      "Is considerate and kind to almost everyone",
-      "Does things efficiently",
-      "Remains calm in tense situations",
-      "Prefers work that is routine",
-      "Is outgoing, sociable",
-      "Is sometimes rude to others",
-      "Makes plans and follows through with them",
-      "Gets nervous easily",
-      "Likes to reflect, play with ideas",
-      "Has few artistic interests",
-      "Likes to cooperate with others",
-      "Is easily distracted",
-      "Is sophisticated in art, music, or literature"
-  ]
+    const navigateBack = () => {
+        navigation.goBack();
+    };
 
     useEffect(() => {
         console.log(currentAnswers);
         console.log(currentQuestion);
         console.log(currentResponse);
-        setChosenValue(currentResponse||1);
-    }, [currentQuestion,currentAnswers,currentResponse])
+        setChosenValue(currentResponse || defaultRating);
+    }, [currentQuestion, currentAnswers, currentResponse])
 
     useEffect(() => {
         console.log(`Chosen Value: ${chosenValue}`);
@@ -146,48 +98,55 @@ export function BigFiveInventoryScreen({
 
     useEffect(() => {
         console.log(`Progress: ${progress.value}`);
+        console.log(surveyQuestions.get(currentQuestion+1))
     }, [progress])
 
-  const BackAction = () => (
-    <TopNavigationAction icon={BackIcon} onPress={navigateBack} />
-  );
+    const BackAction = () => (
+        <TopNavigationAction icon={BackIcon} onPress={navigateBack}/>
+    );
 
-  const backButtonCallback: ButtonCallback = () => {
-      console.log(`Saving value ${progress.value} for question ${currentQuestion}`);
-      dispatch(previousQuestion({questionNumber: currentQuestion, responseValue: progress.value}));
-  }
+    const backButtonCallback: ButtonCallback = () => {
+        console.log(`Saving value ${progress.value} for question ${currentQuestion}`);
+        dispatch(previousQuestion({questionNumber: currentQuestion, responseValue: progress.value}));
+    }
 
     const nextButtonCallback: ButtonCallback = () => {
         console.log(`Saving value ${progress.value} for question ${currentQuestion}`);
         dispatch(nextQuestion({questionNumber: currentQuestion, responseValue: progress.value}));
     }
 
-  return (
-    <SafeAreaView style={{flex: 1, height: "100%"}}>
-      <TopNavigation
-        title="Personality Survey"
-        alignment="center"
-        accessoryLeft={BackAction}
-      />
-      <Divider />
-      <Layout style={styles.container}>
-        <Text category="h1">Big Five Inventory</Text>
-          <Card
-              style={styles.card}
-              header={makeHeader('I see myself as someone who...', surveyQuestions[currentQuestion])}
-              footer={makeFooter(nextButtonCallback, backButtonCallback)}>
-              <Slider
-                  style={styles.container}
-                  progress={progress}
-                  minimumValue={min}
-                  maximumValue={max}
-                  bubble={(x)=>{return Math.round(x).toString();}}
-                  onValueChange={(x)=>{progress.value=x}}
-                  onSlidingComplete={(x)=>{setChosenValue(Math.round(x));}}
-              />
-          </Card>
+    return (
+        <SafeAreaView style={{flex: 1, height: "100%"}}>
+            <TopNavigation
+                title="Personality Survey"
+                alignment="center"
+                accessoryLeft={BackAction}
+            />
+            <Divider/>
+            <Layout style={styles.container}>
+                <Text category="h1">Big Five Inventory</Text>
+                <Card
+                    style={styles.card}
+                    header={makeHeader('I see myself as someone who...', surveyQuestions.get(currentQuestion+1))}
+                    footer={makeFooter(nextButtonCallback, backButtonCallback)}>
+                    <Slider
+                        style={styles.container}
+                        progress={progress}
+                        minimumValue={min}
+                        maximumValue={max}
+                        bubble={(x) => {
+                            return Math.round(x).toString();
+                        }}
+                        onValueChange={(x) => {
+                            progress.value = x
+                        }}
+                        onSlidingComplete={(x) => {
+                            setChosenValue(Math.round(x));
+                        }}
+                    />
+                </Card>
 
-      </Layout>
-    </SafeAreaView>
-  );
+            </Layout>
+        </SafeAreaView>
+    );
 }
