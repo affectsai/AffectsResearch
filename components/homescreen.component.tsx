@@ -7,7 +7,7 @@ import {
   TopNavigation,
 } from '@ui-kitten/components';
 import {SafeAreaView, ImageProps, StyleSheet, StatusBar} from 'react-native';
-import {styles, HomeScreenNavigationProp} from './types.tsx';
+import {styles, HomeScreenNavigationProp} from './types';
 import {useDispatch} from "react-redux";
 
 const HeartIcon = (

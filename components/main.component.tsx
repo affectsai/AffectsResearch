@@ -27,7 +27,7 @@ import {useDispatch, useSelector} from 'react-redux';
  */
 import {AppNavigator} from './navigation.component';
 import {useFonts} from "expo-font";
-import {Animated, StatusBar} from "react-native";
+import {StatusBar} from "react-native";
 import {createStackNavigator} from "@react-navigation/stack";
 import {RootStackParamList} from "./types";
 import {HomeScreen} from "./homescreen.component";
@@ -42,7 +42,6 @@ const {Navigator, Screen} = createStackNavigator<RootStackParamList>();
 
 
 export function MainComponent(): React.JSX.Element | null {
-    const [isAppReady, setAppReady] = useState(false);
     const theme: string = useSelector(state => state.theme);
 
     const [fontsLoaded, fontError] = useFonts({
@@ -54,12 +53,20 @@ export function MainComponent(): React.JSX.Element | null {
         console.log('callback');
         if (fontsLoaded || fontError) {
             await SplashScreen.hideAsync();
-            setAppReady(true);
         }
     }, [fontsLoaded, fontError]);
 
     if (!fontsLoaded && !fontError) {
         return null;
+    }
+
+    const getTheme = (themeName: string) => {
+        const themeMap = new Map<string,object>([
+            ['light', eva.light],
+            ['dark', eva.dark],
+        ])
+
+        return themeMap.get(themeName);
     }
 
     return (
@@ -68,7 +75,7 @@ export function MainComponent(): React.JSX.Element | null {
             <IconRegistry icons={EvaIconsPack}/>
             <ApplicationProvider
                 {...eva}
-                theme={{...eva[theme], ...affectsai_theme}}
+                theme={{...getTheme(theme), ...affectsai_theme}}
                 customMapping={affectsai_mapping}>
                 <NavigationContainer onReady={onNavigationReady}>
                     <Navigator screenOptions={{headerShown: false}}>
