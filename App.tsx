@@ -12,8 +12,9 @@ import React from "react";
  * Redux...
  */
 import { Provider } from 'react-redux';
-import store from './store';
+import { PersistGate } from 'redux-persist/integration/react'
 
+import {store, persistor} from './store';
 /*
  * screens
  */
@@ -23,7 +24,9 @@ function App(): React.JSX.Element {
   return (
     <>
       <Provider store={store}>
-        <MainComponent />
+          <PersistGate persistor={persistor}>
+            <MainComponent />
+          </PersistGate>
       </Provider>
     </>
   );
