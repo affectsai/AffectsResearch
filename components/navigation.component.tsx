@@ -4,6 +4,7 @@ import {createStackNavigator} from '@react-navigation/stack';
 import {HomeScreen} from './homescreen.component.tsx';
 import {DetailsScreen} from './details.component.tsx';
 import {RootStackParamList} from './types.tsx';
+import {StatusBar} from "react-native";
 
 const {Navigator, Screen} = createStackNavigator<RootStackParamList>();
 
@@ -16,6 +17,8 @@ const HomeNavigator = () => (
 
 export const AppNavigator = () => (
   <NavigationContainer>
-    <HomeNavigator />
+      <StatusBar/>
+
+      <HomeNavigator />
   </NavigationContainer>
 );

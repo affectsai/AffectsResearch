@@ -5,10 +5,11 @@
  * @format
  */
 
-import React from 'react';
+import React, { useCallback } from "react";
 import * as eva from '@eva-design/eva';
 import {ApplicationProvider, IconRegistry} from '@ui-kitten/components';
 import {EvaIconsPack} from '@ui-kitten/eva-icons';
+import * as SplashScreen from 'expo-splash-screen';
 
 /*
  * Branding...
@@ -20,32 +21,25 @@ import {default as affectsai_mapping} from '../affectsai-theme-mapping.json'; //
  * Redux...
  */
 import { useDispatch, useSelector } from 'react-redux';
-import {ThemeContext} from './theme-context.tsx';
 
 /*
  * screens
  */
 import {AppNavigator} from './navigation.component';
 
-export function MainComponent(): React.JSX.Element {
-  const theme: string = useSelector(state => state.theme);
-  const dispatch = useDispatch();
 
-  const toggleTheme = () => {
-    dispatch({type: 'TOGGLE_THEME'});
-  };
+export function MainComponent(): React.JSX.Element | null {
+  const theme: string = useSelector(state => state.theme);
 
   return (
     <>
       <IconRegistry icons={EvaIconsPack} />
-      <ThemeContext.Provider value={{theme, toggleTheme}}>
-        <ApplicationProvider
-          {...eva}
-          theme={{...eva[theme], ...affectsai_theme}}
-          customMapping={affectsai_mapping}>
-          <AppNavigator />
-        </ApplicationProvider>
-      </ThemeContext.Provider>
+      <ApplicationProvider
+        {...eva}
+        theme={{...eva[theme], ...affectsai_theme}}
+        customMapping={affectsai_mapping}>
+        <AppNavigator />
+      </ApplicationProvider>
     </>
   );
 }
