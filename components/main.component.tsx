@@ -16,16 +16,15 @@ import * as SplashScreen from 'expo-splash-screen';
  */
 import {default as affectsai_theme} from '../affectsai-theme.json'; // <-- Import app theme
 import {default as affectsai_mapping} from '../affectsai-theme-mapping.json'; // <-- Import app mapping
-
+import {selectTheme} from "../features/themes/themeSlice";
 /*
  * Redux...
  */
-import {useDispatch, useSelector} from 'react-redux';
+import {useSelector} from 'react-redux';
 
 /*
  * screens
  */
-import {AppNavigator} from './navigation.component';
 import {useFonts} from "expo-font";
 import {StatusBar} from "react-native";
 import {createStackNavigator} from "@react-navigation/stack";
@@ -42,7 +41,7 @@ const {Navigator, Screen} = createStackNavigator<RootStackParamList>();
 
 
 export function MainComponent(): React.JSX.Element | null {
-    const theme: string = useSelector(state => state.theme);
+    const theme: string = useSelector(selectTheme)
 
     const [fontsLoaded, fontError] = useFonts({
         'Montserrat-SemiBold': require('../assets/fonts/Montserrat-SemiBold.ttf'),

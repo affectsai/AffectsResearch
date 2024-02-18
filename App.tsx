@@ -6,18 +6,9 @@
  */
 
 import React from "react";
-
-
-/*
- * Redux...
- */
 import { Provider } from 'react-redux';
 import { PersistGate } from 'redux-persist/integration/react'
-
-import {store, persistor} from './store';
-/*
- * screens
- */
+import {store,persistor} from './store';
 import { MainComponent } from './components/main.component';
 
 function App(): React.JSX.Element {
