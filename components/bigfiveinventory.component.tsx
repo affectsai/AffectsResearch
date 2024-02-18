@@ -181,8 +181,9 @@ export function BigFiveInventoryScreen({
                   progress={progress}
                   minimumValue={min}
                   maximumValue={max}
+                  bubble={(x)=>{return Math.round(x).toString();}}
                   onValueChange={(x)=>{progress.value=x}}
-                  onSlidingComplete={(x)=>{setChosenValue(x);}}
+                  onSlidingComplete={(x)=>{setChosenValue(Math.round(x));}}
               />
           </Card>
 
