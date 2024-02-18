@@ -32,6 +32,7 @@ import {RootStackParamList} from "./types";
 import {HomeScreen} from "./homescreen.component";
 import {DetailsScreen} from "./details.component";
 import {NavigationContainer} from "@react-navigation/native";
+import {HomeNavigator} from "./navigation.component";
 
 SplashScreen.preventAutoHideAsync().then(() => {
     console.log('ok');
@@ -77,10 +78,7 @@ export function MainComponent(): React.JSX.Element | null {
                 theme={{...getTheme(theme), ...affectsai_theme}}
                 customMapping={affectsai_mapping}>
                 <NavigationContainer onReady={onNavigationReady}>
-                    <Navigator screenOptions={{headerShown: false}}>
-                        <Screen name="Home" component={HomeScreen}/>
-                        <Screen name="Details" component={DetailsScreen}/>
-                    </Navigator>
+                    <HomeNavigator/>
                 </NavigationContainer>
             </ApplicationProvider>
         </>

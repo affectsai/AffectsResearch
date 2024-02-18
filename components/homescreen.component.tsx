@@ -21,7 +21,9 @@ export function HomeScreen({
   const navigateDetails = () => {
     navigation.navigate('Details');
   };
-
+  const navigateBigFive = () => {
+    navigation.navigate('BigFive');
+  };
   const dispatch = useDispatch();
 
   return (
@@ -37,6 +39,9 @@ export function HomeScreen({
         </Button>
         <Button style={styles.button} onPress={() => dispatch(toggleTheme())}>
           Switch Theme
+        </Button>
+        <Button style={styles.button} onPress={navigateBigFive}>
+          Take the Inventory
         </Button>
       </Layout>
     </SafeAreaView>
