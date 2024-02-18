@@ -114,8 +114,11 @@ const score = ( x:number, reverse: boolean = false) => {
 }
 
 export const selectExtraversionScore = (state: { bigfive: PersonalityQuizState }) => {
-  console.log('Scoring Extraversion')
-  return score(state.bigfive.currentAnswers[0]) +
+  const numScores = 8;
+  const maxScore = numScores * 5;
+  const minScore = numScores * 1;
+  const rawScore =
+      score(state.bigfive.currentAnswers[0]) +
       score(state.bigfive.currentAnswers[5], true) +
       score(state.bigfive.currentAnswers[10]) +
       score(state.bigfive.currentAnswers[15]) +
@@ -123,20 +126,33 @@ export const selectExtraversionScore = (state: { bigfive: PersonalityQuizState }
       score(state.bigfive.currentAnswers[25]) +
       score(state.bigfive.currentAnswers[30], true) +
       score(state.bigfive.currentAnswers[35]);
+
+  const scoreRange = maxScore - minScore;
+  return (rawScore - minScore) / scoreRange * 100;
 }
 export const selectAgreeablenessScore = (state: { bigfive: PersonalityQuizState }) => {
-  return score(state.bigfive.currentAnswers[1], true) +
+  const numScores = 9;
+  const maxScore = numScores * 5;
+  const minScore = numScores * 1;
+  const rawScore =
+      score(state.bigfive.currentAnswers[1], true) +
       score(state.bigfive.currentAnswers[6], false ) +
       score(state.bigfive.currentAnswers[11], true) +
       score(state.bigfive.currentAnswers[16], false) +
       score(state.bigfive.currentAnswers[21], false) +
       score(state.bigfive.currentAnswers[26], true) +
       score(state.bigfive.currentAnswers[31], false) +
-      score(state.bigfive.currentAnswers[33], true) +
+      score(state.bigfive.currentAnswers[36], true) +
       score(state.bigfive.currentAnswers[41], false);
+  const scoreRange = maxScore - minScore;
+  return (rawScore - minScore) / scoreRange * 100;
 }
 export const selectConscientiousnessScore = (state: { bigfive: PersonalityQuizState }) => {
-  return score(state.bigfive.currentAnswers[2], false) +
+  const numScores = 9;
+  const maxScore = numScores * 5;
+  const minScore = numScores * 1;
+  const rawScore =
+      score(state.bigfive.currentAnswers[2], false) +
       score(state.bigfive.currentAnswers[7], true ) +
       score(state.bigfive.currentAnswers[12], false) +
       score(state.bigfive.currentAnswers[17], true) +
@@ -145,9 +161,16 @@ export const selectConscientiousnessScore = (state: { bigfive: PersonalityQuizSt
       score(state.bigfive.currentAnswers[32], false) +
       score(state.bigfive.currentAnswers[37], false) +
       score(state.bigfive.currentAnswers[42], true);
+
+  const scoreRange = maxScore - minScore;
+  return (rawScore - minScore) / scoreRange * 100;
 }
 export const selectNeuroticismScore = (state: { bigfive: PersonalityQuizState }) => {
-  return score(state.bigfive.currentAnswers[3], false) +
+  const numScores = 8;
+  const maxScore = numScores * 5;
+  const minScore = numScores * 1;
+  const rawScore =
+      score(state.bigfive.currentAnswers[3], false) +
       score(state.bigfive.currentAnswers[8], true ) +
       score(state.bigfive.currentAnswers[13], false) +
       score(state.bigfive.currentAnswers[18], false) +
@@ -155,9 +178,16 @@ export const selectNeuroticismScore = (state: { bigfive: PersonalityQuizState })
       score(state.bigfive.currentAnswers[28], false) +
       score(state.bigfive.currentAnswers[33], true) +
       score(state.bigfive.currentAnswers[38], false)
+
+  const scoreRange = maxScore - minScore;
+  return (rawScore - minScore) / scoreRange * 100;
 }
 export const selectOpennessScore = (state: { bigfive: PersonalityQuizState }) => {
-  return score(state.bigfive.currentAnswers[4], false) +
+  const numScores = 10;
+  const maxScore = numScores * 5;
+  const minScore = numScores * 1;
+  const rawScore =
+      score(state.bigfive.currentAnswers[4], false) +
       score(state.bigfive.currentAnswers[9], false ) +
       score(state.bigfive.currentAnswers[14], false) +
       score(state.bigfive.currentAnswers[19], false) +
@@ -167,6 +197,9 @@ export const selectOpennessScore = (state: { bigfive: PersonalityQuizState }) =>
       score(state.bigfive.currentAnswers[39], false) +
       score(state.bigfive.currentAnswers[40], true) +
       score(state.bigfive.currentAnswers[43], false);
+
+  const scoreRange = maxScore - minScore;
+  return (rawScore - minScore) / scoreRange * 100;
 }
 
 export default personalityQuizSlice.reducer;

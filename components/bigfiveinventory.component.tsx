@@ -5,7 +5,7 @@ import {
     Layout,
     Divider,
     TopNavigation,
-    TopNavigationAction, Card, Button,
+    TopNavigationAction, Card, Button, ProgressBar, CircularProgressBar,
 } from '@ui-kitten/components';
 import {
     GestureResponderEvent,
@@ -78,16 +78,22 @@ export function BigFiveInventoryScreen({
     const currentAnswers = useSelector(selectQuizAnswers);
     const currentResponse = useSelector(selectCurrentResponse);
 
-    const extraversion = useSelector(selectExtraversionScore)
-    const agreeableness = useSelector(selectAgreeablenessScore);
-    const conscientiousness = useSelector(selectConscientiousnessScore);
-    const neuroticism = useSelector(selectNeuroticismScore);
-    const openness = useSelector(selectOpennessScore);
+    const extraversionScore = useSelector(selectExtraversionScore)
+    const agreeablenessScore = useSelector(selectAgreeablenessScore);
+    const conscientiousnessScore = useSelector(selectConscientiousnessScore);
+    const neuroticismScore = useSelector(selectNeuroticismScore);
+    const opennessScore = useSelector(selectOpennessScore);
 
     const defaultRating: number = 5;
     const min = useSharedValue(0);
     const max = useSharedValue(10);
     let progress = useSharedValue(currentResponse)
+
+    const [extraversion, setExtraversion] = useState(extraversionScore)
+    const [agreeableness, setAgreeableness] = useState(agreeablenessScore)
+    const [conscientiousness, setConscientiousness] = useState(conscientiousnessScore)
+    const [neuroticism, setNeuroticism] = useState(neuroticismScore)
+    const [openness, setOpenness] = useState(opennessScore)
     const [chosenValue, setChosenValue] = useState(currentResponse);
 
     const navigateBack = () => {
@@ -95,16 +101,15 @@ export function BigFiveInventoryScreen({
     };
 
     useEffect(() => {
-        console.log(currentAnswers);
-        console.log(`extraversion: ${extraversion}`);
-        console.log(`agreeableness: ${agreeableness}`);
-        console.log(`conscientiousness: ${conscientiousness}`);
-        console.log(`neuroticism: ${neuroticism}`);
-        console.log(`openness: ${openness}`);
         setChosenValue(currentResponse );
     }, [currentQuestion, currentAnswers, currentResponse])
 
     useEffect(() => {
+        setExtraversion(extraversionScore);
+        setAgreeableness(agreeablenessScore);
+        setOpenness(opennessScore);
+        setNeuroticism(neuroticismScore);
+        setConscientiousness(conscientiousnessScore);
         progress.value = chosenValue;
     }, [chosenValue])
 
@@ -171,7 +176,19 @@ export function BigFiveInventoryScreen({
                         }}
                     />
                 </Card>
-
+                <Card
+                    style={styles.scoreCard}>
+                    <Text category='h4'>Extraversion: {extraversion.toFixed(0)}%</Text>
+                    <ProgressBar progress={extraversion/100}/>
+                    <Text category='h4' style={{marginTop: 20}}>Agreeableness: {agreeableness.toFixed(0)}%</Text>
+                    <ProgressBar  progress={agreeableness/100}/>
+                    <Text category='h4' style={{marginTop: 20}}>Conscientiousness {conscientiousness.toFixed(0)}%</Text>
+                    <ProgressBar  progress={conscientiousness/100}/>
+                    <Text category='h4' style={{marginTop: 20}}>Neuroticism {neuroticism.toFixed(0)}%</Text>
+                    <ProgressBar  progress={neuroticism/100}/>
+                    <Text category='h4' style={{marginTop: 20}}>Openness {openness.toFixed(0)}%</Text>
+                    <ProgressBar  progress={openness/100}/>
+                </Card>
             </Layout>
         </SafeAreaView>
     );

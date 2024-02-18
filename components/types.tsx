@@ -29,7 +29,6 @@ export const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: "#ffffff",
   },
   text: {
     textAlign: 'center',
@@ -43,6 +42,11 @@ export const styles = StyleSheet.create({
   },
   card: {
     margin: 20,
+    width: "95%",
+    justifyContent: 'center',
+  },
+  scoreCard: {
+    flex: 1,
     width: "95%",
     justifyContent: 'center',
   },
