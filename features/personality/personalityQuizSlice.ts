@@ -1,4 +1,4 @@
-import {createSlice} from "@reduxjs/toolkit";
+import {createSlice, createSelector} from "@reduxjs/toolkit";
 
 interface PersonalityQuizState {
   currentQuestion: number;
@@ -63,7 +63,7 @@ export const surveyQuestions = new Map<number,string>([
 
 const initialState = {
   currentQuestion: 0,
-  currentAnswers: [1],
+  currentAnswers: Array(surveyQuestions.size).fill(-1),
 } as PersonalityQuizState
 
 const personalityQuizSlice = createSlice({
@@ -71,18 +71,18 @@ const personalityQuizSlice = createSlice({
   initialState,
   reducers: {
     nextQuestion: (state, action: SaveQuizAnswerAction) => {
-      console.log(`In reducer nextQuestion => storing question number ${action.payload.questionNumber} response ${action.payload.responseValue}`)
       const newAnswers = state.currentAnswers.slice();
       newAnswers[action.payload.questionNumber] = action.payload.responseValue
       state.currentAnswers = newAnswers;
+
       if (state.currentQuestion+1 < surveyQuestions.size)
         state.currentQuestion++;
     },
     previousQuestion: (state, action: SaveQuizAnswerAction) => {
-      console.log(`In reducer previousQuestion => storing question number ${action.payload.questionNumber} response ${action.payload.responseValue}`)
       const newAnswers = state.currentAnswers.slice();
       newAnswers[action.payload.questionNumber] = action.payload.responseValue
       state.currentAnswers = newAnswers;
+
       if ( state.currentQuestion > 0 )
         state.currentQuestion--;
     }
@@ -110,47 +110,96 @@ export const selectCurrentResponse = (state: { bigfive: PersonalityQuizState }) 
 const scaleScore = (x: number) => (x/10*4+1);
 const reverseScaleScore = (x: number) => {return 6 - scaleScore(x)};
 const score = ( x:number, reverse: boolean = false) => {
+  if ( x < 0 ) return Number.NEGATIVE_INFINITY;
   return reverse?reverseScaleScore(x):scaleScore(x);
 }
 
-export const selectExtraversionScore = (state: { bigfive: PersonalityQuizState }) => {
-  const numScores = 8;
-  const maxScore = numScores * 5;
-  const minScore = numScores * 1;
-  const rawScore =
-      score(state.bigfive.currentAnswers[0]) +
-      score(state.bigfive.currentAnswers[5], true) +
-      score(state.bigfive.currentAnswers[10]) +
-      score(state.bigfive.currentAnswers[15]) +
-      score(state.bigfive.currentAnswers[20], true) +
-      score(state.bigfive.currentAnswers[25]) +
-      score(state.bigfive.currentAnswers[30], true) +
-      score(state.bigfive.currentAnswers[35]);
+let _extraversionScore: number = 5;
+let _agreeablenessScore: number = 5;
+let _opennessScore: number = 5;
+let _conscientiousnessScore: number = 5;
+let _neuroticismScore: number = 5;
 
-  const scoreRange = maxScore - minScore;
-  return (rawScore - minScore) / scoreRange * 100;
-}
-export const selectAgreeablenessScore = (state: { bigfive: PersonalityQuizState }) => {
-  const numScores = 9;
+const selectAnswer1 = (state: { bigfive: { currentAnswers: number[]; }; }) => state.bigfive.currentAnswers[0];
+const selectAnswer2 = (state: { bigfive: { currentAnswers: number[]; }; }) => state.bigfive.currentAnswers[1];
+const selectAnswer3 = (state: { bigfive: { currentAnswers: number[]; }; }) => state.bigfive.currentAnswers[2];
+const selectAnswer4 = (state: { bigfive: { currentAnswers: number[]; }; }) => state.bigfive.currentAnswers[3];
+const selectAnswer5 = (state: { bigfive: { currentAnswers: number[]; }; }) => state.bigfive.currentAnswers[4];
+const selectAnswer6 = (state: { bigfive: { currentAnswers: number[]; }; }) => state.bigfive.currentAnswers[5];
+const selectAnswer7 = (state: { bigfive: { currentAnswers: number[]; }; }) => state.bigfive.currentAnswers[6];
+const selectAnswer8 = (state: { bigfive: { currentAnswers: number[]; }; }) => state.bigfive.currentAnswers[7];
+const selectAnswer9 = (state: { bigfive: { currentAnswers: number[]; }; }) => state.bigfive.currentAnswers[8];
+const selectAnswer10 = (state: { bigfive: { currentAnswers: number[]; }; }) => state.bigfive.currentAnswers[9];
+const selectAnswer11 = (state: { bigfive: { currentAnswers: number[]; }; }) => state.bigfive.currentAnswers[10];
+const selectAnswer12 = (state: { bigfive: { currentAnswers: number[]; }; }) => state.bigfive.currentAnswers[11];
+const selectAnswer13 = (state: { bigfive: { currentAnswers: number[]; }; }) => state.bigfive.currentAnswers[12];
+const selectAnswer14 = (state: { bigfive: { currentAnswers: number[]; }; }) => state.bigfive.currentAnswers[13];
+const selectAnswer15 = (state: { bigfive: { currentAnswers: number[]; }; }) => state.bigfive.currentAnswers[14];
+const selectAnswer16 = (state: { bigfive: { currentAnswers: number[]; }; }) => state.bigfive.currentAnswers[15];
+const selectAnswer17 = (state: { bigfive: { currentAnswers: number[]; }; }) => state.bigfive.currentAnswers[16];
+const selectAnswer18 = (state: { bigfive: { currentAnswers: number[]; }; }) => state.bigfive.currentAnswers[17];
+const selectAnswer19 = (state: { bigfive: { currentAnswers: number[]; }; }) => state.bigfive.currentAnswers[18];
+const selectAnswer20 = (state: { bigfive: { currentAnswers: number[]; }; }) => state.bigfive.currentAnswers[19];
+const selectAnswer21 = (state: { bigfive: { currentAnswers: number[]; }; }) => state.bigfive.currentAnswers[20];
+const selectAnswer22 = (state: { bigfive: { currentAnswers: number[]; }; }) => state.bigfive.currentAnswers[21];
+const selectAnswer23 = (state: { bigfive: { currentAnswers: number[]; }; }) => state.bigfive.currentAnswers[22];
+const selectAnswer24 = (state: { bigfive: { currentAnswers: number[]; }; }) => state.bigfive.currentAnswers[23];
+const selectAnswer25 = (state: { bigfive: { currentAnswers: number[]; }; }) => state.bigfive.currentAnswers[24];
+const selectAnswer26 = (state: { bigfive: { currentAnswers: number[]; }; }) => state.bigfive.currentAnswers[25];
+const selectAnswer27 = (state: { bigfive: { currentAnswers: number[]; }; }) => state.bigfive.currentAnswers[26];
+const selectAnswer28 = (state: { bigfive: { currentAnswers: number[]; }; }) => state.bigfive.currentAnswers[27];
+const selectAnswer29 = (state: { bigfive: { currentAnswers: number[]; }; }) => state.bigfive.currentAnswers[28];
+const selectAnswer30 = (state: { bigfive: { currentAnswers: number[]; }; }) => state.bigfive.currentAnswers[29];
+const selectAnswer31 = (state: { bigfive: { currentAnswers: number[]; }; }) => state.bigfive.currentAnswers[30];
+const selectAnswer32 = (state: { bigfive: { currentAnswers: number[]; }; }) => state.bigfive.currentAnswers[31];
+const selectAnswer33 = (state: { bigfive: { currentAnswers: number[]; }; }) => state.bigfive.currentAnswers[32];
+const selectAnswer34 = (state: { bigfive: { currentAnswers: number[]; }; }) => state.bigfive.currentAnswers[33];
+const selectAnswer35 = (state: { bigfive: { currentAnswers: number[]; }; }) => state.bigfive.currentAnswers[34];
+const selectAnswer36 = (state: { bigfive: { currentAnswers: number[]; }; }) => state.bigfive.currentAnswers[35];
+const selectAnswer37 = (state: { bigfive: { currentAnswers: number[]; }; }) => state.bigfive.currentAnswers[36];
+const selectAnswer38 = (state: { bigfive: { currentAnswers: number[]; }; }) => state.bigfive.currentAnswers[37];
+const selectAnswer39 = (state: { bigfive: { currentAnswers: number[]; }; }) => state.bigfive.currentAnswers[38];
+const selectAnswer40 = (state: { bigfive: { currentAnswers: number[]; }; }) => state.bigfive.currentAnswers[39];
+const selectAnswer41 = (state: { bigfive: { currentAnswers: number[]; }; }) => state.bigfive.currentAnswers[40];
+const selectAnswer42 = (state: { bigfive: { currentAnswers: number[]; }; }) => state.bigfive.currentAnswers[41];
+const selectAnswer43 = (state: { bigfive: { currentAnswers: number[]; }; }) => state.bigfive.currentAnswers[42];
+const selectAnswer44 = (state: { bigfive: { currentAnswers: number[]; }; }) => state.bigfive.currentAnswers[43];
+
+const calculatePercentScore = (numScores: numbers, rawScore: number) => {
   const maxScore = numScores * 5;
   const minScore = numScores * 1;
-  const rawScore =
-      score(state.bigfive.currentAnswers[1], true) +
-      score(state.bigfive.currentAnswers[6], false ) +
-      score(state.bigfive.currentAnswers[11], true) +
-      score(state.bigfive.currentAnswers[16], false) +
-      score(state.bigfive.currentAnswers[21], false) +
-      score(state.bigfive.currentAnswers[26], true) +
-      score(state.bigfive.currentAnswers[31], false) +
-      score(state.bigfive.currentAnswers[36], true) +
-      score(state.bigfive.currentAnswers[41], false);
   const scoreRange = maxScore - minScore;
   return (rawScore - minScore) / scoreRange * 100;
 }
+
+export const selectExtraversionScore = createSelector(
+    [selectAnswer1, selectAnswer6, selectAnswer11, selectAnswer16, selectAnswer21, selectAnswer26, selectAnswer31, selectAnswer36],
+    (answer1, answer6, answer11, answer16, answer21, answer26, answer31, answer36) => {
+  return score(answer1) +
+      score(answer6, true) +
+      score(answer11) +
+      score(answer16) +
+      score(answer21, true) +
+      score(answer26) +
+      score(answer31, true) +
+      score(answer36);
+})
+
+export const selectAgreeablenessScore = createSelector(
+    [selectAnswer2, selectAnswer7, selectAnswer12, selectAnswer17, selectAnswer22, selectAnswer27, selectAnswer32, selectAnswer37, selectAnswer42],
+    (answer2, answer7, answer12, answer17, answer22, answer27, answer32, answer37, answer42) => {
+      return score(answer2, true) +
+          score(answer7, false ) +
+          score(answer12, true) +
+          score(answer17, false) +
+          score(answer22, false) +
+          score(answer27, true) +
+          score(answer32, false) +
+          score(answer37, true) +
+          score(answer42, false);
+    })
+
 export const selectConscientiousnessScore = (state: { bigfive: PersonalityQuizState }) => {
-  const numScores = 9;
-  const maxScore = numScores * 5;
-  const minScore = numScores * 1;
   const rawScore =
       score(state.bigfive.currentAnswers[2], false) +
       score(state.bigfive.currentAnswers[7], true ) +
@@ -162,13 +211,10 @@ export const selectConscientiousnessScore = (state: { bigfive: PersonalityQuizSt
       score(state.bigfive.currentAnswers[37], false) +
       score(state.bigfive.currentAnswers[42], true);
 
-  const scoreRange = maxScore - minScore;
-  return (rawScore - minScore) / scoreRange * 100;
+  _conscientiousnessScore = calculatePercentScore(9, rawScore);
+  return _conscientiousnessScore;
 }
 export const selectNeuroticismScore = (state: { bigfive: PersonalityQuizState }) => {
-  const numScores = 8;
-  const maxScore = numScores * 5;
-  const minScore = numScores * 1;
   const rawScore =
       score(state.bigfive.currentAnswers[3], false) +
       score(state.bigfive.currentAnswers[8], true ) +
@@ -179,13 +225,10 @@ export const selectNeuroticismScore = (state: { bigfive: PersonalityQuizState })
       score(state.bigfive.currentAnswers[33], true) +
       score(state.bigfive.currentAnswers[38], false)
 
-  const scoreRange = maxScore - minScore;
-  return (rawScore - minScore) / scoreRange * 100;
+  _neuroticismScore = calculatePercentScore(9, rawScore);
+  return _neuroticismScore;
 }
 export const selectOpennessScore = (state: { bigfive: PersonalityQuizState }) => {
-  const numScores = 10;
-  const maxScore = numScores * 5;
-  const minScore = numScores * 1;
   const rawScore =
       score(state.bigfive.currentAnswers[4], false) +
       score(state.bigfive.currentAnswers[9], false ) +
@@ -198,8 +241,8 @@ export const selectOpennessScore = (state: { bigfive: PersonalityQuizState }) =>
       score(state.bigfive.currentAnswers[40], true) +
       score(state.bigfive.currentAnswers[43], false);
 
-  const scoreRange = maxScore - minScore;
-  return (rawScore - minScore) / scoreRange * 100;
+  _opennessScore = calculatePercentScore(9, rawScore);
+  return _opennessScore;
 }
 
 export default personalityQuizSlice.reducer;

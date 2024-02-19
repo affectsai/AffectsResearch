@@ -43,7 +43,7 @@ const makeHeader = (title: string, description: string) => {
 
 type ButtonCallback = (() => void) | undefined;
 
-const makeFooter = (nextCallback: ButtonCallback, previousCallback: ButtonCallback) => {
+const makeFooter = (firstQuestion: boolean, lastQuestion: boolean, nextCallback: ButtonCallback, previousCallback: ButtonCallback) => {
     return (props: ViewProps): React.ReactElement => (
         <View
             {...props}
@@ -52,6 +52,7 @@ const makeFooter = (nextCallback: ButtonCallback, previousCallback: ButtonCallba
         >
             <Button
                 style={styles.footerControl}
+                disabled={firstQuestion}
                 size='small'
                 status='basic'
                 onPress={previousCallback}
@@ -60,6 +61,7 @@ const makeFooter = (nextCallback: ButtonCallback, previousCallback: ButtonCallba
             </Button>
             <Button
                 style={styles.footerControl}
+                disabled={lastQuestion}
                 size='small'
                 onPress={nextCallback}
             >
@@ -131,6 +133,15 @@ export function BigFiveInventoryScreen({
         dispatch(nextQuestion({questionNumber: currentQuestion, responseValue: progress.value}));
     }
 
+    const statusBar = (value: number, label: string, topMargin: number = 20) => {
+        return ( <>
+            <Text style={{marginTop: topMargin}} status={value < 0 ? 'danger' : 'success'}>{label}: {value < 0 ? 'pending...' : `${value.toFixed(0)}%`}</Text>
+            <ProgressBar progress={value/100}/>
+            </>
+        );
+    }
+
+
     return (
         <SafeAreaView style={{flex: 1, height: "100%"}}>
             <TopNavigation
@@ -144,7 +155,7 @@ export function BigFiveInventoryScreen({
                 <Card
                     style={styles.card}
                     header={makeHeader('I see myself as someone who...', surveyQuestions.get(currentQuestion+1))}
-                    footer={makeFooter(nextButtonCallback, backButtonCallback)}>
+                    footer={makeFooter(currentQuestion==0, currentQuestion==surveyQuestions.size-1,nextButtonCallback, backButtonCallback)}>
                     <Slider
                         style={styles.surveySlider}
                         progress={progress}
@@ -177,17 +188,16 @@ export function BigFiveInventoryScreen({
                     />
                 </Card>
                 <Card
+                    header={(props: ViewProps): React.ReactElement => (
+                        <View {...props}><Text category='h3'>
+                        Personality Traits
+                        </Text></View>)}
                     style={styles.scoreCard}>
-                    <Text category='h4'>Extraversion: {extraversion.toFixed(0)}%</Text>
-                    <ProgressBar progress={extraversion/100}/>
-                    <Text category='h4' style={{marginTop: 20}}>Agreeableness: {agreeableness.toFixed(0)}%</Text>
-                    <ProgressBar  progress={agreeableness/100}/>
-                    <Text category='h4' style={{marginTop: 20}}>Conscientiousness {conscientiousness.toFixed(0)}%</Text>
-                    <ProgressBar  progress={conscientiousness/100}/>
-                    <Text category='h4' style={{marginTop: 20}}>Neuroticism {neuroticism.toFixed(0)}%</Text>
-                    <ProgressBar  progress={neuroticism/100}/>
-                    <Text category='h4' style={{marginTop: 20}}>Openness {openness.toFixed(0)}%</Text>
-                    <ProgressBar  progress={openness/100}/>
+                    {statusBar(extraversion, "Extraversion", 5)}
+                    {statusBar(agreeableness, "Agreeableness")}
+                    {statusBar(conscientiousness, "Conscientiousness")}
+                    {statusBar(neuroticism, "Neuroticism")}
+                    {statusBar(openness, "Openness")}
                 </Card>
             </Layout>
         </SafeAreaView>

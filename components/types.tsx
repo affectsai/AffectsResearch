@@ -44,10 +44,12 @@ export const styles = StyleSheet.create({
     margin: 20,
     width: "95%",
     justifyContent: 'center',
+    minHeight: 225
   },
   scoreCard: {
     flex: 1,
     width: "95%",
+    marginBottom: 20,
     justifyContent: 'center',
   },
   footerContainer: {
