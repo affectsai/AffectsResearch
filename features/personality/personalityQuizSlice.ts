@@ -16,7 +16,7 @@ interface SaveQuizAnswerAction {
 
 export const surveyQuestions = new Map<number,string>([
   [1, "Is talkative"],
-  [2, "Tends to find fault with other"],
+  [2, "Tends to find fault with others"],
   [3, "Does a thorough job"],
   [4, "Is depressed, blue"],
   [5, "Is original, comes up with new ideas"],

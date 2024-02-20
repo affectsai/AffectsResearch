@@ -7,6 +7,7 @@ export type RootStackParamList = {
   Home: undefined;
   Details: undefined;
   BigFive: undefined;
+  SelfAssessment: undefined;
 };
 
 export type HomeScreenNavigationProp = StackScreenProps<
@@ -22,6 +23,11 @@ export type DetailsScreenNavigationProp = StackScreenProps<
 export type BigFiveScreenNavigationProp = StackScreenProps<
     RootStackParamList,
     'BigFive'
+>;
+
+export type SelfAssessmentBottomTabNavigationPageNavigationProp = StackScreenProps<
+    RootStackParamList,
+    'SelfAssessment'
 >;
 
 export const styles = StyleSheet.create({

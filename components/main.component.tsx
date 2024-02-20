@@ -7,7 +7,7 @@
 
 import React, {useCallback} from "react";
 import * as eva from '@eva-design/eva';
-import {ApplicationProvider, IconRegistry} from '@ui-kitten/components';
+import {ApplicationProvider, BottomNavigation, BottomNavigationTab, IconRegistry} from '@ui-kitten/components';
 import {EvaIconsPack} from '@ui-kitten/eva-icons';
 import * as SplashScreen from 'expo-splash-screen';
 
@@ -26,11 +26,34 @@ import {useSelector} from 'react-redux';
  * screens
  */
 import {useFonts} from "expo-font";
-import {StatusBar} from "react-native";
+import {SafeAreaView, StatusBar} from "react-native";
 import {NavigationContainer} from "@react-navigation/native";
-import {HomeNavigator} from "./navigation.component";
+
 
 SplashScreen.preventAutoHideAsync().then(() => {});
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import {HomeScreen} from "./homescreen.component";
+import {BigFiveInventoryScreen} from "./bigfiveinventory.component";
+import {GestureHandlerRootView} from "react-native-gesture-handler";
+import {styles} from "./types";
+
+const { Navigator, Screen } = createBottomTabNavigator();
+
+const BottomTabBar = ({ navigation, state }) => (
+    <BottomNavigation
+        selectedIndex={state.index}
+        onSelect={index => navigation.navigate(state.routeNames[index])}>
+        <BottomNavigationTab title='Home'/>
+        <BottomNavigationTab title='Big 5 Survey'/>
+    </BottomNavigation>
+);
+
+const TabNavigator = () => (
+    <Navigator screenOptions={{ headerShown: false }} tabBar={props => <BottomTabBar {...props} />}>
+        <Screen name='Home' component={HomeScreen}/>
+        <Screen name='Big 5 Survey' component={BigFiveInventoryScreen}/>
+    </Navigator>
+);
 
 export function MainComponent(): React.JSX.Element | null {
     const theme: string = useSelector(selectTheme)
@@ -68,9 +91,14 @@ export function MainComponent(): React.JSX.Element | null {
                 {...eva}
                 theme={{...getTheme(theme), ...affectsai_theme}}
                 customMapping={affectsai_mapping}>
-                <NavigationContainer onReady={onNavigationReady}>
-                    <HomeNavigator/>
-                </NavigationContainer>
+                <GestureHandlerRootView style={{flex: 1}}>
+                    <SafeAreaView style={{flex: 1}}>
+
+                    <NavigationContainer onReady={onNavigationReady}>
+                        <TabNavigator/>
+                    </NavigationContainer>
+                    </SafeAreaView>
+                </GestureHandlerRootView>
             </ApplicationProvider>
         </>
     );

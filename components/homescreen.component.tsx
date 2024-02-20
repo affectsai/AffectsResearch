@@ -33,8 +33,12 @@ import {
 } from "../features/authentication/authentication.js"
 
 const HeartIcon = (
-  props?: Partial<ImageProps>,
+    props?: Partial<ImageProps>,
 ): React.ReactElement<ImageProps> => <Icon {...props} name="heart" />;
+
+const GoogleIcon = (
+    props?: Partial<ImageProps>,
+): React.ReactElement<ImageProps> => <Icon {...props} name="google" />;
 
 export function HomeScreen({
   navigation,
@@ -47,6 +51,11 @@ export function HomeScreen({
   const navigateBigFive = () => {
     navigation.navigate('BigFive');
   };
+
+  const navigateSelfAssessment = () => {
+    navigation.navigate('SelfAssessment');
+  };
+
   const dispatch = useDispatch();
 
   const queryUsersAsync = async () => {
@@ -85,15 +94,12 @@ export function HomeScreen({
   }
 
   return (
-    <SafeAreaView style={{flex: 1}}>
-      <TopNavigation title="Affects Research" alignment="center" />
-      <Divider />
       <Layout style={styles.container}>
         <Button
             style={styles.button}
             onPress={()=>authAsync()}
-            accessoryLeft={HeartIcon}>
-          Login
+            accessoryLeft={GoogleIcon}>
+          Login with Google
         </Button>
         <Button
             style={styles.button}
@@ -110,10 +116,6 @@ export function HomeScreen({
         <Button style={styles.button} onPress={() => dispatch(toggleTheme())}>
           Switch Theme
         </Button>
-        <Button style={styles.button} onPress={navigateBigFive}>
-          Take the Inventory
-        </Button>
       </Layout>
-    </SafeAreaView>
   );
 }

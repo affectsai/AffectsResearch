@@ -95,9 +95,7 @@ const makeResetFooter = (resetCallback: ButtonCallback) => {
 }
 
 
-export function BigFiveInventoryScreen({
-                                           navigation,
-                                       }: BigFiveScreenNavigationProp): React.JSX.Element {
+export function BigFiveInventoryScreen(): React.JSX.Element {
     const dispatch = useDispatch();
     const currentQuestion = useSelector(selectCurrentQuestion);
     const currentAnswers = useSelector(selectQuizAnswers);
@@ -121,9 +119,6 @@ export function BigFiveInventoryScreen({
     const [openness, setOpenness] = useState(opennessScore)
     const [chosenValue, setChosenValue] = useState(currentResponse);
 
-    const navigateBack = () => {
-        navigation.goBack();
-    };
 
     useEffect(() => {
         setChosenValue(currentResponse );
@@ -142,9 +137,6 @@ export function BigFiveInventoryScreen({
         console.log(surveyQuestions.get(currentQuestion+1))
     }, [progress])
 
-    const BackAction = () => (
-        <TopNavigationAction icon={BackIcon} onPress={navigateBack}/>
-    );
 
     const backButtonCallback: ButtonCallback = () => {
         console.log(`Saving value ${progress.value} for question ${currentQuestion}`);
@@ -169,16 +161,9 @@ export function BigFiveInventoryScreen({
 
 
     return (
-        <SafeAreaView style={{flex: 1, height: "100%"}}>
-            <TopNavigation
-                title="Personality Survey"
-                alignment="center"
-                accessoryLeft={BackAction}
-            />
-            <Divider/>
-            <ScrollView>
-                <Layout style={styles.container}>
-                    <Text category="h1">Big Five Inventory</Text>
+        <ScrollView style={{flex: 1}} contentContainerStyle={{ flexGrow: 1 }}>
+            <Layout style={styles.container}>
+                    <Text category="h3">Big Five Inventory</Text>
                     <Card disabled={true}
                         style={styles.card}
                         header={makeHeader('I see myself as someone who...', surveyQuestions.get(currentQuestion+1))}
@@ -256,7 +241,6 @@ export function BigFiveInventoryScreen({
                         {statusBar(openness, "Openness")}
                     </Card>
                 </Layout>
-            </ScrollView>
-        </SafeAreaView>
+        </ScrollView>
     );
 }
