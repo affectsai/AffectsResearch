@@ -24,8 +24,9 @@ import {
     surveyQuestions,
     selectExtraversionScore,
     selectAgreeablenessScore,
-    selectConscientiousnessScore, selectNeuroticismScore, selectOpennessScore
+    selectConscientiousnessScore, selectNeuroticismScore, selectOpennessScore, saveAnswer, resetPersonalityQuiz
 } from "../features/personality/personalityQuizSlice";
+import * as Haptics from 'expo-haptics'
 
 const makeHeader = (title: string, description: string) => {
     return (props: ViewProps): React.ReactElement => (
@@ -45,6 +46,8 @@ type ButtonCallback = (() => void) | undefined;
 
 const makeFooter = (firstQuestion: boolean, lastQuestion: boolean, nextCallback: ButtonCallback, previousCallback: ButtonCallback) => {
     return (props: ViewProps): React.ReactElement => (
+        <Layout style={{alignContent: 'flex-end'}}>
+
         <View
             {...props}
             // eslint-disable-next-line react/prop-types
@@ -66,6 +69,27 @@ const makeFooter = (firstQuestion: boolean, lastQuestion: boolean, nextCallback:
                 onPress={nextCallback}
             >
                 NEXT QUESTION
+            </Button>
+        </View>
+        </Layout>
+
+    );
+}
+
+const makeResetFooter = (resetCallback: ButtonCallback) => {
+    return (props: ViewProps): React.ReactElement => (
+        <View
+            {...props}
+            // eslint-disable-next-line react/prop-types
+            style={[props.style, styles.footerContainer]}
+        >
+            <Button
+                status='danger'
+                style={styles.footerControl}
+                size='small'
+                onPress={resetCallback}
+            >
+                RESET ANSWERS
             </Button>
         </View>
     );
@@ -135,8 +159,11 @@ export function BigFiveInventoryScreen({
 
     const statusBar = (value: number, label: string, topMargin: number = 20) => {
         return ( <>
-            <Text style={{marginTop: topMargin}} status={value < 0 ? 'danger' : 'success'}>{label}: {value < 0 ? 'pending...' : `${value.toFixed(0)}%`}</Text>
-            <ProgressBar progress={value/100}/>
+                <Layout style={{flexDirection: 'row', marginTop: topMargin}}>
+                    <Text style={{flex: 1}} status={value < 0 ? 'danger' : 'success'}>{label}:</Text>
+                    <Text style={{flex: 1, textAlign: 'right'}} status={value < 0 ? 'danger' : 'success'}>{value < 0 ? 'pending...' : `${value.toFixed(0)}%`}</Text>
+                </Layout>
+            <ProgressBar style={{marginTop: 5}} progress={value/100} />
             </>
         );
     }
@@ -150,56 +177,87 @@ export function BigFiveInventoryScreen({
                 accessoryLeft={BackAction}
             />
             <Divider/>
-            <Layout style={styles.container}>
-                <Text category="h1">Big Five Inventory</Text>
-                <Card
-                    style={styles.card}
-                    header={makeHeader('I see myself as someone who...', surveyQuestions.get(currentQuestion+1))}
-                    footer={makeFooter(currentQuestion==0, currentQuestion==surveyQuestions.size-1,nextButtonCallback, backButtonCallback)}>
-                    <Slider
-                        style={styles.surveySlider}
-                        progress={progress}
-                        minimumValue={min}
-                        maximumValue={max}
-                        bubbleMaxWidth={500}
-                        bubble={(x) => {
-                            let desc = "Strongly Disagree";
-                            let val = Math.round(x);
-                            if (val <= 1)
-                                desc = "Strongly Disagree";
-                            else if (val <= 3)
-                                desc = "Somewhat disagree";
-                            else if (val <= 6)
-                                desc = "Neither agree nor disagree";
-                            else if (val <= 8)
-                                desc = "Somewhat agree";
-                            else if (val <= 10)
-                                desc = "Strongly Agree";
+            <ScrollView>
+                <Layout style={styles.container}>
+                    <Text category="h1">Big Five Inventory</Text>
+                    <Card disabled={true}
+                        style={styles.card}
+                        header={makeHeader('I see myself as someone who...', surveyQuestions.get(currentQuestion+1))}
+                        footer={makeFooter(currentQuestion==0, currentQuestion==surveyQuestions.size-1,nextButtonCallback, backButtonCallback)}>
+                        <Slider
+                            style={styles.surveySlider}
+                            progress={progress}
+                            minimumValue={min}
+                            maximumValue={max}
+                            bubbleMaxWidth={500}
+                            bubble={(x) => {
+                                let desc = "Strongly Disagree";
+                                let val = Math.round(x);
+                                if (val <= 1)
+                                    desc = "Strongly Disagree";
+                                else if (val <= 3)
+                                    desc = "Somewhat disagree";
+                                else if (val <= 6)
+                                    desc = "Neither agree nor disagree";
+                                else if (val <= 8)
+                                    desc = "Somewhat agree";
+                                else if (val <= 10)
+                                    desc = "Strongly Agree";
 
-                            return `${val} - ${desc}`;
-                        }}
-                        onValueChange={(x) => {
-                            progress.value = x
-                        }}
-                        onSlidingComplete={(x) => {
-                            progress.value = Math.round(x);
-                            setChosenValue(Math.round(x));
-                        }}
-                    />
-                </Card>
-                <Card
-                    header={(props: ViewProps): React.ReactElement => (
-                        <View {...props}><Text category='h3'>
-                        Personality Traits
-                        </Text></View>)}
-                    style={styles.scoreCard}>
-                    {statusBar(extraversion, "Extraversion", 5)}
-                    {statusBar(agreeableness, "Agreeableness")}
-                    {statusBar(conscientiousness, "Conscientiousness")}
-                    {statusBar(neuroticism, "Neuroticism")}
-                    {statusBar(openness, "Openness")}
-                </Card>
-            </Layout>
+                                return `${val} - ${desc}`;
+                            }}
+                            onValueChange={(x) => {
+                                progress.value = x
+                            }}
+                            onSlidingComplete={(x) => {
+                                progress.value = Math.round(x);
+                                setChosenValue(progress.value);
+                                Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success).then(()=>{})
+                                dispatch(saveAnswer({questionNumber: currentQuestion, responseValue: progress.value}))
+                            }}
+                            theme={{
+                                disableMinTrackTintColor: '#fff',
+                                maximumTrackTintColor: '#D4D4D4',
+                                minimumTrackTintColor: '#891198',
+                                cacheTrackTintColor: '#333',
+                                bubbleBackgroundColor: '#891198',
+                            }}
+                        />
+                        <Layout style={{flexDirection: 'row', marginTop: 10}}>
+                            <Text style={{flex:1, textAlign: 'center'}} category='label'>0</Text>
+                            <Text style={{flex:1, textAlign: 'center'}} category='label'>1</Text>
+                            <Text style={{flex:1, textAlign: 'center'}} category='label'>2</Text>
+                            <Text style={{flex:1, textAlign: 'center'}} category='label'>3</Text>
+                            <Text style={{flex:1, textAlign: 'center'}} category='label'>4</Text>
+                            <Text style={{flex:1, textAlign: 'center'}} category='label'>5</Text>
+                            <Text style={{flex:1, textAlign: 'center'}} category='label'>6</Text>
+                            <Text style={{flex:1, textAlign: 'center'}} category='label'>7</Text>
+                            <Text style={{flex:1, textAlign: 'center'}} category='label'>8</Text>
+                            <Text style={{flex:1, textAlign: 'center'}} category='label'>9</Text>
+                            <Text style={{flex:1, textAlign: 'center'}} category='label'>10</Text>
+                        </Layout>
+                        <Layout style={{flexDirection: 'row', marginTop: 10}}>
+                            <Text style={{flex:1, textAlign: 'left'}} category='label'>Strongly Disagree</Text>
+                            <Text style={{flex:1, textAlign: 'right'}} category='label'>Strongly Agree</Text>
+                        </Layout>
+                    </Card>
+                    <Card disabled={true}
+                        footer={makeResetFooter(()=>{
+                            dispatch(resetPersonalityQuiz())
+                        })}
+                        header={(props: ViewProps): React.ReactElement => (
+                            <View {...props}><Text category='h3'>
+                            Personality Traits
+                            </Text></View>)}
+                        style={styles.scoreCard}>
+                        {statusBar(extraversion, "Extraversion", 5)}
+                        {statusBar(agreeableness, "Agreeableness")}
+                        {statusBar(conscientiousness, "Conscientiousness")}
+                        {statusBar(neuroticism, "Neuroticism")}
+                        {statusBar(openness, "Openness")}
+                    </Card>
+                </Layout>
+            </ScrollView>
         </SafeAreaView>
     );
 }

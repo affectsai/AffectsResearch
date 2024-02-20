@@ -46,6 +46,7 @@ export function MainComponent(): React.JSX.Element | null {
 
     const [fontsLoaded, fontError] = useFonts({
         'Montserrat-SemiBold': require('../assets/fonts/Montserrat-SemiBold.ttf'),
+        'Montserrat-Bold': require('../assets/fonts/Montserrat-Bold.ttf'),
         'Montserrat-Regular': require('../assets/fonts/Montserrat-Regular.ttf'),
     });
 

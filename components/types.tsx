@@ -44,7 +44,7 @@ export const styles = StyleSheet.create({
     margin: 20,
     width: "95%",
     justifyContent: 'center',
-    minHeight: 225
+    minHeight: 250
   },
   scoreCard: {
     flex: 1,
@@ -55,6 +55,7 @@ export const styles = StyleSheet.create({
   footerContainer: {
     flexDirection: 'row',
     justifyContent: 'flex-end',
+    alignContent: 'flex-end',
   },
   footerControl: {
     marginHorizontal: 2,

@@ -85,11 +85,20 @@ const personalityQuizSlice = createSlice({
 
       if ( state.currentQuestion > 0 )
         state.currentQuestion--;
+    },
+    saveAnswer: (state, action: SaveQuizAnswerAction) => {
+      const newAnswers = state.currentAnswers.slice();
+      newAnswers[action.payload.questionNumber] = action.payload.responseValue
+      state.currentAnswers = newAnswers;
+    },
+    resetPersonalityQuiz: (state) => {
+      state.currentQuestion = 0;
+      state.currentAnswers = Array(surveyQuestions.size).fill(-1);
     }
   }
 })
 
-export const {nextQuestion, previousQuestion} = personalityQuizSlice.actions;
+export const {nextQuestion, previousQuestion, saveAnswer, resetPersonalityQuiz} = personalityQuizSlice.actions;
 
 /**
  * Gets the current answers to the survey questions.

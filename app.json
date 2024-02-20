@@ -15,13 +15,15 @@
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "ai.affects.research.AffectSurvey"
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#ffffff"
-      }
+      },
+      "package": "ai.affects.research.AffectSurvey"
     },
     "web": {
       "favicon": "./assets/favicon.png"
@@ -36,6 +38,11 @@
           ]
         }
       ]
-    ]
+    ],
+    "extra": {
+      "eas": {
+        "projectId": "6e526dda-896e-48f3-a294-b9e02e5ad51e"
+      }
+    }
   }
 }
