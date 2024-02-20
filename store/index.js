@@ -4,24 +4,35 @@ import { persistStore, persistReducer } from 'redux-persist'
 import {FLUSH, PAUSE, PERSIST, PURGE, REGISTER, REHYDRATE} from "redux-persist/es/constants";
 import themeReducer from '../features/themes/themeSlice';
 import bigfiveReducer from '../features/personality/personalityQuizSlice';
+import authReducer from '../features/authentication/authenticationSlice';
+import createSecureStore from "redux-persist-expo-securestore";
+
 
 const persistThemeConfig = {
   key: 'affectsresearch-theme',
   storage: AsyncStorage,
 }
+const persistedThemeReducer = persistReducer(persistThemeConfig, themeReducer)
 
 const persistBigFiveConfig = {
     key: 'affectsresearch-bigfive',
     storage: AsyncStorage,
 }
-
-const persistedThemeReducer = persistReducer(persistThemeConfig, themeReducer)
 const persisteBigFiveReducer = persistReducer(persistBigFiveConfig, bigfiveReducer);
+
+const secureStorage = createSecureStore();
+const persistAuthConfig = {
+    key: 'affectsresearch-auth',
+    storage: secureStorage,
+}
+const persisteAuthReducer = persistReducer(persistAuthConfig, authReducer);
+
 
 export const store = configureStore({
   reducer: {
       theme: persistedThemeReducer,
       bigfive: persisteBigFiveReducer,
+      auth: persisteAuthReducer,
   },
   devTools: process.env.NODE_ENV !== 'production',
   middleware: (getDefaultMiddleware) =>

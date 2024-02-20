@@ -8,7 +8,7 @@ import {
 } from '@ui-kitten/components';
 import {SafeAreaView, ImageProps, StyleSheet, StatusBar} from 'react-native';
 import {styles, HomeScreenNavigationProp} from './types';
-import {useDispatch} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 import {toggleTheme} from "../features/themes/themeSlice";
 import axios from 'axios'
 import * as Linking from 'expo-linking'
@@ -18,16 +18,20 @@ import { feathers } from '@feathersjs/feathers'
 import rest from '@feathersjs/rest-client'
 import authentication from '@feathersjs/authentication-client'
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import {
+  logout,
+  selectAuthToken,
+  storeToken,
+  storeTokenActionPayload
+} from "../features/authentication/authenticationSlice";
+import {
+  authenticatedServiceCall,
+  AuthSuccessCallbackURL,
+  feathersApp,
+  feathersClient,
+  reauthenticate
+} from "../features/authentication/authentication.js"
 
-const app = feathers()
-const restClient = rest("https://api.affects.ai");
-app.configure(restClient.axios(axios))
-app.configure(authentication({
-  storage: AsyncStorage,
-  path: '/authentication/google'
-}))
-
-const prefix = Linking.createURL("/");
 const HeartIcon = (
   props?: Partial<ImageProps>,
 ): React.ReactElement<ImageProps> => <Icon {...props} name="heart" />;
@@ -35,6 +39,8 @@ const HeartIcon = (
 export function HomeScreen({
   navigation,
 }: HomeScreenNavigationProp): React.JSX.Element {
+  const authToken = useSelector(selectAuthToken);
+
   const navigateDetails = () => {
     navigation.navigate('Details');
   };
@@ -44,24 +50,32 @@ export function HomeScreen({
   const dispatch = useDispatch();
 
   const queryUsersAsync = async () => {
-    app.service("users").find().then((r) => {
-      console.log(JSON.stringify(r))
-    }).catch((e) => {
-      console.log(e)
+    authenticatedServiceCall( () => {
+      feathersApp.service("users").find().then((r) => {
+        console.log(JSON.stringify(r))
+      }).catch((e) => {
+        console.log(e)
+      })
     })
   }
 
   const authAsync = async () => {
-    console.log(prefix)
-    const callbackUrl = Linking.createURL("App", {scheme:"affectsai"});
-    Linking.addEventListener("url", (event) => {
-      const access_token = event.url.substring(event.url.indexOf("=")+1);
-      app.authentication.setAccessToken(access_token);
-      app.reAuthenticate()
-      return queryUsersAsync();
+    if (authToken) {
+      console.log("Already logged in... attempting to reauthenticate the token");
+      reauthenticate(authToken).then(() => {
+        console.log("Successfully reauthenticated the existing access token.");
+      }).catch((e) => {
+        console.log("Unable to reauthenticate the access token... logging out");
+        dispatch(logout())
+      });
+    } else {
+      await WebBrowser.openAuthSessionAsync(`https://api.affects.ai/oauth/google?redirect=${AuthSuccessCallbackURL}`);
+    }
+  }
 
-    })
-    await WebBrowser.openAuthSessionAsync(`https://api.affects.ai/oauth/google?redirect=${callbackUrl}`);
+  const logoutAsync = async() => {
+    dispatch(logout());
+    await feathersApp.authentication.logout();
   }
 
   return (
@@ -77,7 +91,7 @@ export function HomeScreen({
         </Button>
         <Button
             style={styles.button}
-            onPress={()=>app.authentication.logout()}
+            onPress={()=>logoutAsync()}
             accessoryLeft={HeartIcon}>
           Logout
         </Button>

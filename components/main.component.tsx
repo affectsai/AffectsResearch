@@ -5,9 +5,9 @@
  * @format
  */
 
-import React, {useCallback, useEffect, useState} from "react";
+import React, {useCallback} from "react";
 import * as eva from '@eva-design/eva';
-import {ApplicationProvider, IconRegistry, Layout} from '@ui-kitten/components';
+import {ApplicationProvider, IconRegistry} from '@ui-kitten/components';
 import {EvaIconsPack} from '@ui-kitten/eva-icons';
 import * as SplashScreen from 'expo-splash-screen';
 
@@ -27,23 +27,13 @@ import {useSelector} from 'react-redux';
  */
 import {useFonts} from "expo-font";
 import {StatusBar} from "react-native";
-import {createStackNavigator} from "@react-navigation/stack";
-import {RootStackParamList} from "./types";
-import {HomeScreen} from "./homescreen.component";
-import {DetailsScreen} from "./details.component";
 import {NavigationContainer} from "@react-navigation/native";
 import {HomeNavigator} from "./navigation.component";
 
-SplashScreen.preventAutoHideAsync().then(() => {
-    console.log('ok');
-});
-
-const {Navigator, Screen} = createStackNavigator<RootStackParamList>();
-
+SplashScreen.preventAutoHideAsync().then(() => {});
 
 export function MainComponent(): React.JSX.Element | null {
     const theme: string = useSelector(selectTheme)
-
     const [fontsLoaded, fontError] = useFonts({
         'Montserrat-SemiBold': require('../assets/fonts/Montserrat-SemiBold.ttf'),
         'Montserrat-Bold': require('../assets/fonts/Montserrat-Bold.ttf'),
