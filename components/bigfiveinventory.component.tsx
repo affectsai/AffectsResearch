@@ -5,10 +5,9 @@ import {
     Layout,
     Divider,
     TopNavigation,
-    TopNavigationAction, Card, Button, ProgressBar, CircularProgressBar,
+    TopNavigationAction, Card, Button, ProgressBar,
 } from '@ui-kitten/components';
 import {
-    GestureResponderEvent,
     SafeAreaView, ScrollView, View, ViewProps,
 } from 'react-native';
 import {styles, BigFiveScreenNavigationProp, BackIcon} from './types';

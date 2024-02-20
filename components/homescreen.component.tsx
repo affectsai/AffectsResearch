@@ -50,7 +50,7 @@ export function HomeScreen({
   const dispatch = useDispatch();
 
   const queryUsersAsync = async () => {
-    authenticatedServiceCall( () => {
+    await authenticatedServiceCall( () => {
       feathersApp.service("users").find().then((r) => {
         console.log(JSON.stringify(r))
       }).catch((e) => {
@@ -60,17 +60,23 @@ export function HomeScreen({
   }
 
   const authAsync = async () => {
-    if (authToken) {
-      console.log("Already logged in... attempting to reauthenticate the token");
-      reauthenticate(authToken).then(() => {
-        console.log("Successfully reauthenticated the existing access token.");
-      }).catch((e) => {
-        console.log("Unable to reauthenticate the access token... logging out");
-        dispatch(logout())
-      });
-    } else {
-      await WebBrowser.openAuthSessionAsync(`https://api.affects.ai/oauth/google?redirect=${AuthSuccessCallbackURL}`);
+    if (feathersApp.authentication.authenticated) {
+      console.log("Already logged in...");
+      return;
     }
+
+    if (authToken) {
+      console.log("Already have auth token, attempting reauthorization.");
+      await reauthenticate(authToken).then(() => {
+        if (feathersApp.authentication.authenticated)
+          console.log("Successfully reauthenticated the existing access token.");
+        else
+          dispatch(logout())
+      })
+    }
+
+    if (!feathersApp.authentication.authenticated)
+      await WebBrowser.openAuthSessionAsync(`https://api.affects.ai/oauth/google?redirect=${AuthSuccessCallbackURL}`);
   }
 
   const logoutAsync = async() => {
