@@ -1,4 +1,4 @@
-import React, {ReactElement} from 'react';
+import React, {ReactElement, useEffect} from 'react';
 import {
   Button,
   Icon,
@@ -40,15 +40,17 @@ const GoogleIcon = (
 
 export function HomeScreen(): React.JSX.Element {
   const authToken = useSelector(selectAuthToken);
-  const identity = useSelector(selectIdentity);
-
+  let identity = useSelector(selectIdentity);
   const dispatch = useDispatch();
-  const [needAccount, setNeedAccount] = React.useState(true);
+
   const [editableParticipantID, setEditableParticipantID] = React.useState(false);
   const [participantID, setParticipantID] = React.useState<string>(identity);
-  const [password, setPassword] = React.useState<string>();
+  // const [password, setPassword] = React.useState<string>();
 
-
+  useEffect(() => {
+    console.log(identity)
+    setParticipantID(identity)
+  },[identity])
 
   const styles = useStyleSheet(themedStyles);
   const PersonIcon = (style: ImageStyle): IconElement => (
@@ -80,9 +82,11 @@ export function HomeScreen(): React.JSX.Element {
               placeholder='participant id'
               accessoryRight={PersonIcon}
               value={participantID}
-              onEndEditing={(value)=> {
+              onEndEditing={(event)=> {
+                console.log('setting id to ' + event.nativeEvent.text)
                 setEditableParticipantID(false);
-                dispatch(setID({identity: participantID}));
+                setParticipantID(event.nativeEvent.text);
+                dispatch(setID({identity: event.nativeEvent.text}));
               }}
               onChangeText={(value)=>setParticipantID(value)}
           />

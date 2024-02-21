@@ -6,6 +6,12 @@ interface IdState {
 }
 
 const initialState = { identity: randomUUID() } as IdState
+interface SetIdentityAction {
+  type: string,
+  payload: {
+    identity: string,
+  }
+}
 
 const identitySlice = createSlice({
   name: 'theme',
@@ -14,11 +20,8 @@ const identitySlice = createSlice({
     resetID(state) {
       state.identity = randomUUID();
     },
-    setID(state, action) {
-      const newID = action.payload.identity;
-      if (! newID && newID !== state.identity) {
-        state.identity = newID;
-      }
+    setID(state, action: SetIdentityAction) {
+      state.identity = action.payload.identity;
     },
     clearID(state) {
       state.identity = '';
