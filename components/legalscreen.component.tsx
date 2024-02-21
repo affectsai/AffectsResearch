@@ -37,27 +37,24 @@ export function LegalScreen(): React.JSX.Element {
 
           <Text style={{marginTop: 10}} category="h3">Privacy</Text>
           <Text style={{textAlign:'justify', marginTop: 10}} category='p1'>
-              Affects AI does not collect or retain any identifiable information about you, or the device on which it is installed. We may collect certain
-              anonymous metadata for development purposes, including device type and operating system. All data collected will be associated with a unique,
-              randomly generated identification code, which you can view on the Setting screen. This identification code was generated the first time the app
-              was launched on your device, and may be changed by you at any time. Please note that if you change your identification code, you are permanently
-              disassociating yourself from any data collected under that code, which may have unintended consequences. Please keep reading the rest of this
-              section to be sure you understand the consequences before you change it.
+              Affects AI does not collect or retain any identifiable information about you, or your mobile device. We do collect certain
+              anonymous usage data for research and development purposes, including device type and operating system. All data collected will be associated with a unique,
+              randomly generated identification code, which you can view on the Home screen. This identification code was either generated the first time the app
+              was launched on your device, or assigned to you by a research assistant during a sponsored research project. It may be changed by you at any time. If
+              you change your identification code, you are permanently disassociating yourself from any data collected under that code, which may have unintended
+              consequences. Please continue reading the rest of this section to be sure you understand the consequences before you change it.
           </Text>
 
           <Text style={{textAlign:'justify', marginTop: 10}}>
-          <Text  category='p1'>Affects AI uses the data collected by the application for research purposes. If you would like us to
-              delete your information, you may do so at any time by e-mailing your request to </Text>
+              <Text  category='p1'>If you would like us to delete your information, you may do so at any time by e-mailing your request and unique identification code to </Text>
               <Text status='info' style={{marginTop: 5}}
                     onPress={() => Linking.openURL('mailto:info@affects.ai')}>info@affects.ai</Text>
-              <Text>.
-          </Text>
           </Text>
 
           <Text style={{textAlign:'justify', marginTop: 10}}>
               Since we do not collect any identifying information about you, or your device, you MUST provide the unique identification code from
               the home screen in order for us to process your request. We are unable to retrieve your identification code for you. This includes your current code, as
-              well as any prior codes. Once you change your unique identification code, any data associated with the prior code is permanently and irrevocably disassociated from you, and we
+              well as any prior codes. Once you change your unique identification code, any data recorded using the prior code is permanently and irrevocably disassociated from you, and we
               will have no way to identify or delete that data from our system.
           </Text>
 
