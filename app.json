@@ -48,6 +48,11 @@
           "faceIDPermission": "Allow $(PRODUCT_NAME) to access your Face ID biometric data."
         }
       ]
-    ]
+    ],
+    "extra": {
+      "eas": {
+        "projectId": "cd278e3b-f1d2-4294-95f5-fed3500202f8"
+      }
+    }
   }
 }
