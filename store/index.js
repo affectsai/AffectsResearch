@@ -5,6 +5,8 @@ import {FLUSH, PAUSE, PERSIST, PURGE, REGISTER, REHYDRATE} from "redux-persist/e
 import themeReducer from '../features/themes/themeSlice';
 import bigfiveReducer from '../features/personality/personalityQuizSlice';
 import authReducer from '../features/authentication/authenticationSlice';
+import identityReducer from '../features/identification/idSlice'
+
 import createSecureStore from "redux-persist-expo-securestore";
 
 
@@ -27,12 +29,18 @@ const persistAuthConfig = {
 }
 const persisteAuthReducer = persistReducer(persistAuthConfig, authReducer);
 
+const persistIDConfig = {
+    key: 'affectsresearch-id',
+    storage: secureStorage,
+}
+const persistIDReducer = persistReducer(persistIDConfig, identityReducer);
 
 export const store = configureStore({
   reducer: {
       theme: persistedThemeReducer,
       bigfive: persisteBigFiveReducer,
       auth: persisteAuthReducer,
+      identity: persistIDReducer,
   },
   devTools: process.env.NODE_ENV !== 'production',
   middleware: (getDefaultMiddleware) =>

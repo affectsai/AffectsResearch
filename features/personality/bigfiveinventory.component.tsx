@@ -11,7 +11,7 @@ import {
     Linking,
     SafeAreaView, ScrollView, View, ViewProps,
 } from 'react-native';
-import {styles, BigFiveScreenNavigationProp, BackIcon} from '../../components/types';
+import {styles} from '../../components/types';
 import {Slider} from 'react-native-awesome-slider';
 import {useDerivedValue, useSharedValue} from "react-native-reanimated";
 import {useDispatch, useSelector} from "react-redux";

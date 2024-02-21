@@ -2,39 +2,18 @@ import { StackScreenProps } from "@react-navigation/stack";
 import {ImageProps, StyleSheet} from "react-native";
 import React from "react";
 import {Icon} from "@ui-kitten/components";
-
-export type RootStackParamList = {
-  Home: undefined;
-  Details: undefined;
-  BigFive: undefined;
-  SelfAssessment: undefined;
-};
-
-export type HomeScreenNavigationProp = StackScreenProps<
-  RootStackParamList,
-  'Home'
->;
-
-export type DetailsScreenNavigationProp = StackScreenProps<
-  RootStackParamList,
-  'Details'
->;
-
-export type BigFiveScreenNavigationProp = StackScreenProps<
-    RootStackParamList,
-    'BigFive'
->;
-
-export type SelfAssessmentBottomTabNavigationPageNavigationProp = StackScreenProps<
-    RootStackParamList,
-    'SelfAssessment'
->;
-
+import {BottomTabScreenProps} from "@react-navigation/bottom-tabs";
 export const styles = StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
+  },
+  textContainer: {
+    flex: 1,
+    justifyContent: 'left',
+    alignItems: 'left',
+    padding: 10
   },
   text: {
     textAlign: 'center',

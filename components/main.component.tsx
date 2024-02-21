@@ -7,7 +7,7 @@
 
 import React, {useCallback} from "react";
 import * as eva from '@eva-design/eva';
-import {ApplicationProvider, BottomNavigation, BottomNavigationTab, IconRegistry} from '@ui-kitten/components';
+import {ApplicationProvider, BottomNavigation, BottomNavigationTab, Icon, IconRegistry} from '@ui-kitten/components';
 import {EvaIconsPack} from '@ui-kitten/eva-icons';
 import * as SplashScreen from 'expo-splash-screen';
 
@@ -26,7 +26,7 @@ import {useSelector} from 'react-redux';
  * screens
  */
 import {useFonts} from "expo-font";
-import {SafeAreaView, StatusBar} from "react-native";
+import {ImageProps, SafeAreaView, StatusBar} from "react-native";
 import {NavigationContainer} from "@react-navigation/native";
 
 
@@ -35,23 +35,33 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import {HomeScreen} from "./homescreen.component";
 import {BigFiveInventoryScreen} from "../features/personality/bigfiveinventory.component";
 import {GestureHandlerRootView} from "react-native-gesture-handler";
-import {styles} from "./types";
+import {LegalScreen} from "./legalscreen.component";
 
 const { Navigator, Screen } = createBottomTabNavigator();
-
+const HomeIcon = (
+    props?: Partial<ImageProps>,
+): React.ReactElement<ImageProps> => <Icon {...props} name="home" />;
+const SurveyIcon = (
+    props?: Partial<ImageProps>,
+): React.ReactElement<ImageProps> => <Icon {...props} name="list" />;
+const LegalIcon = (
+    props?: Partial<ImageProps>,
+): React.ReactElement<ImageProps> => <Icon {...props} name="info" />;
 const BottomTabBar = ({ navigation, state }) => (
     <BottomNavigation
         selectedIndex={state.index}
         onSelect={index => navigation.navigate(state.routeNames[index])}>
-        <BottomNavigationTab title='Home'/>
-        <BottomNavigationTab title='Big 5 Survey'/>
+        <BottomNavigationTab title='Home' icon={HomeIcon}/>
+        <BottomNavigationTab title='Big 5 Inventory' icon={SurveyIcon}/>
+        <BottomNavigationTab title='Legal' icon={LegalIcon}/>
     </BottomNavigation>
 );
 
 const TabNavigator = () => (
     <Navigator screenOptions={{ headerShown: false }} tabBar={props => <BottomTabBar {...props} />}>
         <Screen name='Home' component={HomeScreen}/>
-        <Screen name='Big 5 Survey' component={BigFiveInventoryScreen}/>
+        <Screen name='Big 5 Inventory' component={BigFiveInventoryScreen}/>
+        <Screen name='Legal' component={LegalScreen}/>
     </Navigator>
 );
 
@@ -93,10 +103,9 @@ export function MainComponent(): React.JSX.Element | null {
                 customMapping={affectsai_mapping}>
                 <GestureHandlerRootView style={{flex: 1}}>
                     <SafeAreaView style={{flex: 1}}>
-
-                    <NavigationContainer onReady={onNavigationReady}>
-                        <TabNavigator/>
-                    </NavigationContainer>
+                        <NavigationContainer onReady={onNavigationReady}>
+                            <TabNavigator/>
+                        </NavigationContainer>
                     </SafeAreaView>
                 </GestureHandlerRootView>
             </ApplicationProvider>
