@@ -33,7 +33,7 @@ import {NavigationContainer} from "@react-navigation/native";
 SplashScreen.preventAutoHideAsync().then(() => {});
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import {HomeScreen} from "./homescreen.component";
-import {BigFiveInventoryScreen} from "./bigfiveinventory.component";
+import {BigFiveInventoryScreen} from "../features/personality/bigfiveinventory.component";
 import {GestureHandlerRootView} from "react-native-gesture-handler";
 import {styles} from "./types";
 

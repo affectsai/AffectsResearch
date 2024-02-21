@@ -1,4 +1,4 @@
-import {createSlice, createSelector} from "@reduxjs/toolkit";
+import {createSelector, createSlice} from "@reduxjs/toolkit";
 
 interface PersonalityQuizState {
   currentQuestion: number;
@@ -72,7 +72,7 @@ const personalityQuizSlice = createSlice({
   reducers: {
     nextQuestion: (state, action: SaveQuizAnswerAction) => {
       const newAnswers = state.currentAnswers.slice();
-      newAnswers[action.payload.questionNumber] = action.payload.responseValue
+      newAnswers[action.payload.questionNumber] = action.payload.responseValue < 0 ? 0 : action.payload.responseValue
       state.currentAnswers = newAnswers;
 
       if (state.currentQuestion+1 < surveyQuestions.size)
@@ -80,7 +80,7 @@ const personalityQuizSlice = createSlice({
     },
     previousQuestion: (state, action: SaveQuizAnswerAction) => {
       const newAnswers = state.currentAnswers.slice();
-      newAnswers[action.payload.questionNumber] = action.payload.responseValue
+      newAnswers[action.payload.questionNumber] = action.payload.responseValue < 0 ? 0 : action.payload.responseValue
       state.currentAnswers = newAnswers;
 
       if ( state.currentQuestion > 0 )

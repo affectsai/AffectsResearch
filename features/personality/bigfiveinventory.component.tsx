@@ -8,9 +8,10 @@ import {
     TopNavigationAction, Card, Button, ProgressBar,
 } from '@ui-kitten/components';
 import {
+    Linking,
     SafeAreaView, ScrollView, View, ViewProps,
 } from 'react-native';
-import {styles, BigFiveScreenNavigationProp, BackIcon} from './types';
+import {styles, BigFiveScreenNavigationProp, BackIcon} from '../../components/types';
 import {Slider} from 'react-native-awesome-slider';
 import {useDerivedValue, useSharedValue} from "react-native-reanimated";
 import {useDispatch, useSelector} from "react-redux";
@@ -24,16 +25,20 @@ import {
     selectExtraversionScore,
     selectAgreeablenessScore,
     selectConscientiousnessScore, selectNeuroticismScore, selectOpennessScore, saveAnswer, resetPersonalityQuiz
-} from "../features/personality/personalityQuizSlice";
+} from "./personalityQuizSlice";
 import * as Haptics from 'expo-haptics'
+import {current} from "@reduxjs/toolkit";
 
-const makeHeader = (title: string, description: string) => {
+const makeHeader = (title: string, description: string, currentQuestion: number, totalQuestions: number) => {
     return (props: ViewProps): React.ReactElement => (
         <View {...props}>
-            <Text category='h6'>
+            <Text category='p2'>
+                Question {currentQuestion} of {totalQuestions}
+            </Text>
+            <Text style={{marginTop: 5}} category='s1'>
                 {title}
             </Text>
-            <Text category='s1'>
+            <Text category='s2' >
                 {description}
             </Text>
         </View>
@@ -46,30 +51,29 @@ type ButtonCallback = (() => void) | undefined;
 const makeFooter = (firstQuestion: boolean, lastQuestion: boolean, nextCallback: ButtonCallback, previousCallback: ButtonCallback) => {
     return (props: ViewProps): React.ReactElement => (
         <Layout style={{alignContent: 'flex-end'}}>
-
-        <View
-            {...props}
-            // eslint-disable-next-line react/prop-types
-            style={[props.style, styles.footerContainer]}
-        >
-            <Button
-                style={styles.footerControl}
-                disabled={firstQuestion}
-                size='small'
-                status='basic'
-                onPress={previousCallback}
+            <View
+                {...props}
+                // eslint-disable-next-line react/prop-types
+                style={[props.style, styles.footerContainer]}
             >
-                GO BACK
-            </Button>
-            <Button
-                style={styles.footerControl}
-                disabled={lastQuestion}
-                size='small'
-                onPress={nextCallback}
-            >
-                NEXT QUESTION
-            </Button>
-        </View>
+                <Button
+                    style={styles.footerControl}
+                    disabled={firstQuestion}
+                    size='small'
+                    status='basic'
+                    onPress={previousCallback}
+                >
+                    GO BACK
+                </Button>
+                <Button
+                    style={styles.footerControl}
+                    disabled={lastQuestion}
+                    size='small'
+                    onPress={nextCallback}
+                >
+                    NEXT QUESTION
+                </Button>
+            </View>
         </Layout>
 
     );
@@ -151,8 +155,8 @@ export function BigFiveInventoryScreen(): React.JSX.Element {
     const statusBar = (value: number, label: string, topMargin: number = 20) => {
         return ( <>
                 <Layout style={{flexDirection: 'row', marginTop: topMargin}}>
-                    <Text style={{flex: 1}} status={value < 0 ? 'danger' : 'success'}>{label}:</Text>
-                    <Text style={{flex: 1, textAlign: 'right'}} status={value < 0 ? 'danger' : 'success'}>{value < 0 ? 'pending...' : `${value.toFixed(0)}%`}</Text>
+                    <Text style={{flex: 1}} status={value < 0 ? 'danger' : 'info'}>{label}:</Text>
+                    <Text style={{flex: 1, textAlign: 'right'}} status={value < 0 ? 'danger' : 'info'}>{value < 0 ? 'pending...' : `${value.toFixed(0)}%`}</Text>
                 </Layout>
             <ProgressBar style={{marginTop: 5}} progress={value/100} />
             </>
@@ -166,7 +170,7 @@ export function BigFiveInventoryScreen(): React.JSX.Element {
                     <Text category="h3">Big Five Inventory</Text>
                     <Card disabled={true}
                         style={styles.card}
-                        header={makeHeader('I see myself as someone who...', surveyQuestions.get(currentQuestion+1))}
+                        header={makeHeader(`I see myself as someone who...`, surveyQuestions.get(currentQuestion+1), currentQuestion, surveyQuestions.size)}
                         footer={makeFooter(currentQuestion==0, currentQuestion==surveyQuestions.size-1,nextButtonCallback, backButtonCallback)}>
                         <Slider
                             style={styles.surveySlider}
@@ -224,6 +228,8 @@ export function BigFiveInventoryScreen(): React.JSX.Element {
                             <Text style={{flex:1, textAlign: 'left'}} category='label'>Strongly Disagree</Text>
                             <Text style={{flex:1, textAlign: 'right'}} category='label'>Strongly Agree</Text>
                         </Layout>
+
+
                     </Card>
                     <Card disabled={true}
                         footer={makeResetFooter(()=>{
@@ -234,12 +240,24 @@ export function BigFiveInventoryScreen(): React.JSX.Element {
                             Personality Traits
                             </Text></View>)}
                         style={styles.scoreCard}>
-                        {statusBar(extraversion, "Extraversion", 5)}
+                        {statusBar(extraversion, "Extraversion", 15)}
                         {statusBar(agreeableness, "Agreeableness")}
                         {statusBar(conscientiousness, "Conscientiousness")}
                         {statusBar(neuroticism, "Neuroticism")}
                         {statusBar(openness, "Openness")}
                     </Card>
+                <Card disabled={true} style={styles.scoreCard}>
+                    <Layout >
+                        <Text category="p2">The Big Five Inventory is implemented here for research purposes only. For more information
+                            about the Big Five Inventory, please see:</Text>
+                        <Text category="p2" style={{color: 'blue', marginTop: 5}}
+                            onPress={() => Linking.openURL('https://www.ocf.berkeley.edu/~johnlab/index.htm')}>
+                            Berkeley Personality Lab
+                        </Text>
+                    </Layout>
+
+                </Card>
+
                 </Layout>
         </ScrollView>
     );
