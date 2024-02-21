@@ -61,7 +61,7 @@ export function HomeScreen(): React.JSX.Element {
           <Text
               category='h1'
               status='control'>
-            Hello
+            Affects Research
           </Text>
           <Text
               style={styles.signInLabel}
