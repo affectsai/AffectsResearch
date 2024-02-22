@@ -3,8 +3,8 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { persistStore, persistReducer } from 'redux-persist'
 import {FLUSH, PAUSE, PERSIST, PURGE, REGISTER, REHYDRATE} from "redux-persist/es/constants";
 import themeReducer from '../features/themes/themeSlice';
-// import bigfiveReducer from '../features/personality/personalityQuizSlice';
-import bfi1Reducer from '../features/personality/fiveFactorModelSlice'
+import bfi1Reducer from '../features/personality/bigFiveInventory1Slice'
+import bfi2Reducer from '../features/personality/bigFiveInventory2Slice'
 import authReducer from '../features/authentication/authenticationSlice';
 import identityReducer from '../features/identification/idSlice'
 
@@ -17,11 +17,17 @@ const persistThemeConfig = {
 }
 const persistedThemeReducer = persistReducer(persistThemeConfig, themeReducer)
 
-const persistBigFiveConfig = {
+const persistBigFive1Config = {
     key: 'affectsresearch-bfi1',
     storage: AsyncStorage,
 }
-const persisteBigFiveReducer = persistReducer(persistBigFiveConfig, bfi1Reducer);
+const persisteBigFive1Reducer = persistReducer(persistBigFive1Config, bfi1Reducer);
+
+const persistBigFive2Config = {
+    key: 'affectsresearch-bfi2',
+    storage: AsyncStorage,
+}
+const persisteBigFive2Reducer = persistReducer(persistBigFive2Config, bfi2Reducer);
 
 const secureStorage = createSecureStore();
 const persistAuthConfig = {
@@ -39,7 +45,8 @@ const persistIDReducer = persistReducer(persistIDConfig, identityReducer);
 export const store = configureStore({
   reducer: {
       theme: persistedThemeReducer,
-      bigfive: persisteBigFiveReducer,
+      bigfive: persisteBigFive1Reducer,
+      bigfive2: persisteBigFive2Reducer,
       auth: persisteAuthReducer,
       identity: persistIDReducer,
   },

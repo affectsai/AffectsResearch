@@ -5,7 +5,6 @@ import {Icon} from "@ui-kitten/components";
 import {BottomTabScreenProps} from "@react-navigation/bottom-tabs";
 export const styles = StyleSheet.create({
   container: {
-    flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
   },
@@ -32,7 +31,6 @@ export const styles = StyleSheet.create({
     minHeight: 250
   },
   scoreCard: {
-    flex: 1,
     width: "95%",
     marginBottom: 20,
     justifyContent: 'center',

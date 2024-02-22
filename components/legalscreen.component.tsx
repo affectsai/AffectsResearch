@@ -8,8 +8,6 @@ import {useDispatch} from "react-redux";
 import {resetID} from "../features/identification/idSlice";
 import {logout} from "../features/authentication/authenticationSlice";
 
-
-
 export function LegalScreen(): React.JSX.Element {
     const dispatch = useDispatch();
   return (
@@ -17,14 +15,14 @@ export function LegalScreen(): React.JSX.Element {
 
       <Layout style={styles.textContainer}>
           <Text category="h3">License</Text>
+
           <Text style={{textAlign:'justify', marginTop: 10}}>
               <Text category='p1'>This application, AffectResearch, (hereafter, "app") is written and distributed by </Text>
               <Text status='info' style={{marginTop: 5}}
                     onPress={() => Linking.openURL('https://affects.ai')}>Affects AI LLC </Text>
               <Text category="p1">("Affects AI").</Text>
           </Text>
-          {/*<Image style={{flex: 1, width: undefined, resizeMode: 'stretch', marginTop: 0}} source={require("../assets/images/license_overview.png")}/>*/}
-
+          <Image style={{flex: 1, width: undefined, resizeMode: 'contain', marginTop: 0}} source={require("../assets/images/license_overview.png")}/>
           <Text style={{textAlign:'justify', marginTop: 10}}>
           <Text>This app is free for non-commercial use under </Text>
           <Text status='info' style={{marginTop: 5}}
