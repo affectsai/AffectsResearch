@@ -73,8 +73,8 @@ export function BigFiveInventory2Screen(): React.JSX.Element {
     const CreativeImaginationScore = useSelector(selectCreativeImaginationScore)
     const [sliderValue, setSliderValue] = useState(currentQuestion.response);
 
-    const min = useSharedValue(1);
-    const max = useSharedValue(5);
+    const min = useSharedValue(0.5);
+    const max = useSharedValue(5.5);
     let progress = useSharedValue(currentQuestion.response)
 
 
@@ -135,18 +135,17 @@ export function BigFiveInventory2Screen(): React.JSX.Element {
                     bubbleMaxWidth={500}
                     bubble={(x) => {
                         let desc = "Strongly Disagree";
-                        let val = Math.round(x);
-                        if (val <= 1)
+                        if (x <= 1.5)
                             desc = "Strongly Disagree";
-                        else if (val <= 3)
+                        else if (x <= 2.5)
                             desc = "Somewhat disagree";
-                        else if (val <= 6)
+                        else if (x <= 3.5)
                             desc = "Neither agree nor disagree";
-                        else if (val <= 8)
+                        else if (x <= 4.5)
                             desc = "Somewhat agree";
-                        else if (val <= 10)
+                        else
                             desc = "Strongly Agree";
-
+                        let val = Math.round(x);
                         return `${val} - ${desc}`;
                     }}
                     onValueChange={(x) => {

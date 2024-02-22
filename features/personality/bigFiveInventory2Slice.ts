@@ -171,6 +171,10 @@ const bfi2Slice = createSlice({
     },
     saveQuestion: (state, action: SaveSurveyQuestionAction) => {
       const newSurvey = {...state.survey}
+      if (action.payload.question.response < 1)
+        action.payload.question.response = 1
+      else if (action.payload.question.response > 5)
+        action.payload.question.response = 5
       updateQuestionInSurvey(newSurvey, action.payload.question)
       state.survey = newSurvey
     },
