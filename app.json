@@ -17,7 +17,7 @@
     ],
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "ai.affects.research.AffectSurvey",
+      "bundleIdentifier": "ai.affects.apps.research.AffectSurvey",
       "config": {
         "usesNonExemptEncryption": false
       }
@@ -27,7 +27,7 @@
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
-      "package": "ai.affects.research.AffectSurvey"
+      "package": "ai.affects.apps.research.AffectSurvey"
     },
     "web": {
       "favicon": "./assets/favicon.png"
@@ -51,8 +51,9 @@
     ],
     "extra": {
       "eas": {
-        "projectId": "cd278e3b-f1d2-4294-95f5-fed3500202f8"
+        "projectId": "2faeb639-77b2-4670-b339-a2abf7b77e44"
       }
-    }
+    },
+    "owner": "affectsai"
   }
 }

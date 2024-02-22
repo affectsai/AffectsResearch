@@ -186,7 +186,7 @@ export function BigFiveInventory2Screen(): React.JSX.Element {
                           Domain Scales
                       </Text></View>)}
                   style={styles.scoreCard}>
-                {statusBar(extraversionScore, "Extraversion", 15)}
+                {statusBar(extraversionScore, "Extraversion", 0)}
                 {statusBar(agreeablenessScore, "Agreeableness")}
                 {statusBar(conscientiousnessScore, "Conscientiousness")}
                 {statusBar(neuroticismScore, "Negative Emotionality")}
@@ -201,7 +201,7 @@ export function BigFiveInventory2Screen(): React.JSX.Element {
                           Facet Scales
                       </Text></View>)}
                   style={styles.scoreCard}>
-                {statusBar(SociabilityScore, "Sociability", 15)}
+                {statusBar(SociabilityScore, "Sociability", 0)}
                 {statusBar(AssertivenessScore, "Assertiveness")}
                 {statusBar(EnergyLevelScore, "EnergyLevel")}
                 {statusBar(CompassionScore, "Compassion")}
