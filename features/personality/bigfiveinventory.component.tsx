@@ -15,19 +15,30 @@ import {styles} from '../../components/types';
 import {Slider} from 'react-native-awesome-slider';
 import {useDerivedValue, useSharedValue} from "react-native-reanimated";
 import {useDispatch, useSelector} from "react-redux";
+// import {
+//     nextQuestion,
+//     previousQuestion,
+//     selectQuizAnswers,
+//     selectCurrentQuestion,
+//     selectCurrentResponse,
+//     bfi_1_questions,
+//     selectExtraversionScore,
+//     selectAgreeablenessScore,
+//     selectConscientiousnessScore, selectNeuroticismScore, selectOpennessScore, saveAnswer, resetPersonalityQuiz
+// } from "./personalityQuizSlice";
 import {
     nextQuestion,
     previousQuestion,
-    selectQuizAnswers,
+    saveQuestion,
+    resetPersonalityQuiz,
     selectCurrentQuestion,
-    selectCurrentResponse,
-    surveyQuestions,
     selectExtraversionScore,
     selectAgreeablenessScore,
-    selectConscientiousnessScore, selectNeuroticismScore, selectOpennessScore, saveAnswer, resetPersonalityQuiz
-} from "./personalityQuizSlice";
+    selectConscientiousnessScore,
+    selectNegativeEmotionalityScore,
+    selectOpenMindednessScore, selectSurveySize, selectCurrentIndex
+} from './fiveFactorModelSlice'
 import * as Haptics from 'expo-haptics'
-import {current} from "@reduxjs/toolkit";
 
 const makeHeader = (title: string, description: string, currentQuestion: number, totalQuestions: number) => {
     return (props: ViewProps): React.ReactElement => (
@@ -101,32 +112,25 @@ const makeResetFooter = (resetCallback: ButtonCallback) => {
 
 export function BigFiveInventoryScreen(): React.JSX.Element {
     const dispatch = useDispatch();
+    const surveySize = useSelector(selectSurveySize)
     const currentQuestion = useSelector(selectCurrentQuestion);
-    const currentAnswers = useSelector(selectQuizAnswers);
-    const currentResponse = useSelector(selectCurrentResponse);
-
     const extraversionScore = useSelector(selectExtraversionScore)
     const agreeablenessScore = useSelector(selectAgreeablenessScore);
     const conscientiousnessScore = useSelector(selectConscientiousnessScore);
-    const neuroticismScore = useSelector(selectNeuroticismScore);
-    const opennessScore = useSelector(selectOpennessScore);
+    const neuroticismScore = useSelector(selectNegativeEmotionalityScore);
+    const opennessScore = useSelector(selectOpenMindednessScore);
 
-    const defaultRating: number = 5;
-    const min = useSharedValue(0);
-    const max = useSharedValue(10);
-    let progress = useSharedValue(currentResponse)
+    const [sliderValue, setSliderValue] = useState(currentQuestion.response);
+
+    const min = useSharedValue(1);
+    const max = useSharedValue(5);
+    let progress = useSharedValue(currentQuestion.response)
 
     const [extraversion, setExtraversion] = useState(extraversionScore)
     const [agreeableness, setAgreeableness] = useState(agreeablenessScore)
     const [conscientiousness, setConscientiousness] = useState(conscientiousnessScore)
     const [neuroticism, setNeuroticism] = useState(neuroticismScore)
     const [openness, setOpenness] = useState(opennessScore)
-    const [chosenValue, setChosenValue] = useState(currentResponse);
-
-
-    useEffect(() => {
-        setChosenValue(currentResponse );
-    }, [currentQuestion, currentAnswers, currentResponse])
 
     useEffect(() => {
         setExtraversion(extraversionScore);
@@ -134,31 +138,40 @@ export function BigFiveInventoryScreen(): React.JSX.Element {
         setOpenness(opennessScore);
         setNeuroticism(neuroticismScore);
         setConscientiousness(conscientiousnessScore);
-        progress.value = chosenValue;
-    }, [chosenValue])
+        progress.value = sliderValue;
+    }, [sliderValue])
 
     useEffect(() => {
-        console.log(surveyQuestions.get(currentQuestion+1))
-    }, [progress])
-
+        progress.value = currentQuestion.response
+    }, [currentQuestion])
 
     const backButtonCallback: ButtonCallback = () => {
-        console.log(`Saving value ${progress.value} for question ${currentQuestion}`);
-        dispatch(previousQuestion({questionNumber: currentQuestion, responseValue: progress.value}));
+        if (progress.value < 0)
+            progress.value = 1
+        console.log(`Saving value ${progress.value} for question ${currentQuestion.text}`);
+        dispatch(saveQuestion({question: {...currentQuestion, response: progress.value}}))
+        dispatch(previousQuestion());
     }
 
     const nextButtonCallback: ButtonCallback = () => {
-        console.log(`Saving value ${progress.value} for question ${currentQuestion}`);
-        dispatch(nextQuestion({questionNumber: currentQuestion, responseValue: progress.value}));
+        if (progress.value < 0)
+            progress.value = 1
+        console.log(`Saving value ${progress.value} for question ${currentQuestion.text}`);
+        dispatch(saveQuestion({question: {...currentQuestion, response: progress.value}}))
+        dispatch(nextQuestion());
     }
 
     const statusBar = (value: number, label: string, topMargin: number = 20) => {
-        return ( <>
+        // if (value == null || Number.isNaN(value)) value = Number.NEGATIVE_INFINITY
+        console.log("Getting status bar for value " + value)
+
+        return (
+            <>
                 <Layout style={{flexDirection: 'row', marginTop: topMargin}}>
                     <Text style={{flex: 1}} status={value < 0 ? 'danger' : 'info'}>{label}:</Text>
-                    <Text style={{flex: 1, textAlign: 'right'}} status={value < 0 ? 'danger' : 'info'}>{value < 0 ? 'pending...' : `${value.toFixed(0)}%`}</Text>
+                    <Text style={{flex: 1, textAlign: 'right'}} status={value < 0 ? 'danger' : 'info'}>{value == null || value < 0 ? 'pending...' : `${value.toFixed(0)}%`}</Text>
                 </Layout>
-            <ProgressBar style={{marginTop: 5}} progress={value/100} />
+                <ProgressBar style={{marginTop: 5}} progress={value/100} />
             </>
         );
     }
@@ -170,8 +183,8 @@ export function BigFiveInventoryScreen(): React.JSX.Element {
                     <Text category="h3">Big Five Inventory</Text>
                     <Card disabled={true}
                         style={styles.card}
-                        header={makeHeader(`I see myself as someone who...`, surveyQuestions.get(currentQuestion+1), currentQuestion, surveyQuestions.size)}
-                        footer={makeFooter(currentQuestion==0, currentQuestion==surveyQuestions.size-1,nextButtonCallback, backButtonCallback)}>
+                        header={makeHeader(`I see myself as someone who...`, currentQuestion.text, currentQuestion.index, surveySize)}
+                        footer={makeFooter(currentQuestion.index==1, currentQuestion.index==surveySize,nextButtonCallback, backButtonCallback)}>
                         <Slider
                             style={styles.surveySlider}
                             progress={progress}
@@ -199,9 +212,10 @@ export function BigFiveInventoryScreen(): React.JSX.Element {
                             }}
                             onSlidingComplete={(x) => {
                                 progress.value = Math.round(x);
-                                setChosenValue(progress.value);
+                                setSliderValue(progress.value);
                                 Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success).then(()=>{})
-                                dispatch(saveAnswer({questionNumber: currentQuestion, responseValue: progress.value}))
+                                currentQuestion.response = progress.value
+                                dispatch(saveQuestion({question: {...currentQuestion, response: progress.value}}))
                             }}
                             theme={{
                                 disableMinTrackTintColor: '#fff',
@@ -212,17 +226,11 @@ export function BigFiveInventoryScreen(): React.JSX.Element {
                             }}
                         />
                         <Layout style={{flexDirection: 'row', marginTop: 10}}>
-                            <Text style={{flex:1, textAlign: 'center'}} category='label'>0</Text>
                             <Text style={{flex:1, textAlign: 'center'}} category='label'>1</Text>
                             <Text style={{flex:1, textAlign: 'center'}} category='label'>2</Text>
                             <Text style={{flex:1, textAlign: 'center'}} category='label'>3</Text>
                             <Text style={{flex:1, textAlign: 'center'}} category='label'>4</Text>
                             <Text style={{flex:1, textAlign: 'center'}} category='label'>5</Text>
-                            <Text style={{flex:1, textAlign: 'center'}} category='label'>6</Text>
-                            <Text style={{flex:1, textAlign: 'center'}} category='label'>7</Text>
-                            <Text style={{flex:1, textAlign: 'center'}} category='label'>8</Text>
-                            <Text style={{flex:1, textAlign: 'center'}} category='label'>9</Text>
-                            <Text style={{flex:1, textAlign: 'center'}} category='label'>10</Text>
                         </Layout>
                         <Layout style={{flexDirection: 'row', marginTop: 10}}>
                             <Text style={{flex:1, textAlign: 'left'}} category='label'>Strongly Disagree</Text>
@@ -240,11 +248,11 @@ export function BigFiveInventoryScreen(): React.JSX.Element {
                             Personality Traits
                             </Text></View>)}
                         style={styles.scoreCard}>
-                        {statusBar(extraversion, "Extraversion", 15)}
-                        {statusBar(agreeableness, "Agreeableness")}
-                        {statusBar(conscientiousness, "Conscientiousness")}
-                        {statusBar(neuroticism, "Neuroticism")}
-                        {statusBar(openness, "Openness")}
+                        {statusBar(extraversionScore, "Extraversion", 15)}
+                        {statusBar(agreeablenessScore, "Agreeableness")}
+                        {statusBar(conscientiousnessScore, "Conscientiousness")}
+                        {statusBar(neuroticismScore, "Neuroticism")}
+                        {statusBar(opennessScore, "Openness")}
                     </Card>
                 <Card disabled={true} style={styles.scoreCard}>
                     <Layout >

@@ -90,24 +90,7 @@ export function HomeScreen(): React.JSX.Element {
               }}
               onChangeText={(value)=>setParticipantID(value)}
           />
-          {/*<Input*/}
-          {/*    style={styles.passwordInput}*/}
-          {/*    disabled={true}*/}
-          {/*    placeholder={needAccount?'new password':'password'}*/}
-          {/*    accessoryRight={renderPasswordIcon}*/}
-          {/*    value={''}*/}
-          {/*    secureTextEntry={!passwordVisible}*/}
-          {/*    onChangeText={()=>alert('change pw')}*/}
-          {/*/>*/}
-          {/*<View style={styles.forgotPasswordContainer}>*/}
-          {/*  <Button*/}
-          {/*      style={styles.forgotPasswordButton}*/}
-          {/*      appearance='ghost'*/}
-          {/*      status='basic'*/}
-          {/*      onPress={()=>setNeedAccount(!needAccount)}>*/}
-          {/*    {needAccount?'Already Registered?':'Need an account?'}*/}
-          {/*  </Button>*/}
-          {/*</View>*/}
+
           </KeyboardAvoidingView>
 
 
