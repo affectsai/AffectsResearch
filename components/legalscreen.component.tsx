@@ -29,9 +29,9 @@ export function LegalScreen(): React.JSX.Element {
                               onPress={() => Linking.openURL('https://affects.ai')}>Affects AI LLC </Text>
                         <Text category="p1">("Affects AI").</Text>
                     </Text>
-                    <Image style={{flex: 1, width: undefined, resizeMode: 'contain', marginTop: 0}}
+                    <Image style={{alignSelf: 'center', width: "90%", resizeMode: 'contain', margin: 0, padding: 0}}
                            source={images.licence}/>
-                    <Text style={{textAlign: 'justify', marginTop: 10}}>
+                    <Text style={{textAlign: 'justify'}}>
                         <Text>This app is free for non-commercial use under </Text>
                         <Text status='info' style={{marginTop: 5}}
                               onPress={() => Linking.openURL('https://creativecommons.org/licenses/by-nc-sa/4.0/deed.en')}> CC
