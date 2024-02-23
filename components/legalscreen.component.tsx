@@ -18,7 +18,7 @@ export function LegalScreen(): React.JSX.Element {
     const tabBarHeight = useBottomTabBarHeight();
     function ThisAppLegal(): React.JSX.Element {
         return (
-            <ScrollView>
+            <ScrollView contentContainerStyle={{paddingBottom: tabBarHeight}}>
                 <Layout style={styles.textContainer}>
                     <Text category="h3">License</Text>
 

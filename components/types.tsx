@@ -15,7 +15,8 @@ export const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'left',
     alignItems: 'left',
-    padding: 10
+    padding: 10,
+
   },
   licenceContainer: {
     flex: 1,
