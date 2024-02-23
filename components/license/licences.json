@@ -1,0 +1,248 @@
+{
+    "@eva-design/eva@2.2.0": {
+        "licenses": "MIT",
+        "repository": "https://github.com/eva-design/eva",
+        "licenseUrl": "https://github.com/eva-design/eva",
+        "parents": "affectsresearch"
+    },
+    "@expo/metro-runtime@3.1.3": {
+        "licenses": "MIT",
+        "repository": "https://github.com/expo/expo",
+        "licenseUrl": "https://github.com/expo/expo",
+        "parents": "affectsresearch"
+    },
+    "@feathersjs/authentication-client@5.0.22": {
+        "licenses": "MIT",
+        "repository": "https://github.com/feathersjs/feathers",
+        "licenseUrl": "https://github.com/feathersjs/feathers/raw/master/LICENSE",
+        "parents": "affectsresearch"
+    },
+    "@feathersjs/rest-client@5.0.22": {
+        "licenses": "MIT",
+        "repository": "https://github.com/feathersjs/feathers",
+        "licenseUrl": "https://github.com/feathersjs/feathers/raw/master/LICENSE",
+        "parents": "affectsresearch"
+    },
+    "@react-native-async-storage/async-storage@1.22.0": {
+        "licenses": "MIT",
+        "repository": "https://github.com/react-native-async-storage/async-storage",
+        "licenseUrl": "https://github.com/react-native-async-storage/async-storage/raw/master/LICENSE",
+        "parents": "affectsresearch"
+    },
+    "@react-native/metro-config@0.73.5": {
+        "licenses": "MIT",
+        "repository": "https://github.com/facebook/react-native",
+        "licenseUrl": "https://github.com/facebook/react-native",
+        "parents": "affectsresearch"
+    },
+    "@react-navigation/bottom-tabs@6.5.12": {
+        "licenses": "MIT",
+        "repository": "https://github.com/react-navigation/react-navigation",
+        "licenseUrl": "https://github.com/react-navigation/react-navigation/raw/master/LICENSE",
+        "parents": "affectsresearch"
+    },
+    "@react-navigation/material-top-tabs@6.6.6": {
+        "licenses": "MIT",
+        "repository": "https://github.com/react-navigation/react-navigation",
+        "licenseUrl": "https://github.com/react-navigation/react-navigation/raw/master/LICENSE",
+        "parents": "affectsresearch"
+    },
+    "@react-navigation/native@6.1.10": {
+        "licenses": "MIT",
+        "repository": "https://github.com/react-navigation/react-navigation",
+        "licenseUrl": "https://github.com/react-navigation/react-navigation/raw/master/LICENSE",
+        "parents": "affectsresearch"
+    },
+    "@react-navigation/stack@6.3.21": {
+        "licenses": "MIT",
+        "repository": "https://github.com/react-navigation/react-navigation",
+        "licenseUrl": "https://github.com/react-navigation/react-navigation/raw/master/LICENSE",
+        "parents": "affectsresearch"
+    },
+    "@reduxjs/toolkit@2.2.1": {
+        "licenses": "MIT",
+        "repository": "https://github.com/reduxjs/redux-toolkit",
+        "licenseUrl": "https://github.com/reduxjs/redux-toolkit/raw/master/LICENSE",
+        "parents": "affectsresearch"
+    },
+    "@ui-kitten/components@5.3.1": {
+        "licenses": "MIT",
+        "repository": "https://github.com/akveo/react-native-ui-kitten",
+        "licenseUrl": "https://github.com/akveo/react-native-ui-kitten",
+        "parents": "affectsresearch"
+    },
+    "@ui-kitten/eva-icons@5.3.1": {
+        "licenses": "MIT",
+        "repository": "https://github.com/akveo/react-native-ui-kitten",
+        "licenseUrl": "https://github.com/akveo/react-native-ui-kitten",
+        "parents": "affectsresearch"
+    },
+    "axios@1.6.7": {
+        "licenses": "MIT",
+        "repository": "https://github.com/axios/axios",
+        "licenseUrl": "https://github.com/axios/axios/raw/master/LICENSE",
+        "parents": "affectsresearch"
+    },
+    "expo-asset@9.0.2": {
+        "licenses": "MIT",
+        "repository": "https://github.com/expo/expo",
+        "licenseUrl": "https://github.com/expo/expo",
+        "parents": "affectsresearch"
+    },
+    "expo-auth-session@5.4.0": {
+        "licenses": "MIT",
+        "repository": "https://github.com/expo/expo",
+        "licenseUrl": "https://github.com/expo/expo",
+        "parents": "affectsresearch"
+    },
+    "expo-constants@15.4.5": {
+        "licenses": "MIT",
+        "repository": "https://github.com/expo/expo",
+        "licenseUrl": "https://github.com/expo/expo",
+        "parents": "affectsresearch"
+    },
+    "expo-crypto@12.8.1": {
+        "licenses": "MIT",
+        "repository": "https://github.com/expo/expo",
+        "licenseUrl": "https://github.com/expo/expo",
+        "parents": "affectsresearch"
+    },
+    "expo-font@11.10.3": {
+        "licenses": "MIT",
+        "repository": "https://github.com/expo/expo",
+        "licenseUrl": "https://github.com/expo/expo",
+        "parents": "affectsresearch"
+    },
+    "expo-haptics@12.8.1": {
+        "licenses": "MIT",
+        "repository": "https://github.com/expo/expo",
+        "licenseUrl": "https://github.com/expo/expo",
+        "parents": "affectsresearch"
+    },
+    "expo-linking@6.2.2": {
+        "licenses": "MIT",
+        "repository": "https://github.com/expo/expo",
+        "licenseUrl": "https://github.com/expo/expo",
+        "parents": "affectsresearch"
+    },
+    "expo-secure-store@12.8.1": {
+        "licenses": "MIT",
+        "repository": "https://github.com/expo/expo",
+        "licenseUrl": "https://github.com/expo/expo",
+        "parents": "affectsresearch"
+    },
+    "expo-splash-screen@0.26.4": {
+        "licenses": "MIT",
+        "repository": "https://github.com/expo/expo",
+        "licenseUrl": "https://github.com/expo/expo",
+        "parents": "affectsresearch"
+    },
+    "expo-status-bar@1.11.1": {
+        "licenses": "MIT",
+        "repository": "https://github.com/expo/expo",
+        "licenseUrl": "https://github.com/expo/expo",
+        "parents": "affectsresearch"
+    },
+    "expo@50.0.7": {
+        "licenses": "MIT",
+        "repository": "https://github.com/expo/expo",
+        "licenseUrl": "https://github.com/expo/expo",
+        "parents": "affectsresearch"
+    },
+    "react-dom@18.2.0": {
+        "licenses": "MIT",
+        "repository": "https://github.com/facebook/react",
+        "licenseUrl": "https://github.com/facebook/react/raw/master/LICENSE",
+        "parents": "affectsresearch"
+    },
+    "react-native-awesome-slider@2.4.7": {
+        "licenses": "MIT",
+        "repository": "https://github.com/alantoa/react-native-awesome-slider",
+        "licenseUrl": "https://github.com/alantoa/react-native-awesome-slider/raw/master/LICENSE",
+        "parents": "affectsresearch"
+    },
+    "react-native-gesture-handler@2.14.1": {
+        "licenses": "MIT",
+        "repository": "https://github.com/software-mansion/react-native-gesture-handler",
+        "licenseUrl": "https://github.com/software-mansion/react-native-gesture-handler/raw/master/LICENSE",
+        "parents": "affectsresearch"
+    },
+    "react-native-pager-view@6.2.3": {
+        "licenses": "MIT",
+        "repository": "https://github.com/callstack/react-native-pager-view",
+        "licenseUrl": "https://github.com/callstack/react-native-pager-view/raw/master/LICENSE",
+        "parents": "affectsresearch"
+    },
+    "react-native-reanimated@3.6.2": {
+        "licenses": "MIT",
+        "repository": "https://github.com/software-mansion/react-native-reanimated",
+        "licenseUrl": "https://github.com/software-mansion/react-native-reanimated/raw/master/LICENSE",
+        "parents": "affectsresearch"
+    },
+    "react-native-safe-area-context@4.9.0": {
+        "licenses": "MIT",
+        "repository": "https://github.com/th3rdwave/react-native-safe-area-context",
+        "licenseUrl": "https://github.com/th3rdwave/react-native-safe-area-context/raw/master/LICENSE",
+        "parents": "affectsresearch"
+    },
+    "react-native-svg-transformer@1.3.0": {
+        "licenses": "MIT",
+        "repository": "https://github.com/kristerkari/react-native-svg-transformer",
+        "licenseUrl": "https://github.com/kristerkari/react-native-svg-transformer/raw/master/LICENSE",
+        "parents": "affectsresearch"
+    },
+    "react-native-svg@14.1.0": {
+        "licenses": "MIT",
+        "repository": "https://github.com/react-native-community/react-native-svg",
+        "licenseUrl": "https://github.com/react-native-community/react-native-svg/raw/master/LICENSE",
+        "parents": "affectsresearch"
+    },
+    "react-native-tab-view@3.5.2": {
+        "licenses": "MIT",
+        "repository": "https://github.com/react-navigation/react-navigation",
+        "licenseUrl": "https://github.com/react-navigation/react-navigation/raw/master/LICENSE",
+        "parents": "affectsresearch"
+    },
+    "react-native-web@0.19.10": {
+        "licenses": "MIT",
+        "repository": "https://github.com/necolas/react-native-web",
+        "licenseUrl": "https://github.com/necolas/react-native-web/raw/master/LICENSE",
+        "parents": "affectsresearch"
+    },
+    "react-native@0.73.4": {
+        "licenses": "MIT",
+        "repository": "https://github.com/facebook/react-native",
+        "licenseUrl": "https://github.com/facebook/react-native/raw/master/LICENSE",
+        "parents": "affectsresearch"
+    },
+    "react-redux@9.1.0": {
+        "licenses": "MIT",
+        "repository": "github:reduxjs/react-redux",
+        "licenseUrl": "github:reduxjs/react-redux",
+        "parents": "affectsresearch"
+    },
+    "react@18.2.0": {
+        "licenses": "MIT",
+        "repository": "https://github.com/facebook/react",
+        "licenseUrl": "https://github.com/facebook/react/raw/master/LICENSE",
+        "parents": "affectsresearch"
+    },
+    "redux-persist-expo-securestore@2.0.0": {
+        "licenses": "MIT",
+        "repository": "https://github.com:Cretezy/redux-persist-expo-securestore",
+        "licenseUrl": "https://github.com:Cretezy/redux-persist-expo-securestore/raw/master/LICENSE",
+        "parents": "affectsresearch"
+    },
+    "redux-persist@6.0.0": {
+        "licenses": "MIT",
+        "repository": "https://github.com/rt2zz/redux-persist",
+        "licenseUrl": "https://github.com/rt2zz/redux-persist/raw/master/LICENSE",
+        "parents": "affectsresearch"
+    },
+    "redux@5.0.1": {
+        "licenses": "MIT",
+        "repository": "github:reduxjs/redux",
+        "licenseUrl": "github:reduxjs/redux",
+        "parents": "affectsresearch"
+    }
+}

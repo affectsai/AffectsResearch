@@ -7,9 +7,9 @@ import {
     ScrollView
 } from 'react-native';
 
-import { BigFiveInventory1Screen } from "./bfi1_screen.component"
+import { BigFiveInventory1Screen } from "../features/personality/bfi1_screen.component"
 
-import {BigFiveInventory2Screen} from "./bfi2_screen.component";
+import {BigFiveInventory2Screen} from "../features/personality/bfi2_screen.component";
 
 
 export function BigFiveInventoryScreen(): React.JSX.Element {

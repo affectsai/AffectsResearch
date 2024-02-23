@@ -3,6 +3,9 @@ import {ImageProps, StyleSheet} from "react-native";
 import React from "react";
 import {Icon} from "@ui-kitten/components";
 import {BottomTabScreenProps} from "@react-navigation/bottom-tabs";
+import Constants from "expo-constants";
+import {Navigation} from 'react-native-navigation';
+
 export const styles = StyleSheet.create({
   container: {
     justifyContent: 'center',
@@ -13,6 +16,12 @@ export const styles = StyleSheet.create({
     justifyContent: 'left',
     alignItems: 'left',
     padding: 10
+  },
+  licenceContainer: {
+    flex: 1,
+  },
+  licence_container: {
+    flex: 1,
   },
   text: {
     textAlign: 'center',
