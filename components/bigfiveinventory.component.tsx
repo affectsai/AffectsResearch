@@ -1,3 +1,14 @@
+/* Copyright (C) 2024 Affects AI LLC - All Rights Reserved
+ *
+ * You may use, distribute and modify this code under the terms of
+ * the CC BY-SA-NC 4.0 license.
+ *
+ * You should have received a copy of the CC BY-SA-NC 4.0 license
+ * with this file. If not, please write to info@affects.ai or
+ * visit:
+ *    https://creativecommons.org/licenses/by-nc-sa/4.0/deed.en
+ */
+
 import React, {useEffect, useState} from 'react';
 import {
     Tab,
@@ -8,10 +19,11 @@ import {
 } from 'react-native';
 
 import { BigFiveInventory1Screen } from "../features/personality/bfi1_screen.component"
-
 import {BigFiveInventory2Screen} from "../features/personality/bfi2_screen.component";
 
-
+/**
+ * Displays a TopTabBar with tabs for the BFI1 and BFI2 personality surveys.
+ */
 export function BigFiveInventoryScreen(): React.JSX.Element {
     const shouldLoadComponent = (index: number): boolean => index === currentTab;
     const [currentTab, setCurrentTab] = useState(0)
@@ -30,8 +42,6 @@ export function BigFiveInventoryScreen(): React.JSX.Element {
                 </Tab>
             </TabView>
         </ScrollView>
-
-
     );
 
     return (

@@ -1,58 +1,51 @@
-import React, {ReactElement, useEffect} from 'react';
+/* Copyright (C) 2024 Affects AI LLC - All Rights Reserved
+ *
+ * You may use, distribute and modify this code under the terms of
+ * the CC BY-SA-NC 4.0 license.
+ *
+ * You should have received a copy of the CC BY-SA-NC 4.0 license
+ * with this file. If not, please write to info@affects.ai or
+ * visit:
+ *    https://creativecommons.org/licenses/by-nc-sa/4.0/deed.en
+ */
+
+import React, {useEffect} from 'react';
 import {
-  Button,
   Icon,
   Layout,
 useStyleSheet, Text, IconElement, Input, StyleService
 } from '@ui-kitten/components';
 import {
-  SafeAreaView,
   ImageProps,
-  StyleSheet,
-  StatusBar,
   KeyboardAvoidingView,
   View,
   ImageStyle,
-  TouchableWithoutFeedback
 } from 'react-native';
-
 import {useDispatch, useSelector} from "react-redux";
-
-import * as WebBrowser from 'expo-web-browser';
-
-
 import {
-  logout,
   selectAuthToken,
-  storeToken,
-  storeTokenActionPayload
 } from "../features/authentication/authenticationSlice";
-
 import {clearID, selectIdentity, setID} from "../features/identification/idSlice";
+import {homeScreenStyles} from './styles'
 
-const HeartIcon = (
-    props?: Partial<ImageProps>,
-): React.ReactElement<ImageProps> => <Icon {...props} name="heart" />;
-
-const GoogleIcon = (
-    props?: Partial<ImageProps>,
-): React.ReactElement<ImageProps> => <Icon {...props} name="google" />;
-
-export function HomeScreen(): React.JSX.Element {
+/**
+ * ParticipantIDScreen displays the current Participant ID, and allows users to set their ID
+ * if they were assigned one as part of a study.
+ */
+export function ParticipantIDScreen(): React.JSX.Element {
   const authToken = useSelector(selectAuthToken);
   let identity = useSelector(selectIdentity);
   const dispatch = useDispatch();
 
   const [editableParticipantID, setEditableParticipantID] = React.useState(false);
   const [participantID, setParticipantID] = React.useState<string>(identity);
-  // const [password, setPassword] = React.useState<string>();
 
   useEffect(() => {
     console.log(identity)
     setParticipantID(identity)
   },[identity])
 
-  const styles = useStyleSheet(themedStyles);
+  const styles = useStyleSheet(homeScreenStyles);
   const PersonIcon = (style: ImageStyle): IconElement => (
       <Icon {...style} name='person' />
   );
@@ -103,58 +96,10 @@ export function HomeScreen(): React.JSX.Element {
               <Text status='info' category="p2" onPress={()=>{dispatch(clearID()); setEditableParticipantID(true)}}>click here</Text>
               <Text category='p2'> to enter it above.</Text>
             </Text>
-
           </View>
-          {/*<Button*/}
-          {/*    style={styles.signInButton}*/}
-          {/*    size='giant'>*/}
-          {/*  {needAccount?'REGISTER':'SIGN IN'}*/}
-          {/*</Button>*/}
         </Layout>
       </Layout>
   );
 }
 
-const themedStyles = StyleService.create({
-  container: {
-    flex: 1,
-    flexDirection: 'column',
-    backgroundColor: 'background-basic-color-1',
-  },
-  headerContainer: {
-    justifyContent: 'center',
-    alignItems: 'center',
-    minHeight: 216,
-    backgroundColor: 'color-primary-default',
-  },
-  formContainer: {
-    flex: 1,
-    paddingTop: 32,
-    paddingHorizontal: 16,
-  },
-  messageContainer: {
-    paddingTop: 32,
-    paddingHorizontal: 16,
-  },
-  signInLabel: {
-    marginTop: 16,
-  },
-  signInButton: {
-    marginHorizontal: 16,
-    marginTop: 50
-  },
-  signUpButton: {
-    marginVertical: 12,
-    marginHorizontal: 16,
-  },
-  forgotPasswordContainer: {
-    flexDirection: 'row',
-    justifyContent: 'flex-end',
-  },
-  passwordInput: {
-    marginTop: 16,
-  },
-  forgotPasswordButton: {
-    paddingHorizontal: 0,
-  },
-});
+

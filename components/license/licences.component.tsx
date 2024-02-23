@@ -1,31 +1,26 @@
 /**
+ * Copyright (C) 2024 Affects AI LLC - All Rights Reserved
  *
- * Ok, so if you want to make a license page, download this lib: https://www.npmjs.com/package/npm-license-crawler
- * I did it globally: `npm i npm-license-crawler -g`
+ * You may use, distribute and modify this code under the terms of
+ * the CC BY-SA-NC 4.0 license.
  *
- * ## There are two main styles
+ * You should have received a copy of the CC BY-SA-NC 4.0 license
+ * with this file. If not, please write to info@affects.ai or
+ * visit:
+ *    https://creativecommons.org/licenses/by-nc-sa/4.0/deed.en
  *
- * ### Overwhelmingly long to avoid really crediting people: (not judging, you do you)
- *
- * `npm-license-crawler --dependencies --json licenses.json`
- *
- * ### And a concise clean list of direct packages:
- *
- * `npm-license-crawler --onlyDirectDependencies --json licenses.json`
- *
- * Then use something like this React component to display that json! :D
- *
- * Special thanks to @_wodin_ on Twitter for helping update the component.
+ * This source based on the article "Licenses: The Best Part of Your App"
+ * by Evan Bacon:
+ *      https://blog.expo.dev/licenses-the-best-part-of-your-app-29e7285b544f
  */
 
 import React from 'react';
-import { Text, View, StyleSheet } from 'react-native';
-import Constants from 'expo-constants';
+import { View } from 'react-native';
 
 import Licenses from './Licences'
 
 import Data from './licences.json';
-import {styles} from "../types";
+import {styles} from "../styles";
 
 function extractNameFromGithubUrl(url) {
     if (!url) {

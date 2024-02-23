@@ -1,3 +1,22 @@
+/* Copyright (C) 2024 Affects AI LLC - All Rights Reserved
+ *
+ * You may use, distribute and modify this code under the terms of
+ * the CC BY-SA-NC 4.0 license.
+ *
+ * You should have received a copy of the CC BY-SA-NC 4.0 license
+ * with this file. If not, please write to info@affects.ai or
+ * visit:
+ *    https://creativecommons.org/licenses/by-nc-sa/4.0/deed.en
+ *
+ * Displays the BFI personality survey from Handbook of Personality:
+ * Theory and Research, 4th Edition.
+ *
+ * The Big Five Inventory is (c) Oliver P John of the Berkeley
+ * Personality Lab at University of California, Berkeley. It is
+ * made available for non-commercial purposes.
+ *      https://www.ocf.berkeley.edu/~johnlab/index.htm
+ */
+
 import React, {useEffect, useState} from 'react';
 import {
     Text,
@@ -10,9 +29,9 @@ import {
     View,
     ViewProps,
 } from 'react-native';
-import {styles} from '../../components/types';
+import {styles} from '../../components/styles';
 import {Slider} from 'react-native-awesome-slider';
-import {useDerivedValue, useSharedValue} from "react-native-reanimated";
+import {useSharedValue} from "react-native-reanimated";
 import {useDispatch, useSelector} from "react-redux";
 
 import {
@@ -28,7 +47,6 @@ import {
     selectOpenMindednessScore,
     selectSurveySize,
     selectSociabilityScore,
-    selectCurrentIndex,
     selectAssertivenessScore,
     selectEnergyLevelScore,
     selectCompassionScore,
@@ -45,17 +63,27 @@ import {
 
 
 import * as Haptics from 'expo-haptics'
-import {makeHeader, makeFooter, makeResetFooter, ButtonCallback} from "./shared";
+import {makeCardHeader, makeCardFooter, makeResetFooter, statusBar, ButtonCallback} from "./shared";
 
 export function BigFiveInventory2Screen(): React.JSX.Element {
     const dispatch = useDispatch();
+
+    /*
+     * There's probably a better way to handle this... feels like too many state variables.
+     * But I'm rushed for time right now so it's what we're going live with.
+     */
+
     const surveySize = useSelector(selectSurveySize)
     const currentQuestion = useSelector(selectCurrentQuestion);
+
+    // Domain Scores
     const extraversionScore = useSelector(selectExtraversionScore)
     const agreeablenessScore = useSelector(selectAgreeablenessScore);
     const conscientiousnessScore = useSelector(selectConscientiousnessScore);
     const neuroticismScore = useSelector(selectNegativeEmotionalityScore);
     const opennessScore = useSelector(selectOpenMindednessScore);
+
+    // Facet Scores
     const SociabilityScore = useSelector(selectSociabilityScore)
     const AssertivenessScore = useSelector(selectAssertivenessScore)
     const EnergyLevelScore = useSelector(selectEnergyLevelScore)
@@ -71,62 +99,45 @@ export function BigFiveInventory2Screen(): React.JSX.Element {
     const IntellectualCuriosityScore = useSelector(selectIntellectualCuriosityScore)
     const AestheticSensitivityScore = useSelector(selectAestheticSensitivityScore)
     const CreativeImaginationScore = useSelector(selectCreativeImaginationScore)
-    const [sliderValue, setSliderValue] = useState(currentQuestion.response);
 
+    // Slider Control
     const min = useSharedValue(0.5);
     const max = useSharedValue(5.5);
     let progress = useSharedValue(currentQuestion.response)
 
-
-    useEffect(() => {
-        progress.value = sliderValue;
-    }, [sliderValue])
-
+    /**
+     * When the question changes, reset progress.value to the new question's response.
+     */
     useEffect(() => {
         progress.value = currentQuestion.response
     }, [currentQuestion])
 
+    /**
+     * Saves the current question and moves to the previous question in the survey.
+     */
     const backButtonCallback: ButtonCallback = () => {
         if (progress.value < 0)
             progress.value = 1
-        console.log(`Saving value ${progress.value} for question ${currentQuestion.text}`);
         dispatch(saveQuestion({question: {...currentQuestion, response: progress.value}}))
         dispatch(previousQuestion());
     }
 
+    /**
+     * Saves the current question and moves to the next question in the survey.
+     */
     const nextButtonCallback: ButtonCallback = () => {
         if (progress.value < 0)
             progress.value = 1
-        console.log(`Saving value ${progress.value} for question ${currentQuestion.text}`);
         dispatch(saveQuestion({question: {...currentQuestion, response: progress.value}}))
         dispatch(nextQuestion());
-    }
-
-    const statusBar = (value: number, label: string, topMargin: number = 20) => {
-
-        const valueNotOK = value == null || Number.isNaN(value) ||value < 0 || value == Number.POSITIVE_INFINITY
-        if (valueNotOK)
-            value = Number.NEGATIVE_INFINITY
-
-        console.log(`${value} -- ${valueNotOK}`)
-        return (
-            <>
-                <Layout style={{flexDirection: 'row', marginTop: topMargin}}>
-                    <Text style={{flex: 2}} status={valueNotOK ? 'danger' : 'info'}>{label}:</Text>
-                    <Text style={{flex: 1, textAlign: 'right'}}
-                          status={valueNotOK ? 'danger' : 'info'}>{ valueNotOK ? 'pending...' : `${value.toFixed(0)}%`}</Text>
-                </Layout>
-                <ProgressBar style={{marginTop: 5}} progress={value/100}/>
-            </>
-        );
     }
 
     const BFI2Screen = () => (
         <Layout style={styles.container}>
             <Card disabled={true}
                   style={styles.card}
-                  header={makeHeader(`I see myself as someone who...`, currentQuestion.text, currentQuestion.index, surveySize)}
-                  footer={makeFooter(currentQuestion.index == 1, currentQuestion.index == surveySize, nextButtonCallback, backButtonCallback)}>
+                  header={makeCardHeader(`I see myself as someone who...`, currentQuestion.text, currentQuestion.index, surveySize)}
+                  footer={makeCardFooter(currentQuestion.index == 1, currentQuestion.index == surveySize, nextButtonCallback, backButtonCallback)}>
                 <Slider
                     style={styles.surveySlider}
                     progress={progress}
@@ -152,8 +163,6 @@ export function BigFiveInventory2Screen(): React.JSX.Element {
                         progress.value = x
                     }}
                     onSlidingComplete={(x) => {
-                        progress.value = Math.round(x);
-                        setSliderValue(progress.value);
                         Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success).then(() => {
                         })
                         currentQuestion.response = progress.value
@@ -228,7 +237,6 @@ export function BigFiveInventory2Screen(): React.JSX.Element {
                 </Layout>
 
             </Card>
-
         </Layout>
     )
 

@@ -1,3 +1,14 @@
+/* Copyright (C) 2024 Affects AI LLC - All Rights Reserved
+ *
+ * You may use, distribute and modify this code under the terms of
+ * the CC BY-SA-NC 4.0 license.
+ *
+ * You should have received a copy of the CC BY-SA-NC 4.0 license
+ * with this file. If not, please write to info@affects.ai or
+ * visit:
+ *    https://creativecommons.org/licenses/by-nc-sa/4.0/deed.en
+ */
+
 import {feathers} from "@feathersjs/feathers";
 import rest from "@feathersjs/rest-client";
 import axios from "axios";
@@ -33,8 +44,6 @@ Linking.addEventListener("url", (event: Linking.EventType) => {
         });
     }
 });
-
-
 
 export const AuthSuccessCallbackURL = Linking.createURL("AuthSuccess", {scheme:"affectsai"});
 

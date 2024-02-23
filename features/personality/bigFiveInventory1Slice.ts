@@ -1,3 +1,23 @@
+/* Copyright (C) 2024 Affects AI LLC - All Rights Reserved
+ *
+ * You may use, distribute and modify this code under the terms of
+ * the CC BY-SA-NC 4.0 license.
+ *
+ * You should have received a copy of the CC BY-SA-NC 4.0 license
+ * with this file. If not, please write to info@affects.ai or
+ * visit:
+ *    https://creativecommons.org/licenses/by-nc-sa/4.0/deed.en
+ *
+ * This file contains an implementation of the Big Five Inventory
+ * from the Handbook of Personality: Theory and Research, 2nd
+ * Edition.
+ *
+ * The Big Five Inventory is (c) Oliver P John of the Berkeley
+ * Personality Lab at University of California, Berkeley. It is
+ * made available for non-commercial purposes.
+ *      https://www.ocf.berkeley.edu/~johnlab/index.htm
+ */
+
 import {createSelector, createSlice} from "@reduxjs/toolkit";
 import {
   FiveFactoryModel,
@@ -118,7 +138,6 @@ const bfi1Slice = createSlice({
 
 export const {nextQuestion, previousQuestion, saveQuestion, resetPersonalityQuiz} = bfi1Slice.actions;
 
-
 export const selectSurvey = (state: { bigfive: FiveFactorModelState }) => state.bigfive.survey
 
 export const selectSurveySize = (state: { bigfive: FiveFactorModelState }) => getSurveySize(state.bigfive.survey)
@@ -127,12 +146,16 @@ export const selectCurrentIndex = (state: { bigfive: FiveFactorModelState }) => 
 export const selectCurrentQuestion = createSelector([selectCurrentIndex, selectSurvey], (index, survey) => {
   return {...extractQuestion(index, survey)}
 })
+
+/*
+ * Domain score selectors...
+ */
+
 export const selectExtraversionScore = (state: { bigfive: FiveFactorModelState }) => state.bigfive.survey.extraversion.score
 export const selectAgreeablenessScore = (state: { bigfive: FiveFactorModelState }) => state.bigfive.survey.agreeableness.score
 export const selectConscientiousnessScore = (state: { bigfive: FiveFactorModelState }) => state.bigfive.survey.conscientiousness.score
 export const selectNegativeEmotionalityScore = (state: { bigfive: FiveFactorModelState }) => state.bigfive.survey.negativeEmotionality.score
 export const selectOpenMindednessScore = (state: { bigfive: FiveFactorModelState }) => state.bigfive.survey.openMindedness.score
-
 
 export default bfi1Slice.reducer;
 

@@ -1,4 +1,22 @@
-import {createSelector} from "@reduxjs/toolkit";
+/* Copyright (C) 2024 Affects AI LLC - All Rights Reserved
+ *
+ * You may use, distribute and modify this code under the terms of
+ * the CC BY-SA-NC 4.0 license.
+ *
+ * You should have received a copy of the CC BY-SA-NC 4.0 license
+ * with this file. If not, please write to info@affects.ai or
+ * visit:
+ *    https://creativecommons.org/licenses/by-nc-sa/4.0/deed.en
+ *
+ * This file contains common methods for defining and implementing
+ * the personality surveys based on the Five Factor Model, or
+ * Big Five Inventory.
+ *
+ * Big Five Inventory is (c) Oliver P John of the Berkeley
+ * Personality Lab at University of California, Berkeley. It is
+ * made available for non-commercial purposes.
+ *      https://www.ocf.berkeley.edu/~johnlab/index.htm
+ */
 
 export interface FiveFactorModelState {
     survey: FiveFactoryModel

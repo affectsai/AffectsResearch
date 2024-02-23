@@ -1,8 +1,19 @@
-import React, {useEffect, useState} from 'react';
+/* Copyright (C) 2024 Affects AI LLC - All Rights Reserved
+ *
+ * You may use, distribute and modify this code under the terms of
+ * the CC BY-SA-NC 4.0 license.
+ *
+ * You should have received a copy of the CC BY-SA-NC 4.0 license
+ * with this file. If not, please write to info@affects.ai or
+ * visit:
+ *    https://creativecommons.org/licenses/by-nc-sa/4.0/deed.en
+ */
+
+import React, {useState} from 'react';
 import {
     Layout, Tab, TabView, Text,
 } from '@ui-kitten/components';
-import {styles} from './types';
+import {styles} from './styles';
 import {Image, Linking, ScrollView, StyleSheet} from "react-native";
 import {useDispatch} from "react-redux";
 import {resetID} from "../features/identification/idSlice";
@@ -11,11 +22,18 @@ import images from './images'
 import LicenceView from "./license/licences.component";
 import { useBottomTabBarHeight } from '@react-navigation/bottom-tabs';
 
+/**
+ * LegalScreen displays a TabView with top-tabs for our legal disclaimers,
+ * and open source license disclosures.
+ */
 export function LegalScreen(): React.JSX.Element {
     const dispatch = useDispatch();
     const [currentTab, setCurrentTab] = useState(0)
-    const shouldLoadComponent = (index: number): boolean => index === currentTab;
     const tabBarHeight = useBottomTabBarHeight();
+
+    /**
+     * The AffectsAI Tab...
+     */
     function ThisAppLegal(): React.JSX.Element {
         return (
             <ScrollView contentContainerStyle={{paddingBottom: tabBarHeight}}>
@@ -116,15 +134,28 @@ export function LegalScreen(): React.JSX.Element {
         );
     }
 
-    const measure = () => {
-        if (tabBar) {
-            this.tabBar.measureInWindow(this.props.setTabMeasurement);
-        }
+    /**
+     * The open source license disclosures tab...
+     */
+    function LicenseView(): React.JSX.Element {
+        return (
+            <Layout
+                style={StyleSheet.flatten([styles.licenceContainer, {paddingBottom: 5+tabBarHeight} ])}>
+                <Layout style={{margin: 10}}>
+                    <Text style={{marginTop: 10}} category="h3">On the shoulders of Giants</Text>
+                    <Text style={{textAlign: 'justify', marginTop: 10}} category='p1'>
+                        Building an app is very much like assembling a puzzle. The pieces of our puzzle
+                        come from the work of so many others, each of whom distribute their work freely under
+                        a variety of open source licenses. Below is a list of all of our puzzle pieces, their authors (if known) and the license under which their piece is distributed.
+                    </Text>
+                </Layout>
+                <LicenceView />
+            </Layout>
+        )
     }
 
     return (
         <TabView
-            // shouldLoadComponent={shouldLoadComponent}
             selectedIndex={currentTab}
             onSelect={index => setCurrentTab(index)}
         >
@@ -132,19 +163,7 @@ export function LegalScreen(): React.JSX.Element {
                 <ThisAppLegal/>
             </Tab>
             <Tab title='Dependencies'>
-                <Layout
-                    style={StyleSheet.flatten([styles.licenceContainer, {paddingBottom: 5+tabBarHeight} ])}>
-                    <Layout style={{margin: 10}}>
-                        <Text style={{marginTop: 10}} category="h3">On the shoulders of Giants</Text>
-                        <Text style={{textAlign: 'justify', marginTop: 10}} category='p1'>
-                            Building an app is very much like assembling a puzzle. The pieces of our puzzle
-                            come from the work of so many others, each of whom distribute their work freely under
-                            a variety of open source licenses. Below is a list of all of our puzzle pieces, their authors (if known) and the license under which their piece is distributed.
-                        </Text>
-                    </Layout>
-                    <LicenceView />
-
-                </Layout>
+                <LicenseView/>
             </Tab>
         </TabView>
     )
