@@ -13,6 +13,14 @@
     "production": {}
   },
   "submit": {
-    "production": {}
+
+
+    "production": {
+      "ios": {
+        "appleId": "tim@affects.ai",
+        "appleTeamId": "55D5Z6A76D",
+        "companyName": "Affects AI"
+      }
+    }
   }
 }

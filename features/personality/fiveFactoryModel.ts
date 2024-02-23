@@ -135,3 +135,28 @@ export const updateQuestionInSurvey = (model: FiveFactoryModel|undefined, questi
 
     return
 }
+
+export const extractMultipleQuestion = (list: Array<number>, survey: FiveFactoryModel) => {
+    const q_list: FFMQuestion[] = []
+    list.forEach((idx) => q_list.push(extractQuestion(idx, survey)));
+
+    return q_list
+}
+
+/**
+ * Extracts a temporary Factor using the question numbers provided in list: Array<number>, scores it and returns
+ * the result. This is useful for Facet Scores that are subsets of the Domain Scores.
+ *
+ * @param list
+ * @param survey
+ */
+export const getFacetScore = (list: Array<number>, survey: FiveFactoryModel) => {
+    const temp: Factor = {
+        name: '',
+        score: Number.NEGATIVE_INFINITY,
+        questions: extractMultipleQuestion(list, survey)
+    }
+
+    temp.score = scoreFactor(temp)
+    return temp.score
+}

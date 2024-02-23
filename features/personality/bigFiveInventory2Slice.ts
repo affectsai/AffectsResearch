@@ -1,11 +1,21 @@
 import {createSelector, createSlice} from "@reduxjs/toolkit";
 import {
   FiveFactoryModel,
-  make_ffm_question,
   FiveFactorModelState,
-  getSurveySize, SaveSurveyQuestionAction, updateQuestionInSurvey, extractQuestion, Factor, scoreFactor, FFMQuestion
+  SaveSurveyQuestionAction,
+  make_ffm_question,
+  getSurveySize,
+  updateQuestionInSurvey,
+  extractQuestion,
+  getFacetScore,
 } from './fiveFactoryModel'
 
+/**
+ * Big Five Inventory 2 survey - organized by domain.
+ *
+ * BFI is (c) Oliver P John of the Berkeley Personality Lab.
+ * BFI is available for non-commercial use.
+ */
 const bfi_2_survey: FiveFactoryModel = {
   extraversion: {
     name: "Extraversion",
@@ -103,7 +113,6 @@ const bfi_2_survey: FiveFactoryModel = {
 
 
 
-
 export const selectSurvey = (state: { bigfive: FiveFactorModelState }) => state.bigfive2.survey
 
 export const selectSurveySize = (state: { bigfive: FiveFactorModelState }) => getSurveySize(state.bigfive2.survey)
@@ -112,30 +121,19 @@ export const selectCurrentIndex = (state: { bigfive: FiveFactorModelState }) => 
 export const selectCurrentQuestion = createSelector([selectCurrentIndex, selectSurvey], (index, survey) => {
   return {...extractQuestion(index, survey)}
 })
+
+/*
+ * DOMAIN SCORE SELECTORS
+ */
 export const selectExtraversionScore = (state: { bigfive: FiveFactorModelState }) => state.bigfive2.survey.extraversion.score
 export const selectAgreeablenessScore = (state: { bigfive: FiveFactorModelState }) => state.bigfive2.survey.agreeableness.score
 export const selectConscientiousnessScore = (state: { bigfive: FiveFactorModelState }) => state.bigfive2.survey.conscientiousness.score
 export const selectNegativeEmotionalityScore = (state: { bigfive: FiveFactorModelState }) => state.bigfive2.survey.negativeEmotionality.score
 export const selectOpenMindednessScore = (state: { bigfive: FiveFactorModelState }) => state.bigfive2.survey.openMindedness.score
 
-const extractMultipleQuestion = (list: Array<number>, survey: FiveFactoryModel) => {
-  const q_list: FFMQuestion[] = []
-  list.forEach((idx) => q_list.push(extractQuestion(idx, survey)));
-
-  return q_list
-}
-
-const getFacetScore = (list: Array<number>, survey: FiveFactoryModel) => {
-  const temp: Factor = {
-    name: '',
-    score: Number.NEGATIVE_INFINITY,
-    questions: extractMultipleQuestion(list, survey)
-  }
-
-  temp.score = scoreFactor(temp)
-  return temp.score
-}
-
+/*
+ * FACET SCORE SELECTORS
+ */
 export const selectSociabilityScore = createSelector([selectSurvey], (survey) => getFacetScore([1,16,31,46], survey))
 export const selectAssertivenessScore = createSelector([selectSurvey], (survey) => getFacetScore([6,21,36,51], survey))
 export const selectEnergyLevelScore = createSelector([selectSurvey], (survey) => getFacetScore([11,26,41,56], survey))
@@ -186,7 +184,6 @@ const bfi2Slice = createSlice({
 })
 
 export const {nextQuestion, previousQuestion, saveQuestion, resetPersonalityQuiz} = bfi2Slice.actions;
-
 
 export default bfi2Slice.reducer;
 

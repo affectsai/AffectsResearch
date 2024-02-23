@@ -7,9 +7,13 @@ import {Image, Linking, ScrollView} from "react-native";
 import {useDispatch} from "react-redux";
 import {resetID} from "../features/identification/idSlice";
 import {logout} from "../features/authentication/authenticationSlice";
+import {useAssets} from "expo-asset";
 
 export function LegalScreen(): React.JSX.Element {
     const dispatch = useDispatch();
+
+    const [assets, error] = useAssets(require('../assets/images/license_overview.png'))
+
   return (
       <ScrollView>
 
@@ -22,7 +26,7 @@ export function LegalScreen(): React.JSX.Element {
                     onPress={() => Linking.openURL('https://affects.ai')}>Affects AI LLC </Text>
               <Text category="p1">("Affects AI").</Text>
           </Text>
-          <Image style={{flex: 1, width: undefined, resizeMode: 'contain', marginTop: 0}} source={require("../assets/images/license_overview.png")}/>
+          <Image style={{flex: 1, width: undefined, resizeMode: 'contain', marginTop: 0}} source={assets ? assets[0] : null}/>
           <Text style={{textAlign:'justify', marginTop: 10}}>
           <Text>This app is free for non-commercial use under </Text>
           <Text status='info' style={{marginTop: 5}}
@@ -31,7 +35,6 @@ export function LegalScreen(): React.JSX.Element {
           </Text>
           <Text style={{textAlign:'justify', marginTop: 10}}>This app DOES NOT provide medical or treatment advice, is not a professional service, and the information obtained
           through the app is intended only for educational and research purposes.</Text>
-
 
           <Text style={{marginTop: 10}} category="h3">Privacy</Text>
           <Text style={{textAlign:'justify', marginTop: 10}} category='p1'>
