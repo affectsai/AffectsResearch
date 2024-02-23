@@ -40,30 +40,29 @@ import {
     saveQuestion,
     resetPersonalityQuiz,
     selectCurrentQuestion,
-    selectExtraversionScore,
-    selectAgreeablenessScore,
-    selectConscientiousnessScore,
-    selectNegativeEmotionalityScore,
-    selectOpenMindednessScore,
     selectSurveySize,
-    selectSociabilityScore,
-    selectAssertivenessScore,
-    selectEnergyLevelScore,
-    selectCompassionScore,
-    selectRespectfulnessScore,
-    selectTrustScore,
-    selectOrganizationScore,
-    selectProductivenessScore,
-    selectResponsibilityScore,
-    selectAnxietyScore,
-    selectDepressionScore,
-    selectEmotionalVolatilityScore,
-    selectIntellectualCuriosityScore, selectAestheticSensitivityScore, selectCreativeImaginationScore
+    selectSociability,
+    selectAssertiveness,
+    selectEnergyLevel,
+    selectCompassion,
+    selectRespectfulness,
+    selectTrust,
+    selectOrganization,
+    selectProductiveness,
+    selectResponsibility,
+    selectAnxiety,
+    selectDepression,
+    selectEmotionalVolatility,
+    selectIntellectualCuriosity,
+    selectAestheticSensitivity,
+    selectCreativeImagination,
+    selectExtraversion,
+    selectAgreeableness, selectConscientiousness, selectNegativeEmotionality, selectOpenMindedness
 } from './bigFiveInventory2Slice'
-
+import {RATING_MAX_VALUE, RATING_MIN_VALUE} from "./fiveFactoryModel";
 
 import * as Haptics from 'expo-haptics'
-import {makeCardHeader, makeCardFooter, makeResetFooter, statusBar, ButtonCallback} from "./shared";
+import {makeCardHeader, makeCardFooter, makeResetFooter, statusBar, ButtonCallback, factorBar} from "./shared";
 
 export function BigFiveInventory2Screen(): React.JSX.Element {
     const dispatch = useDispatch();
@@ -76,33 +75,32 @@ export function BigFiveInventory2Screen(): React.JSX.Element {
     const surveySize = useSelector(selectSurveySize)
     const currentQuestion = useSelector(selectCurrentQuestion);
 
-    // Domain Scores
-    const extraversionScore = useSelector(selectExtraversionScore)
-    const agreeablenessScore = useSelector(selectAgreeablenessScore);
-    const conscientiousnessScore = useSelector(selectConscientiousnessScore);
-    const neuroticismScore = useSelector(selectNegativeEmotionalityScore);
-    const opennessScore = useSelector(selectOpenMindednessScore);
-
     // Facet Scores
-    const SociabilityScore = useSelector(selectSociabilityScore)
-    const AssertivenessScore = useSelector(selectAssertivenessScore)
-    const EnergyLevelScore = useSelector(selectEnergyLevelScore)
-    const CompassionScore = useSelector(selectCompassionScore)
-    const RespectfulnessScore = useSelector(selectRespectfulnessScore)
-    const TrustScore = useSelector(selectTrustScore)
-    const OrganizationScore = useSelector(selectOrganizationScore)
-    const ProductivenessScore = useSelector(selectProductivenessScore)
-    const ResponsibilityScore = useSelector(selectResponsibilityScore)
-    const AnxietyScore = useSelector(selectAnxietyScore)
-    const DepressionScore = useSelector(selectDepressionScore)
-    const EmotionalVolatilityScore = useSelector(selectEmotionalVolatilityScore)
-    const IntellectualCuriosityScore = useSelector(selectIntellectualCuriosityScore)
-    const AestheticSensitivityScore = useSelector(selectAestheticSensitivityScore)
-    const CreativeImaginationScore = useSelector(selectCreativeImaginationScore)
+    const extraversion = useSelector(selectExtraversion)
+    const agreeableness = useSelector(selectAgreeableness)
+    const conscientiousness = useSelector(selectConscientiousness)
+    const neuroticism = useSelector(selectNegativeEmotionality)
+    const openness = useSelector(selectOpenMindedness)
+    const Sociability = useSelector(selectSociability)
+    const Assertiveness = useSelector(selectAssertiveness)
+    const EnergyLevel = useSelector(selectEnergyLevel)
+    const Compassion = useSelector(selectCompassion)
+    const Respectfulness = useSelector(selectRespectfulness)
+    const Trust = useSelector(selectTrust)
+    const Organization = useSelector(selectOrganization)
+    const Productiveness = useSelector(selectProductiveness)
+    const Responsibility = useSelector(selectResponsibility)
+    const Anxiety = useSelector(selectAnxiety)
+    const Depression = useSelector(selectDepression)
+    const EmotionalVolatility = useSelector(selectEmotionalVolatility)
+    const IntellectualCuriosity = useSelector(selectIntellectualCuriosity)
+    const AestheticSensitivity = useSelector(selectAestheticSensitivity)
+    const CreativeImagination = useSelector(selectCreativeImagination)
+
 
     // Slider Control
-    const min = useSharedValue(0.5);
-    const max = useSharedValue(5.5);
+    const min = useSharedValue(RATING_MIN_VALUE);
+    const max = useSharedValue(RATING_MAX_VALUE);
     let progress = useSharedValue(currentQuestion.response)
 
     /**
@@ -116,8 +114,8 @@ export function BigFiveInventory2Screen(): React.JSX.Element {
      * Saves the current question and moves to the previous question in the survey.
      */
     const backButtonCallback: ButtonCallback = () => {
-        if (progress.value < 0)
-            progress.value = 1
+        if (progress.value < RATING_MIN_VALUE)
+            progress.value = RATING_MIN_VALUE
         dispatch(saveQuestion({question: {...currentQuestion, response: progress.value}}))
         dispatch(previousQuestion());
     }
@@ -126,8 +124,8 @@ export function BigFiveInventory2Screen(): React.JSX.Element {
      * Saves the current question and moves to the next question in the survey.
      */
     const nextButtonCallback: ButtonCallback = () => {
-        if (progress.value < 0)
-            progress.value = 1
+        if (progress.value < RATING_MIN_VALUE)
+            progress.value = RATING_MIN_VALUE
         dispatch(saveQuestion({question: {...currentQuestion, response: progress.value}}))
         dispatch(nextQuestion());
     }
@@ -194,11 +192,11 @@ export function BigFiveInventory2Screen(): React.JSX.Element {
                           Domain Scales
                       </Text></View>)}
                   style={styles.scoreCard}>
-                {statusBar(extraversionScore, "Extraversion", 0)}
-                {statusBar(agreeablenessScore, "Agreeableness")}
-                {statusBar(conscientiousnessScore, "Conscientiousness")}
-                {statusBar(neuroticismScore, "Negative Emotionality")}
-                {statusBar(opennessScore, "Open Mindedness")}
+                {factorBar(extraversion, 0)}
+                {factorBar(agreeableness)}
+                {factorBar(conscientiousness)}
+                {factorBar(neuroticism)}
+                {factorBar(openness)}
             </Card>
             <Card disabled={true}
                   footer={makeResetFooter(() => {
@@ -209,21 +207,21 @@ export function BigFiveInventory2Screen(): React.JSX.Element {
                           Facet Scales
                       </Text></View>)}
                   style={styles.scoreCard}>
-                {statusBar(SociabilityScore, "Sociability", 0)}
-                {statusBar(AssertivenessScore, "Assertiveness")}
-                {statusBar(EnergyLevelScore, "EnergyLevel")}
-                {statusBar(CompassionScore, "Compassion")}
-                {statusBar(RespectfulnessScore, "Respectfulness")}
-                {statusBar(TrustScore, "Trust")}
-                {statusBar(OrganizationScore, "Organization")}
-                {statusBar(ProductivenessScore, "Productiveness")}
-                {statusBar(ResponsibilityScore, "Responsibility")}
-                {statusBar(AnxietyScore, "Anxiety")}
-                {statusBar(DepressionScore, "Depression")}
-                {statusBar(EmotionalVolatilityScore, "Emotional Volatility")}
-                {statusBar(IntellectualCuriosityScore, "Intellectual Curiosity")}
-                {statusBar(AestheticSensitivityScore, "Aesthetic Sensitivity")}
-                {statusBar(CreativeImaginationScore, "Creative Imagination")}
+                {factorBar(Sociability,0)}
+                {factorBar(Assertiveness)}
+                {factorBar(EnergyLevel)}
+                {factorBar(Compassion)}
+                {factorBar(Respectfulness)}
+                {factorBar(Trust)}
+                {factorBar(Organization)}
+                {factorBar(Productiveness)}
+                {factorBar(Responsibility)}
+                {factorBar(Anxiety)}
+                {factorBar(Depression)}
+                {factorBar(EmotionalVolatility)}
+                {factorBar(IntellectualCuriosity)}
+                {factorBar(AestheticSensitivity)}
+                {factorBar(CreativeImagination)}
             </Card>
             <Card disabled={true} style={styles.scoreCard}>
                 <Layout>

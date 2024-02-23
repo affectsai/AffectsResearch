@@ -18,6 +18,9 @@
  *      https://www.ocf.berkeley.edu/~johnlab/index.htm
  */
 
+export const RATING_MIN_VALUE = 0.5
+export const RATING_MAX_VALUE = 5.5
+
 export interface FiveFactorModelState {
     survey: FiveFactoryModel
     currentIndex: number
@@ -59,8 +62,8 @@ export const scoreFactor = (factor: Factor) => {
             factorScore = factorScore + (question.reverse ? (6-question.response) : question.response)
     })
 
-    const min = factor.questions.length * 1
-    const max = factor.questions.length * 5
+    const min = factor.questions.length * RATING_MIN_VALUE
+    const max = factor.questions.length * RATING_MAX_VALUE
 
     return 100*(factorScore-min)/(max-min)
 }
@@ -112,7 +115,9 @@ export const extractQuestion = (index: number, model: FiveFactoryModel|undefined
 export const updateQuestionInSurvey = (model: FiveFactoryModel|undefined, question: FFMQuestion) => {
     if (!model)
         return
-    const answer = question.response < 1 ? 1 : question.response
+    let answer = question.response
+    if ( answer < RATING_MIN_VALUE ) answer = RATING_MIN_VALUE;
+    if ( answer > RATING_MAX_VALUE ) answer = RATING_MAX_VALUE;
 
     model.extraversion.questions.forEach((q: FFMQuestion) => {
         if (q.index == question.index) {
@@ -169,12 +174,17 @@ export const extractMultipleQuestion = (list: Array<number>, survey: FiveFactory
  * @param survey
  */
 export const getFacetScore = (list: Array<number>, survey: FiveFactoryModel) => {
+    const temp = getFacet('', list, survey);
+    return temp.score
+}
+
+export const getFacet = (name: string, list: Array<number>, survey: FiveFactoryModel) => {
     const temp: Factor = {
-        name: '',
+        name: name,
         score: Number.NEGATIVE_INFINITY,
         questions: extractMultipleQuestion(list, survey)
     }
 
     temp.score = scoreFactor(temp)
-    return temp.score
+    return temp;
 }

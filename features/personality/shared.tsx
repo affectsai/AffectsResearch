@@ -23,6 +23,7 @@ import {
     ViewProps,
 } from 'react-native';
 import {styles} from '../../components/styles';
+import {Factor} from "./fiveFactoryModel";
 
 export type ButtonCallback = (() => void) | undefined;
 
@@ -103,7 +104,30 @@ export const statusBar = (value: number, label: string, topMargin: number = 20) 
     return (
         <>
             <Layout style={{flexDirection: 'row', marginTop: topMargin}}>
-                <Text style={{flex: 1}} status={value < 0 ? 'danger' : 'info'}>{label}:</Text>
+                <Text style={{flex: 2}} status={value < 0 ? 'danger' : 'info'}>{label}:</Text>
+                <Text style={{flex: 1, textAlign: 'right'}}
+                      status={value < 0 ? 'danger' : 'info'}>{value == null || value < 0 ? 'pending...' : `${value.toFixed(0)}%`}</Text>
+            </Layout>
+            <ProgressBar style={{marginTop: 5}} progress={value / 100}/>
+        </>
+    );
+}
+
+export const factorBar = (factor: Factor, topMargin: number = 20) => {
+    let value = factor.score
+    const label = factor.name
+
+    // valueNotOK is unnecessarily complicated, and was the result of bad state initialization on first-launch.
+    // But the app is stable and it doesn't hurt, so it's staying this way for now. We'll probably clean
+    // this up in the future.
+    const valueNotOK = value == null || Number.isNaN(value) || value < 0 || value == Number.POSITIVE_INFINITY
+    if (valueNotOK)
+        value = Number.NEGATIVE_INFINITY
+
+    return (
+        <>
+            <Layout style={{flexDirection: 'row', marginTop: topMargin}}>
+                <Text style={{flex: 2}} status={value < 0 ? 'danger' : 'info'}>{label}:</Text>
                 <Text style={{flex: 1, textAlign: 'right'}}
                       status={value < 0 ? 'danger' : 'info'}>{value == null || value < 0 ? 'pending...' : `${value.toFixed(0)}%`}</Text>
             </Layout>

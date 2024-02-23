@@ -27,7 +27,7 @@ import {
   getSurveySize,
   updateQuestionInSurvey,
   extractQuestion,
-  getFacetScore,
+  getFacetScore, getFacet, RATING_MAX_VALUE, RATING_MIN_VALUE
 } from './fiveFactoryModel'
 
 const bfi_2_survey: FiveFactoryModel = {
@@ -145,10 +145,6 @@ const bfi2Slice = createSlice({
     },
     saveQuestion: (state, action: SaveSurveyQuestionAction) => {
       const newSurvey = {...state.survey}
-      if (action.payload.question.response < 1)
-        action.payload.question.response = 1
-      else if (action.payload.question.response > 5)
-        action.payload.question.response = 5
       updateQuestionInSurvey(newSurvey, action.payload.question)
       state.survey = newSurvey
     },
@@ -170,11 +166,11 @@ export const selectCurrentQuestion = createSelector([selectCurrentIndex, selectS
  * DOMAIN SCORE SELECTORS
  */
 
-export const selectExtraversionScore = (state: { bigfive: FiveFactorModelState }) => state.bigfive2.survey.extraversion.score
-export const selectAgreeablenessScore = (state: { bigfive: FiveFactorModelState }) => state.bigfive2.survey.agreeableness.score
-export const selectConscientiousnessScore = (state: { bigfive: FiveFactorModelState }) => state.bigfive2.survey.conscientiousness.score
-export const selectNegativeEmotionalityScore = (state: { bigfive: FiveFactorModelState }) => state.bigfive2.survey.negativeEmotionality.score
-export const selectOpenMindednessScore = (state: { bigfive: FiveFactorModelState }) => state.bigfive2.survey.openMindedness.score
+export const selectExtraversion = (state: { bigfive2: FiveFactorModelState }) => state.bigfive2.survey.extraversion
+export const selectAgreeableness = (state: { bigfive2: FiveFactorModelState }) => state.bigfive2.survey.agreeableness
+export const selectConscientiousness = (state: { bigfive2: FiveFactorModelState }) => state.bigfive2.survey.conscientiousness
+export const selectNegativeEmotionality = (state: { bigfive2: FiveFactorModelState }) => state.bigfive2.survey.negativeEmotionality
+export const selectOpenMindedness = (state: { bigfive2: FiveFactorModelState }) => state.bigfive2.survey.openMindedness
 
 /*
  * FACET SCORE SELECTORS
@@ -185,21 +181,21 @@ export const selectOpenMindednessScore = (state: { bigfive: FiveFactorModelState
  *         If a future version mixes normal- and reverse- scoring for any one question, we'll need to revisit this
  *         implementation... but for now, it feels an awful lot like OPJ wanted this to be easy to do :).
  */
-export const selectSociabilityScore = createSelector([selectSurvey], (survey) => getFacetScore([1,16,31,46], survey))
-export const selectAssertivenessScore = createSelector([selectSurvey], (survey) => getFacetScore([6,21,36,51], survey))
-export const selectEnergyLevelScore = createSelector([selectSurvey], (survey) => getFacetScore([11,26,41,56], survey))
-export const selectCompassionScore = createSelector([selectSurvey], (survey) => getFacetScore([2,17,32,47], survey))
-export const selectRespectfulnessScore = createSelector([selectSurvey], (survey) => getFacetScore([7,22,37,52], survey))
-export const selectTrustScore = createSelector([selectSurvey], (survey) => getFacetScore([12,27,42,57], survey))
-export const selectOrganizationScore = createSelector([selectSurvey], (survey) => getFacetScore([3,18,33,48], survey))
-export const selectProductivenessScore = createSelector([selectSurvey], (survey) => getFacetScore([8,23,38,53], survey))
-export const selectResponsibilityScore = createSelector([selectSurvey], (survey) => getFacetScore([13,28,43,48], survey))
-export const selectAnxietyScore = createSelector([selectSurvey], (survey) => getFacetScore([4,19,34,49], survey))
-export const selectDepressionScore = createSelector([selectSurvey], (survey) => getFacetScore([9,24,39,54], survey))
-export const selectEmotionalVolatilityScore = createSelector([selectSurvey], (survey) => getFacetScore([14,29,44,59], survey))
-export const selectIntellectualCuriosityScore = createSelector([selectSurvey], (survey) => getFacetScore([10,25,40,55], survey))
-export const selectAestheticSensitivityScore = createSelector([selectSurvey], (survey) => getFacetScore([5,20,35,50], survey))
-export const selectCreativeImaginationScore = createSelector([selectSurvey], (survey) => getFacetScore([15,30,45,60], survey))
+export const selectSociability = createSelector([selectSurvey], (survey) => getFacet("Sociability", [1,16,31,46], survey))
+export const selectAssertiveness = createSelector([selectSurvey], (survey) => getFacet("Assertiveness", [6,21,36,51], survey))
+export const selectEnergyLevel = createSelector([selectSurvey], (survey) => getFacet("Energy Level", [11,26,41,56], survey))
+export const selectCompassion = createSelector([selectSurvey], (survey) => getFacet("Compassion", [2,17,32,47], survey))
+export const selectRespectfulness = createSelector([selectSurvey], (survey) => getFacet("Respectfulness", [7,22,37,52], survey))
+export const selectTrust = createSelector([selectSurvey], (survey) => getFacet("Trust", [12,27,42,57], survey))
+export const selectOrganization = createSelector([selectSurvey], (survey) => getFacet("Organization", [3,18,33,48], survey))
+export const selectProductiveness = createSelector([selectSurvey], (survey) => getFacet("Productiveness", [8,23,38,53], survey))
+export const selectResponsibility = createSelector([selectSurvey], (survey) => getFacet("Responsibility", [13,28,43,48], survey))
+export const selectAnxiety = createSelector([selectSurvey], (survey) => getFacet("Anxiety", [4,19,34,49], survey))
+export const selectDepression = createSelector([selectSurvey], (survey) => getFacet("Depression", [9,24,39,54], survey))
+export const selectEmotionalVolatility = createSelector([selectSurvey], (survey) => getFacet("Emotional Volatility", [14,29,44,59], survey))
+export const selectIntellectualCuriosity = createSelector([selectSurvey], (survey) => getFacet("Intellectual Curiosity", [10,25,40,55], survey))
+export const selectAestheticSensitivity = createSelector([selectSurvey], (survey) => getFacet("Aesthetic Sensitivity", [5,20,35,50], survey))
+export const selectCreativeImagination = createSelector([selectSurvey], (survey) => getFacet("Creative Imagination", [15,30,45,60], survey))
 
 export const {nextQuestion, previousQuestion, saveQuestion, resetPersonalityQuiz} = bfi2Slice.actions;
 

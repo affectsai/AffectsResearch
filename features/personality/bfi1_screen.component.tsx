@@ -39,16 +39,18 @@ import {
     saveQuestion,
     resetPersonalityQuiz,
     selectCurrentQuestion,
-    selectExtraversionScore,
-    selectAgreeablenessScore,
-    selectConscientiousnessScore,
-    selectNegativeEmotionalityScore,
-    selectOpenMindednessScore,
-    selectSurveySize
+    selectSurveySize,
+    selectExtraversion,
+    selectAgreeableness,
+    selectConscientiousness,
+    selectNegativeEmotionality,
+    selectOpenMindedness
 } from './bigFiveInventory1Slice'
 
+import {RATING_MIN_VALUE, RATING_MAX_VALUE} from "./fiveFactoryModel";
+
 import * as Haptics from 'expo-haptics'
-import {makeCardHeader, makeCardFooter, makeResetFooter, statusBar, ButtonCallback} from "./shared";
+import {makeCardHeader, makeCardFooter, makeResetFooter, statusBar, ButtonCallback, factorBar} from "./shared";
 
 
 export function BigFiveInventory1Screen(): React.JSX.Element {
@@ -57,14 +59,14 @@ export function BigFiveInventory1Screen(): React.JSX.Element {
     const currentQuestion = useSelector(selectCurrentQuestion);
 
     // Domain Scores
-    const extraversionScore = useSelector(selectExtraversionScore)
-    const agreeablenessScore = useSelector(selectAgreeablenessScore);
-    const conscientiousnessScore = useSelector(selectConscientiousnessScore);
-    const neuroticismScore = useSelector(selectNegativeEmotionalityScore);
-    const opennessScore = useSelector(selectOpenMindednessScore);
+    const extraversion = useSelector(selectExtraversion)
+    const agreeableness = useSelector(selectAgreeableness);
+    const conscientiousness = useSelector(selectConscientiousness);
+    const neuroticism = useSelector(selectNegativeEmotionality);
+    const openness = useSelector(selectOpenMindedness);
 
-    const min = useSharedValue(0.5);
-    const max = useSharedValue(5.5);
+    const min = useSharedValue(RATING_MIN_VALUE);
+    const max = useSharedValue(RATING_MAX_VALUE);
     let progress = useSharedValue(currentQuestion.response)
 
     useEffect(() => {
@@ -75,8 +77,8 @@ export function BigFiveInventory1Screen(): React.JSX.Element {
      * Saves the current question and moves to the previous question in the survey.
      */
     const backButtonCallback: ButtonCallback = () => {
-        if (progress.value < 0)
-            progress.value = 1
+        if (progress.value < RATING_MIN_VALUE)
+            progress.value = RATING_MIN_VALUE
         dispatch(saveQuestion({question: {...currentQuestion, response: progress.value}}))
         dispatch(previousQuestion());
     }
@@ -85,8 +87,8 @@ export function BigFiveInventory1Screen(): React.JSX.Element {
      * Saves the current question and moves to the next question in the survey.
      */
     const nextButtonCallback: ButtonCallback = () => {
-        if (progress.value < 0)
-            progress.value = 1
+        if (progress.value < RATING_MIN_VALUE)
+            progress.value = RATING_MIN_VALUE
         dispatch(saveQuestion({question: {...currentQuestion, response: progress.value}}))
         dispatch(nextQuestion());
     }
@@ -122,7 +124,7 @@ export function BigFiveInventory1Screen(): React.JSX.Element {
                         progress.value = x
                     }}
                     onSlidingComplete={(x) => {
-                        progress.value = Math.round(x);
+                        progress.value = x //Math.round(x);
                         Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success).then(() => {
                         })
                         currentQuestion.response = progress.value
@@ -157,11 +159,11 @@ export function BigFiveInventory1Screen(): React.JSX.Element {
                           Personality Traits
                       </Text></View>)}
                   style={styles.scoreCard}>
-                {statusBar(extraversionScore, "Extraversion", 15)}
-                {statusBar(agreeablenessScore, "Agreeableness")}
-                {statusBar(conscientiousnessScore, "Conscientiousness")}
-                {statusBar(neuroticismScore, "Neuroticism")}
-                {statusBar(opennessScore, "Openness")}
+                {factorBar(extraversion, 15)}
+                {factorBar(agreeableness)}
+                {factorBar(conscientiousness)}
+                {factorBar(neuroticism)}
+                {factorBar(openness)}
             </Card>
             <Card disabled={true} style={styles.scoreCard}>
                 <Layout>

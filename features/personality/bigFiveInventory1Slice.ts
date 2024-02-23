@@ -23,7 +23,8 @@ import {
   FiveFactoryModel,
   make_ffm_question,
   FiveFactorModelState,
-  getSurveySize, SaveSurveyQuestionAction, updateQuestionInSurvey, extractQuestion
+  getSurveySize, SaveSurveyQuestionAction, updateQuestionInSurvey, extractQuestion,
+  RATING_MIN_VALUE, RATING_MAX_VALUE
 } from './fiveFactoryModel'
 
 const bfi_1_survey: FiveFactoryModel = {
@@ -122,10 +123,6 @@ const bfi1Slice = createSlice({
     },
     saveQuestion: (state, action: SaveSurveyQuestionAction) => {
       const newSurvey = {...state.survey}
-      if (action.payload.question.response < 1)
-        action.payload.question.response = 1
-      else if (action.payload.question.response > 5)
-        action.payload.question.response = 5
       updateQuestionInSurvey(newSurvey, action.payload.question)
       state.survey = newSurvey
     },
@@ -151,11 +148,11 @@ export const selectCurrentQuestion = createSelector([selectCurrentIndex, selectS
  * Domain score selectors...
  */
 
-export const selectExtraversionScore = (state: { bigfive: FiveFactorModelState }) => state.bigfive.survey.extraversion.score
-export const selectAgreeablenessScore = (state: { bigfive: FiveFactorModelState }) => state.bigfive.survey.agreeableness.score
-export const selectConscientiousnessScore = (state: { bigfive: FiveFactorModelState }) => state.bigfive.survey.conscientiousness.score
-export const selectNegativeEmotionalityScore = (state: { bigfive: FiveFactorModelState }) => state.bigfive.survey.negativeEmotionality.score
-export const selectOpenMindednessScore = (state: { bigfive: FiveFactorModelState }) => state.bigfive.survey.openMindedness.score
+export const selectExtraversion = (state: { bigfive: FiveFactorModelState }) => state.bigfive.survey.extraversion
+export const selectAgreeableness = (state: { bigfive: FiveFactorModelState }) => state.bigfive.survey.agreeableness
+export const selectConscientiousness = (state: { bigfive: FiveFactorModelState }) => state.bigfive.survey.conscientiousness
+export const selectNegativeEmotionality = (state: { bigfive: FiveFactorModelState }) => state.bigfive.survey.negativeEmotionality
+export const selectOpenMindedness = (state: { bigfive: FiveFactorModelState }) => state.bigfive.survey.openMindedness
 
 export default bfi1Slice.reducer;
 
