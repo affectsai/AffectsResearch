@@ -167,6 +167,12 @@
         "licenseUrl": "https://github.com/software-mansion/react-native-gesture-handler/raw/master/LICENSE",
         "parents": "affectsresearch"
     },
+    "react-native-navigation@7.38.3": {
+        "licenses": "MIT",
+        "repository": "https://github.com/wix/react-native-navigation",
+        "licenseUrl": "https://github.com/wix/react-native-navigation/raw/master/LICENSE",
+        "parents": "affectsresearch"
+    },
     "react-native-pager-view@6.2.3": {
         "licenses": "MIT",
         "repository": "https://github.com/callstack/react-native-pager-view",
