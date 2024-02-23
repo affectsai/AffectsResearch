@@ -8,11 +8,11 @@ import {useDispatch} from "react-redux";
 import {resetID} from "../features/identification/idSlice";
 import {logout} from "../features/authentication/authenticationSlice";
 import {useAssets} from "expo-asset";
+import images from './images'
 
 export function LegalScreen(): React.JSX.Element {
     const dispatch = useDispatch();
 
-    const [assets, error] = useAssets(require('../assets/images/license_overview.png'))
 
   return (
       <ScrollView>
@@ -26,7 +26,7 @@ export function LegalScreen(): React.JSX.Element {
                     onPress={() => Linking.openURL('https://affects.ai')}>Affects AI LLC </Text>
               <Text category="p1">("Affects AI").</Text>
           </Text>
-          <Image style={{flex: 1, width: undefined, resizeMode: 'contain', marginTop: 0}} source={assets ? assets[0] : null}/>
+          <Image style={{flex: 1, width: undefined, resizeMode: 'contain', marginTop: 0}} source={images.licence}/>
           <Text style={{textAlign:'justify', marginTop: 10}}>
           <Text>This app is free for non-commercial use under </Text>
           <Text status='info' style={{marginTop: 5}}
