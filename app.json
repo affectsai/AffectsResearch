@@ -28,7 +28,7 @@
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
-      "package": "ai.affects.apps.research.AffectSurvey"
+      "package": "ai.affects.apps.research.affectsurvey"
     },
     "web": {
       "favicon": "./assets/favicon.png"
