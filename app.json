@@ -7,6 +7,8 @@
     "icon": "./assets/images/icon.png",
     "userInterfaceStyle": "light",
     "scheme": "affectsai",
+    "owner": "affectsai",
+    "githubUrl": "https://github.com/affectsai/AffectsResearch",
     "splash": {
       "image": "./assets/images/splash.png",
       "resizeMode": "contain",
@@ -17,6 +19,7 @@
       "assets/images/*"
     ],
     "ios": {
+      "appStoreUrl": "https://apps.apple.com/us/app/affects-research/id6478344304",
       "supportsTablet": true,
       "bundleIdentifier": "ai.affects.apps.research.AffectSurvey",
       "config": {
@@ -64,7 +67,6 @@
       "eas": {
         "projectId": "2faeb639-77b2-4670-b339-a2abf7b77e44"
       }
-    },
-    "owner": "affectsai"
+    }
   }
 }
