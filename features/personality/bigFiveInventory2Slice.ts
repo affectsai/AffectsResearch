@@ -145,8 +145,8 @@ export const selectSurveyId = (state: { bigfive2: FiveFactorModelState }) => sta
 export const selectSurvey = (state: { bigfive2: FiveFactorModelState }) => state.bigfive2.survey
 export const selectSurveySize = (state: { bigfive2: FiveFactorModelState }) => getSurveySize(state.bigfive2.survey)
 export const selectCurrentIndex = (state: { bigfive2: FiveFactorModelState }) => state.bigfive2.currentIndex
-export const selectCurrentQuestion = createSelector([selectCurrentIndex, selectSurvey], (index, survey) => {
-  return {...extractQuestion(index, survey)}
+export const selectCurrentQuestion = memoize((state: { bigfive2: FiveFactorModelState }) => {
+  return {...extractQuestion(state.bigfive2.currentIndex, state.bigfive2.survey)}
 })
 
 /*
