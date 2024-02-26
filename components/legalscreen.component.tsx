@@ -23,18 +23,16 @@ import LicenceView from "./license/licences.component";
 import { useBottomTabBarHeight } from '@react-navigation/bottom-tabs';
 import {bigFiveInventory2Slice} from "../features/personality/bigFiveInventory2Slice";
 import {bigFiveInventory1Slice} from "../features/personality/bigFiveInventory1Slice";
-
+import {AppDispatch} from "../store";
 
 /**
  * LegalScreen displays a TabView with top-tabs for our legal disclaimers,
  * and open source license disclosures.
  */
 export function LegalScreen(): React.JSX.Element {
-    const dispatch = useDispatch();
+    const dispatch = useDispatch<AppDispatch>();
     const [currentTab, setCurrentTab] = useState(0)
     const tabBarHeight = useBottomTabBarHeight();
-
-
 
     /**
      * The AffectsAI Tab...

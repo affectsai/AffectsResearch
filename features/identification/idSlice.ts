@@ -50,7 +50,7 @@ export const validateParticipantID = createAsyncThunk(
         authId = await getAuthToken(participantData.participantId, participantData.validation)
         if (authId == undefined )
         {
-          console.log("ParticipantID is invalid, creating a new one")
+          console.log("ParticipantID is invalid, creating a new one: " + participantData.participantId + " " + participantData.validation)
           await createUser(participantData.participantId, participantData.validation)
           authId = await getAuthToken(participantData.participantId, participantData.validation)
         }
@@ -77,12 +77,17 @@ const identitySlice = createSlice({
     resetID(state) {
       state.participantId = randomUUID();
       state.validation = randomUUID();
+      state.authenticated = false;
     },
     setID(state, action: SetIdentityAction) {
       state.participantId = action.payload.participantId;
+      state.validation = randomUUID()
+      state.authenticated = false
+      console.log(action.payload.participantId)
     },
     clearID(state) {
       state.participantId = '';
+      state.authenticated = false;
     },
   },
   extraReducers: (builder) => {
@@ -100,6 +105,8 @@ const identitySlice = createSlice({
 
 export const {clearID, resetID, setID} = identitySlice.actions;
 export const selectIdentity = (state: { identity: IdState }) => state.identity.participantId;
+export const selectValidation = (state: { identity: IdState }) => state.identity.validation;
+export const selectAuthenticated = (state: { identity: IdState }) => state.identity.authenticated;
 
 export default identitySlice.reducer;
 
