@@ -26,6 +26,7 @@ import {
   getSurveySize, SaveSurveyQuestionAction, updateQuestionInSurvey, extractQuestion,
   RATING_MIN_VALUE, RATING_MAX_VALUE
 } from './fiveFactoryModel'
+import {createFiveFactorModelSlice} from "./fiveFactorModelSlice";
 
 const bfi_1_survey: FiveFactoryModel = {
   name: "BFI1",
@@ -110,33 +111,15 @@ const initialState = {
   currentIndex: 1
 } as FiveFactorModelState
 
-const bfi1Slice = createSlice({
+export const {slice, createSurveyInBackend, retrieveSurveyFromBackend, updateSurveyInBackend} = createFiveFactorModelSlice({
   name: 'bfi1',
-  initialState,
-  reducers: {
-    nextQuestion: (state) => {
-      if (state.currentIndex < getSurveySize(state.survey))
-        state.currentIndex++;
-    },
-    previousQuestion: (state) => {
-      if ( state.currentIndex > 1 )
-        state.currentIndex--;
-    },
-    saveQuestion: (state, action: SaveSurveyQuestionAction) => {
-      const newSurvey = {...state.survey}
-      updateQuestionInSurvey(newSurvey, action.payload.question)
-      state.survey = newSurvey
-    },
-    resetPersonalityQuiz: (state) => {
-      state.survey = {...bfi_1_survey}
-      state.currentIndex = 1
-    }
-  }
+  initialState: initialState,
+  reducers: {}
 })
-
-export const {nextQuestion, previousQuestion, saveQuestion, resetPersonalityQuiz} = bfi1Slice.actions;
+export  const bigFiveInventory1Slice = slice
 
 export const selectSurvey = (state: { bigfive: FiveFactorModelState }) => state.bigfive.survey
+export const selectSurveyId = (state: { bigfive: FiveFactorModelState }) => state.bigfive._id
 
 export const selectSurveySize = (state: { bigfive: FiveFactorModelState }) => getSurveySize(state.bigfive.survey)
 
@@ -155,6 +138,5 @@ export const selectConscientiousness = (state: { bigfive: FiveFactorModelState }
 export const selectNegativeEmotionality = (state: { bigfive: FiveFactorModelState }) => state.bigfive.survey.negativeEmotionality
 export const selectOpenMindedness = (state: { bigfive: FiveFactorModelState }) => state.bigfive.survey.openMindedness
 
-export default bfi1Slice.reducer;
 
 

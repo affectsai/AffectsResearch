@@ -34,28 +34,33 @@ import {useSharedValue} from "react-native-reanimated";
 import {useDispatch, useSelector} from "react-redux";
 
 import {
-    nextQuestion,
-    previousQuestion,
-    saveQuestion,
-    resetPersonalityQuiz,
     selectCurrentQuestion,
     selectSurveySize,
     selectExtraversion,
     selectAgreeableness,
     selectConscientiousness,
     selectNegativeEmotionality,
-    selectOpenMindedness
+    selectOpenMindedness, selectSurvey, selectSurveyId, createSurveyInBackend, retrieveSurveyFromBackend, updateSurveyInBackend
 } from './bigFiveInventory1Slice'
 
 import {RATING_MIN_VALUE, RATING_MAX_VALUE} from "./fiveFactoryModel";
 
 import * as Haptics from 'expo-haptics'
 import {makeCardHeader, makeCardFooter, makeResetFooter, statusBar, ButtonCallback, factorBar} from "./shared";
+import {useSliceActions} from "../../components/SliceProvider";
+import {AppDispatch} from "../../store";
 
 export function BigFiveInventory1Screen(): React.JSX.Element {
-    const dispatch = useDispatch();
+    const dispatch = useDispatch<AppDispatch>();
+    const { nextQuestion,
+        previousQuestion,
+        saveQuestion,
+        resetPersonalityQuiz} = useSliceActions()
+
     const surveySize = useSelector(selectSurveySize)
     const currentQuestion = useSelector(selectCurrentQuestion);
+    const survey = useSelector(selectSurvey)
+    const surveyId = useSelector(selectSurveyId)
 
     // Domain Scores
     const extraversion = useSelector(selectExtraversion)
@@ -68,9 +73,28 @@ export function BigFiveInventory1Screen(): React.JSX.Element {
     const max = useSharedValue(RATING_MAX_VALUE);
     let progress = useSharedValue(currentQuestion.response)
 
+    /**
+     * When the question changes, reset progress.value to the new question's response.
+     */
     useEffect(() => {
         progress.value = currentQuestion.response
     }, [currentQuestion])
+
+    useEffect(() => {
+        if (surveyId == undefined || surveyId == "0") {
+            dispatch(createSurveyInBackend(survey))
+        }
+    }, [])
+
+    useEffect(() => {
+        if (surveyId && surveyId !== "0")
+            dispatch(updateSurveyInBackend(survey))
+    }, [survey])
+
+    useEffect(() => {
+        if (surveyId && surveyId !== "0")
+            dispatch(retrieveSurveyFromBackend(surveyId))
+    }, [surveyId])
 
     /**
      * Saves the current question and moves to the previous question in the survey.

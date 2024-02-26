@@ -139,8 +139,6 @@ export const {slice, createSurveyInBackend, retrieveSurveyFromBackend, updateSur
   initialState: initialState,
   reducers: {}
 })
-
-
 export  const bigFiveInventory2Slice = slice
 
 export const selectSurveyId = (state: { bigfive2: FiveFactorModelState }) => state.bigfive2._id

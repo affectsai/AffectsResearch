@@ -3,7 +3,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { persistStore, persistReducer } from 'redux-persist'
 import {FLUSH, PAUSE, PERSIST, PURGE, REGISTER, REHYDRATE} from "redux-persist/es/constants";
 import themeReducer from '../features/themes/themeSlice';
-import bfi1Reducer from '../features/personality/bigFiveInventory1Slice'
+import {bigFiveInventory1Slice} from '../features/personality/bigFiveInventory1Slice'
 import {bigFiveInventory2Slice} from '../features/personality/bigFiveInventory2Slice'
 import authReducer from '../features/authentication/authenticationSlice';
 import identityReducer from '../features/identification/idSlice'
@@ -21,7 +21,7 @@ const persistBigFive1Config = {
     key: 'affectsresearch-bfi1',
     storage: AsyncStorage,
 }
-const persisteBigFive1Reducer = persistReducer(persistBigFive1Config, bfi1Reducer);
+const persisteBigFive1Reducer = persistReducer(persistBigFive1Config, bigFiveInventory1Slice.reducer);
 
 const persistBigFive2Config = {
     key: 'affectsresearch-bfi2',
