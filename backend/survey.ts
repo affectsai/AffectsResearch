@@ -7,19 +7,26 @@ export const saveSurvey = async (surveyId: string, data: FiveFactoryModel) => {
         'Content-Type': 'application/json',
     }
 
-    let result = false;
+    let result = undefined;
 
-    await axios.patch(
-        `${SURVEY_SERVICE_API}/${surveyId}`,
-        {survey: JSON.stringify(data)},
-        {
-            headers: headers
+    try {
+        result = await axios.patch(
+            `${SURVEY_SERVICE_API}/${surveyId}`,
+            {survey: JSON.stringify(data)},
+            {
+                headers: headers
+            }
+        );
+        result = result.data
+    } catch (reason) {
+        console.log("Error saving survey: " + reason + ". Trying to create instead.")
+        try {
+            result = await createSurvey(data)
+        } catch (err2) {
+            console.log("Couldn't create it either: " + err2)
         }
-    ).then((response) => {
-        result = true;
-    }).catch((reason) => {
-        console.log("Error saving survey: " + reason)
-    })
+    }
+
 
     return result;
 }

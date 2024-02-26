@@ -107,6 +107,7 @@ const bfi_1_survey: FiveFactoryModel = {
 }
 
 const initialState = {
+  _id: "0",
   survey: {...bfi_1_survey},
   currentIndex: 1
 } as FiveFactorModelState

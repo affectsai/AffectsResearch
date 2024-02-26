@@ -76,7 +76,7 @@ export function MainComponent(): React.JSX.Element | null {
             participantId: identity,
             validation: identity
         } as IdState))
-    }, [])
+    }, [identity])
 
     /*
      * Wait for fonts to load before hiding the splash screen...

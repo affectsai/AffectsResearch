@@ -21,6 +21,9 @@ import {logout} from "../features/authentication/authenticationSlice";
 import images from './images'
 import LicenceView from "./license/licences.component";
 import { useBottomTabBarHeight } from '@react-navigation/bottom-tabs';
+import {bigFiveInventory2Slice} from "../features/personality/bigFiveInventory2Slice";
+import {bigFiveInventory1Slice} from "../features/personality/bigFiveInventory1Slice";
+
 
 /**
  * LegalScreen displays a TabView with top-tabs for our legal disclaimers,
@@ -30,6 +33,8 @@ export function LegalScreen(): React.JSX.Element {
     const dispatch = useDispatch();
     const [currentTab, setCurrentTab] = useState(0)
     const tabBarHeight = useBottomTabBarHeight();
+
+
 
     /**
      * The AffectsAI Tab...

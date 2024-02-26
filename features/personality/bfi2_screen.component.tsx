@@ -122,7 +122,7 @@ export function BigFiveInventory2Screen(): React.JSX.Element {
         if (surveyId == undefined || surveyId == "0") {
             dispatch(createSurveyInBackend(survey))
         }
-    }, [])
+    }, [surveyId])
 
     useEffect(() => {
         if (surveyId && surveyId !== "0")

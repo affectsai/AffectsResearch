@@ -78,9 +78,12 @@ export const createFiveFactorModelSlice = ({ name, initialState, reducers}) =>
         state.survey = newSurvey
       },
       resetPersonalityQuiz: (state) => {
+        console.log("Resetting")
         state._id = initialState._id
         state.survey = {...initialState.survey}
         state.currentIndex = 1
+        console.log("Resetting")
+
       },
       ...reducers,
     },
@@ -88,10 +91,15 @@ export const createFiveFactorModelSlice = ({ name, initialState, reducers}) =>
       // Add reducers for additional action types here, and handle loading state as needed
       builder.addCase(updateSurveyInBackend.fulfilled, (state, action) => {
         // Add user to the state array
-        console.log('Saved survey...')
+        const newId = action.payload._id
+        if (newId != state._id) {
+          state._id = newId
+          console.log("Created new survey id: " + state._id)
+        }
+
       }).addCase(createSurveyInBackend.fulfilled, (state, action) => {
         state._id = action.payload._id
-        console.log("NEW ID: " + state._id)
+        console.log("Created new survey id: " + state._id)
       }).addCase(retrieveSurveyFromBackend.fulfilled, (state, action) => {
         // Add user to the state array
         console.log('Retrieved survey...' )

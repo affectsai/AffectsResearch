@@ -49,6 +49,7 @@ import * as Haptics from 'expo-haptics'
 import {makeCardHeader, makeCardFooter, makeResetFooter, statusBar, ButtonCallback, factorBar} from "./shared";
 import {useSliceActions} from "../../components/SliceProvider";
 import {AppDispatch} from "../../store";
+import {selectIdentity} from "../identification/idSlice";
 
 export function BigFiveInventory1Screen(): React.JSX.Element {
     const dispatch = useDispatch<AppDispatch>();
@@ -56,7 +57,6 @@ export function BigFiveInventory1Screen(): React.JSX.Element {
         previousQuestion,
         saveQuestion,
         resetPersonalityQuiz} = useSliceActions()
-
     const surveySize = useSelector(selectSurveySize)
     const currentQuestion = useSelector(selectCurrentQuestion);
     const survey = useSelector(selectSurvey)
@@ -73,6 +73,7 @@ export function BigFiveInventory1Screen(): React.JSX.Element {
     const max = useSharedValue(RATING_MAX_VALUE);
     let progress = useSharedValue(currentQuestion.response)
 
+
     /**
      * When the question changes, reset progress.value to the new question's response.
      */
@@ -84,7 +85,7 @@ export function BigFiveInventory1Screen(): React.JSX.Element {
         if (surveyId == undefined || surveyId == "0") {
             dispatch(createSurveyInBackend(survey))
         }
-    }, [])
+    }, [surveyId])
 
     useEffect(() => {
         if (surveyId && surveyId !== "0")
