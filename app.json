@@ -66,9 +66,6 @@
     "extra": {
       "eas": {
         "projectId": "2faeb639-77b2-4670-b339-a2abf7b77e44"
-      },
-      "affectsai": {
-        "restAPI": "http://192.168.4.2:3030"
       }
     }
   }
