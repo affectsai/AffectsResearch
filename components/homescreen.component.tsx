@@ -75,16 +75,14 @@ export function ParticipantIDScreen(): React.JSX.Element {
               accessoryRight={PersonIcon}
               value={participantID}
               onEndEditing={(event)=> {
-                console.log('setting id to ' + event.nativeEvent.text)
                 setEditableParticipantID(false);
                 setParticipantID(event.nativeEvent.text);
-                dispatch(setID({identity: event.nativeEvent.text}));
+                dispatch(setID({participantId: event.nativeEvent.text}));
               }}
               onChangeText={(value)=>setParticipantID(value)}
           />
 
           </KeyboardAvoidingView>
-
 
           <View style={styles.messageContainer}>
             <Text category="h6">What is my Participant ID?</Text>
