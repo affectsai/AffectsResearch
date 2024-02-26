@@ -89,7 +89,7 @@ export function BigFiveInventory1Screen(): React.JSX.Element {
     useEffect(() => {
         if (surveyId && surveyId !== "0")
             dispatch(updateSurveyInBackend(survey))
-    }, [survey])
+    }, [survey.agreeableness, survey.conscientiousness, survey.extraversion, survey.negativeEmotionality, survey.openMindedness])
 
     useEffect(() => {
         if (surveyId && surveyId !== "0")
