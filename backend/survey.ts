@@ -52,12 +52,12 @@ export const createSurvey = async (survey: FiveFactoryModel) => {
 }
 
 export const getSurvey = async (surveyId: string) => {
-    const headers = {
-        'Content-Type': 'application/json',
-    }
-
     const response = await axios.get(`${SURVEY_SERVICE_API}/${surveyId}`);
     return response.data
 }
 
 
+export const deleteSurvey = async (surveyId: string) => {
+    const response = await axios.delete(`${SURVEY_SERVICE_API}/${surveyId}`);
+    return response.data
+}
