@@ -18,14 +18,7 @@ import * as Linking from "expo-linking";
 import {logout, selectAuthToken, storeToken, storeTokenActionPayload} from "./authenticationSlice";
 import {store} from '../../store'
 import * as WebBrowser from "expo-web-browser";
-
-export const feathersApp = feathers()
-export const feathersClient = rest("https://api.affects.ai");
-feathersApp.configure(feathersClient.axios(axios))
-feathersApp.configure(authentication({
-    storage: AsyncStorage,
-    path: '/authentication/google'
-}))
+import feathersApp from "../../backend/affectsBackend";
 
 export const reauthenticate = async (access_token: string) => {
     feathersApp.authentication.setAccessToken(access_token);

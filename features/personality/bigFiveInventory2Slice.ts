@@ -18,7 +18,7 @@
  *      https://www.ocf.berkeley.edu/~johnlab/index.htm
  */
 
-import {createSelector, createSlice} from "@reduxjs/toolkit";
+import {createAsyncThunk, createSelector, createSlice} from "@reduxjs/toolkit";
 import {
   FiveFactoryModel,
   FiveFactorModelState,
@@ -27,10 +27,14 @@ import {
   getSurveySize,
   updateQuestionInSurvey,
   extractQuestion,
-  getFacetScore, getFacet, RATING_MAX_VALUE, RATING_MIN_VALUE
+  getFacet, RATING_MAX_VALUE, RATING_MIN_VALUE
 } from './fiveFactoryModel'
+import {createSurvey, getSurvey, saveSurvey} from "../../backend/survey"
+import {randomUUID} from "expo-crypto";
+import {AsyncThunkConfig} from "@reduxjs/toolkit/dist/createAsyncThunk";
 
 const bfi_2_survey: FiveFactoryModel = {
+  name: "BFI2",
   extraversion: {
     name: "Extraversion",
     questions: [
@@ -127,9 +131,31 @@ const bfi_2_survey: FiveFactoryModel = {
 
 
 const initialState = {
+  _id: "0",
   survey: {...bfi_2_survey},
   currentIndex: 1
 } as FiveFactorModelState
+
+export const updateSurveyInBackend = createAsyncThunk(
+    'bfi2/updateSurveyInBackend',
+    async(survey: FiveFactoryModel, {getState}) => {
+      return await saveSurvey(getState().bigfive2._id, survey)
+    }
+);
+
+export const retrieveSurveyFromBackend = createAsyncThunk(
+    'bfi2/retrieveSurveyFromBackend',
+    async(surveyId: string, thunkAPI: AsyncThunkConfig) => {
+      return await getSurvey(surveyId)
+    }
+);
+
+export const createSurveyInBackend = createAsyncThunk(
+    'bfi2/createSurveyInBackend',
+    async(survey: FiveFactoryModel, thunkAPI: AsyncThunkConfig) => {
+      return await createSurvey(survey)
+    }
+);
 
 const bfi2Slice = createSlice({
   name: 'bfi2',
@@ -152,12 +178,29 @@ const bfi2Slice = createSlice({
       state.survey = {...bfi_2_survey}
       state.currentIndex = 1
     }
+  },
+  extraReducers: (builder) => {
+    // Add reducers for additional action types here, and handle loading state as needed
+    builder.addCase(updateSurveyInBackend.fulfilled, (state, action) => {
+      // Add user to the state array
+      console.log('Saved survey...')
+    }).addCase(createSurveyInBackend.fulfilled, (state, action) => {
+      state._id = action.payload._id
+      console.log("NEW ID: " + state._id)
+    }).addCase(retrieveSurveyFromBackend.fulfilled, (state, action) => {
+      // Add user to the state array
+      console.log('Retrieved survey...' )
+      state._id = action.payload._id
+      state.survey = JSON.parse(action.payload.survey)
+    })
   }
 })
 
-export const selectSurvey = (state: { bigfive: FiveFactorModelState }) => state.bigfive2.survey
-export const selectSurveySize = (state: { bigfive: FiveFactorModelState }) => getSurveySize(state.bigfive2.survey)
-export const selectCurrentIndex = (state: { bigfive: FiveFactorModelState }) => state.bigfive2.currentIndex
+
+export const selectSurveyId = (state: { bigfive2: FiveFactorModelState }) => state.bigfive2._id
+export const selectSurvey = (state: { bigfive2: FiveFactorModelState }) => state.bigfive2.survey
+export const selectSurveySize = (state: { bigfive2: FiveFactorModelState }) => getSurveySize(state.bigfive2.survey)
+export const selectCurrentIndex = (state: { bigfive2: FiveFactorModelState }) => state.bigfive2.currentIndex
 export const selectCurrentQuestion = createSelector([selectCurrentIndex, selectSurvey], (index, survey) => {
   return {...extractQuestion(index, survey)}
 })

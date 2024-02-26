@@ -1,4 +1,4 @@
-import {configureStore} from '@reduxjs/toolkit';
+import {configureStore, ThunkMiddleware} from '@reduxjs/toolkit';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { persistStore, persistReducer } from 'redux-persist'
 import {FLUSH, PAUSE, PERSIST, PURGE, REGISTER, REHYDRATE} from "redux-persist/es/constants";
@@ -56,11 +56,14 @@ export const store = configureStore({
         serializableCheck: {
           ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
         },
+          thunk: {
+
+          }
       }),
 });
 
 
 export const persistor = persistStore(store)
-
+export type AppDispatch = typeof store.dispatch;
 export default store;
 

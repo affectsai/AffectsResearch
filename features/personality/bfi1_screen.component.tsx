@@ -52,7 +52,6 @@ import {RATING_MIN_VALUE, RATING_MAX_VALUE} from "./fiveFactoryModel";
 import * as Haptics from 'expo-haptics'
 import {makeCardHeader, makeCardFooter, makeResetFooter, statusBar, ButtonCallback, factorBar} from "./shared";
 
-
 export function BigFiveInventory1Screen(): React.JSX.Element {
     const dispatch = useDispatch();
     const surveySize = useSelector(selectSurveySize)

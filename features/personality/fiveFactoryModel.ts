@@ -22,6 +22,7 @@ export const RATING_MIN_VALUE = 0.5
 export const RATING_MAX_VALUE = 5.5
 
 export interface FiveFactorModelState {
+    _id: string
     survey: FiveFactoryModel
     currentIndex: number
 }
@@ -45,6 +46,7 @@ export interface Factor {
 }
 
 export interface FiveFactoryModel {
+    name: string
     extraversion: Factor
     agreeableness: Factor
     conscientiousness: Factor

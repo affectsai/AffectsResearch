@@ -9,7 +9,7 @@
  *    https://creativecommons.org/licenses/by-nc-sa/4.0/deed.en
  */
 
-import React, {useCallback} from "react";
+import React, {useCallback, useEffect, useState} from "react";
 import * as eva from '@eva-design/eva';
 import {ApplicationProvider, BottomNavigation, BottomNavigationTab, Icon, IconRegistry} from '@ui-kitten/components';
 import {EvaIconsPack} from '@ui-kitten/eva-icons';
@@ -17,7 +17,7 @@ import * as SplashScreen from 'expo-splash-screen';
 import {default as affectsai_theme} from '../affectsai-theme.json'; // <-- Import app theme
 import {default as affectsai_mapping} from '../affectsai-theme-mapping.json'; // <-- Import app mapping
 import {selectTheme} from "../features/themes/themeSlice";
-import {useSelector} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 import {useFonts} from "expo-font";
 import {ImageProps, SafeAreaView, StatusBar} from "react-native";
 import {NavigationContainer} from "@react-navigation/native";
@@ -27,6 +27,8 @@ import {BigFiveInventoryScreen} from "./bigfiveinventory.component";
 import {GestureHandlerRootView} from "react-native-gesture-handler";
 import {LegalScreen} from "./legalscreen.component";
 import {HomeIcon, SurveyIcon, LegalIcon} from "./icons";
+import {IdState, selectIdentity, validateParticipantID} from "../features/identification/idSlice";
+import {AppDispatch} from "../store";
 
 SplashScreen.preventAutoHideAsync().then(() => {});
 
@@ -50,18 +52,31 @@ const TabNavigator = () => (
     </Navigator>
 );
 
+
 /**
  * MainComponent is the top-level element which defines the BottomTabBar.
  *
  * @constructor
  */
 export function MainComponent(): React.JSX.Element | null {
+    const dispatch = useDispatch<AppDispatch>()
     const theme: string = useSelector(selectTheme)
     const [fontsLoaded, fontError] = useFonts({
         'Montserrat-SemiBold': require('../assets/fonts/Montserrat-SemiBold.ttf'),
         'Montserrat-Bold': require('../assets/fonts/Montserrat-Bold.ttf'),
         'Montserrat-Regular': require('../assets/fonts/Montserrat-Regular.ttf'),
     });
+
+    let identity = useSelector(selectIdentity);
+    const [isLoggedIn, setLoggedIn] = useState(false)
+
+    useEffect(() => {
+        console.log('Attempting to login using identity: ' + identity)
+        dispatch(validateParticipantID({
+            participantId: identity,
+            validation: identity
+        } as IdState))
+    }, [])
 
     /*
      * Wait for fonts to load before hiding the splash screen...

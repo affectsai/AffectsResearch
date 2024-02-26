@@ -41,7 +41,6 @@ export function ParticipantIDScreen(): React.JSX.Element {
   const [participantID, setParticipantID] = React.useState<string>(identity);
 
   useEffect(() => {
-    console.log(identity)
     setParticipantID(identity)
   },[identity])
 

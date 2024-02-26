@@ -9,42 +9,97 @@
  *    https://creativecommons.org/licenses/by-nc-sa/4.0/deed.en
  */
 
-import {createSlice} from "@reduxjs/toolkit";
+import {createAsyncThunk, createSlice} from "@reduxjs/toolkit";
 import {randomUUID} from "expo-crypto";
+import feathersApp, {
+  createUser,
+  defineUser,
+  getAuthToken,
+  getCurrentUser,
+  setAuthorizationHeader
+} from "../../backend/affectsBackend";
+import Constants from 'expo-constants'
 
-interface IdState {
-  identity: string;
+export interface IdState {
+  participantId: string;
+  validation: string;
+  authenticated: boolean;
 }
 
-const initialState = { identity: randomUUID() } as IdState
+const initialState = {
+  participantId: randomUUID(),
+  validation: randomUUID(),
+  authenticated: false
+} as IdState
+
 interface SetIdentityAction {
   type: string,
   payload: {
-    identity: string,
+    participantId: string,
   }
 }
+
+export const validateParticipantID = createAsyncThunk(
+    'identity/validateParticipantID',
+    async(participantData: IdState, thunkAPI) => {
+      let authId;
+      try {
+        if (participantData.validation == undefined || participantData.validation.trim().length==0) {
+          participantData.validation = participantData.participantId
+        }
+        authId = await getAuthToken(participantData.participantId, participantData.validation)
+        if (authId == undefined )
+        {
+          console.log("ParticipantID is invalid, creating a new one")
+          await createUser(participantData.participantId, participantData.validation)
+          authId = await getAuthToken(participantData.participantId, participantData.validation)
+        }
+
+        if (authId) {
+          setAuthorizationHeader(authId)
+          return getCurrentUser()
+        }
+      } catch (e) {
+        console.log("An error occurred validating the participant ID: " + e)
+      }
+
+      return {}
+    }
+);
 
 /**
  * identitySlice manages the ParticipantID code...
  */
 const identitySlice = createSlice({
-  name: 'theme',
+  name: 'identity',
   initialState,
   reducers: {
     resetID(state) {
-      state.identity = randomUUID();
+      state.participantId = randomUUID();
+      state.validation = randomUUID();
     },
     setID(state, action: SetIdentityAction) {
-      state.identity = action.payload.identity;
+      state.participantId = action.payload.participantId;
     },
     clearID(state) {
-      state.identity = '';
-    }
-  }
+      state.participantId = '';
+    },
+  },
+  extraReducers: (builder) => {
+    // Add reducers for additional action types here, and handle loading state as needed
+    builder.addCase(validateParticipantID.fulfilled, (state, action) => {
+      // Add user to the state array
+      if ((action.payload as IdState).participantId === state.participantId) {
+        state.authenticated = true
+      }
+    })
+  },
 })
 
+
+
 export const {clearID, resetID, setID} = identitySlice.actions;
-export const selectIdentity = (state: { theme: IdState }) => state.identity.identity;
+export const selectIdentity = (state: { identity: IdState }) => state.identity.participantId;
 
 export default identitySlice.reducer;
 

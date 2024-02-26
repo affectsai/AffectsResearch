@@ -28,6 +28,7 @@ import {
 } from './fiveFactoryModel'
 
 const bfi_1_survey: FiveFactoryModel = {
+  name: "BFI1",
   extraversion: {
     name: "Extraversion",
     questions: [

@@ -57,15 +57,22 @@ import {
     selectAestheticSensitivity,
     selectCreativeImagination,
     selectExtraversion,
-    selectAgreeableness, selectConscientiousness, selectNegativeEmotionality, selectOpenMindedness
+    selectAgreeableness,
+    selectConscientiousness,
+    selectNegativeEmotionality,
+    selectOpenMindedness,
+    selectSurvey,
+    createSurveyInBackend, retrieveSurveyFromBackend, selectSurveyId, updateSurveyInBackend
 } from './bigFiveInventory2Slice'
 import {RATING_MAX_VALUE, RATING_MIN_VALUE} from "./fiveFactoryModel";
 
 import * as Haptics from 'expo-haptics'
 import {makeCardHeader, makeCardFooter, makeResetFooter, statusBar, ButtonCallback, factorBar} from "./shared";
+import {AppDispatch} from "../../store";
+import {getSurvey, saveSurvey} from "../../backend/survey";
 
 export function BigFiveInventory2Screen(): React.JSX.Element {
-    const dispatch = useDispatch();
+    const dispatch = useDispatch<AppDispatch>();
 
     /*
      * There's probably a better way to handle this... feels like too many state variables.
@@ -74,6 +81,8 @@ export function BigFiveInventory2Screen(): React.JSX.Element {
 
     const surveySize = useSelector(selectSurveySize)
     const currentQuestion = useSelector(selectCurrentQuestion);
+    const survey = useSelector(selectSurvey)
+    const surveyId = useSelector(selectSurveyId)
 
     // Facet Scores
     const extraversion = useSelector(selectExtraversion)
@@ -109,6 +118,22 @@ export function BigFiveInventory2Screen(): React.JSX.Element {
     useEffect(() => {
         progress.value = currentQuestion.response
     }, [currentQuestion])
+
+    useEffect(() => {
+        if (surveyId == undefined || surveyId == "0") {
+            dispatch(createSurveyInBackend(survey))
+        }
+    }, [])
+
+    useEffect(() => {
+        if (surveyId && surveyId !== "0")
+            dispatch(updateSurveyInBackend(survey))
+    }, [survey])
+
+    useEffect(() => {
+        if (surveyId && surveyId !== "0")
+            dispatch(retrieveSurveyFromBackend(surveyId))
+    }, [surveyId])
 
     /**
      * Saves the current question and moves to the previous question in the survey.
