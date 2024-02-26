@@ -20,6 +20,8 @@ import {
 
 import { BigFiveInventory1Screen } from "../features/personality/bfi1_screen.component"
 import {BigFiveInventory2Screen} from "../features/personality/bfi2_screen.component";
+import SliceProvider from "./SliceProvider";
+import {bigFiveInventory2Slice} from "../features/personality/bigFiveInventory2Slice";
 
 /**
  * Displays a TopTabBar with tabs for the BFI1 and BFI2 personality surveys.
@@ -35,7 +37,9 @@ export function BigFiveInventoryScreen(): React.JSX.Element {
                 onSelect={index => setCurrentTab(index)}
             >
                 <Tab title='BFI'>
-                    <BigFiveInventory2Screen/>
+                    <SliceProvider slice={bigFiveInventory2Slice}>
+                        <BigFiveInventory2Screen/>
+                    </SliceProvider>
                 </Tab>
                 <Tab title='BFI (original)'>
                     <BigFiveInventory1Screen/>

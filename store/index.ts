@@ -4,7 +4,7 @@ import { persistStore, persistReducer } from 'redux-persist'
 import {FLUSH, PAUSE, PERSIST, PURGE, REGISTER, REHYDRATE} from "redux-persist/es/constants";
 import themeReducer from '../features/themes/themeSlice';
 import bfi1Reducer from '../features/personality/bigFiveInventory1Slice'
-import bfi2Reducer from '../features/personality/bigFiveInventory2Slice'
+import {bigFiveInventory2Slice} from '../features/personality/bigFiveInventory2Slice'
 import authReducer from '../features/authentication/authenticationSlice';
 import identityReducer from '../features/identification/idSlice'
 
@@ -27,7 +27,7 @@ const persistBigFive2Config = {
     key: 'affectsresearch-bfi2',
     storage: AsyncStorage,
 }
-const persisteBigFive2Reducer = persistReducer(persistBigFive2Config, bfi2Reducer);
+const persisteBigFive2Reducer = persistReducer(persistBigFive2Config, bigFiveInventory2Slice.reducer);
 
 const secureStorage = createSecureStore();
 const persistAuthConfig = {

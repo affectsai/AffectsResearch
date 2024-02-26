@@ -18,20 +18,18 @@
  *      https://www.ocf.berkeley.edu/~johnlab/index.htm
  */
 
-import {createAsyncThunk, createSelector, createSlice} from "@reduxjs/toolkit";
+import {createSelector} from "@reduxjs/toolkit";
 import {
   FiveFactoryModel,
   FiveFactorModelState,
-  SaveSurveyQuestionAction,
   make_ffm_question,
   getSurveySize,
-  updateQuestionInSurvey,
   extractQuestion,
-  getFacet, RATING_MAX_VALUE, RATING_MIN_VALUE
+  getFacet,
 } from './fiveFactoryModel'
-import {createSurvey, getSurvey, saveSurvey} from "../../backend/survey"
-import {randomUUID} from "expo-crypto";
-import {AsyncThunkConfig} from "@reduxjs/toolkit/dist/createAsyncThunk";
+
+import {createFiveFactorModelSlice} from "./fiveFactorModelSlice";
+import {memoize} from "proxy-memoize";
 
 const bfi_2_survey: FiveFactoryModel = {
   name: "BFI2",
@@ -68,7 +66,6 @@ const bfi_2_survey: FiveFactoryModel = {
       make_ffm_question( 47, "Can be cold and uncaring", true),
       make_ffm_question( 52, "Is polite, courteous to others"),
       make_ffm_question( 57, "Assumes the best about people"),
-
     ],
     score: Number.NEGATIVE_INFINITY
   },
@@ -136,66 +133,15 @@ const initialState = {
   currentIndex: 1
 } as FiveFactorModelState
 
-export const updateSurveyInBackend = createAsyncThunk(
-    'bfi2/updateSurveyInBackend',
-    async(survey: FiveFactoryModel, {getState}) => {
-      return await saveSurvey(getState().bigfive2._id, survey)
-    }
-);
 
-export const retrieveSurveyFromBackend = createAsyncThunk(
-    'bfi2/retrieveSurveyFromBackend',
-    async(surveyId: string, thunkAPI: AsyncThunkConfig) => {
-      return await getSurvey(surveyId)
-    }
-);
-
-export const createSurveyInBackend = createAsyncThunk(
-    'bfi2/createSurveyInBackend',
-    async(survey: FiveFactoryModel, thunkAPI: AsyncThunkConfig) => {
-      return await createSurvey(survey)
-    }
-);
-
-const bfi2Slice = createSlice({
+export const {slice, createSurveyInBackend, retrieveSurveyFromBackend, updateSurveyInBackend} = createFiveFactorModelSlice({
   name: 'bfi2',
-  initialState,
-  reducers: {
-    nextQuestion: (state) => {
-      if (state.currentIndex < getSurveySize(state.survey))
-        state.currentIndex++;
-    },
-    previousQuestion: (state) => {
-      if ( state.currentIndex > 1 )
-        state.currentIndex--;
-    },
-    saveQuestion: (state, action: SaveSurveyQuestionAction) => {
-      const newSurvey = {...state.survey}
-      updateQuestionInSurvey(newSurvey, action.payload.question)
-      state.survey = newSurvey
-    },
-    resetPersonalityQuiz: (state) => {
-      state.survey = {...bfi_2_survey}
-      state.currentIndex = 1
-    }
-  },
-  extraReducers: (builder) => {
-    // Add reducers for additional action types here, and handle loading state as needed
-    builder.addCase(updateSurveyInBackend.fulfilled, (state, action) => {
-      // Add user to the state array
-      console.log('Saved survey...')
-    }).addCase(createSurveyInBackend.fulfilled, (state, action) => {
-      state._id = action.payload._id
-      console.log("NEW ID: " + state._id)
-    }).addCase(retrieveSurveyFromBackend.fulfilled, (state, action) => {
-      // Add user to the state array
-      console.log('Retrieved survey...' )
-      state._id = action.payload._id
-      state.survey = JSON.parse(action.payload.survey)
-    })
-  }
+  initialState: initialState,
+  reducers: {}
 })
 
+
+export  const bigFiveInventory2Slice = slice
 
 export const selectSurveyId = (state: { bigfive2: FiveFactorModelState }) => state.bigfive2._id
 export const selectSurvey = (state: { bigfive2: FiveFactorModelState }) => state.bigfive2.survey
@@ -224,24 +170,18 @@ export const selectOpenMindedness = (state: { bigfive2: FiveFactorModelState }) 
  *         If a future version mixes normal- and reverse- scoring for any one question, we'll need to revisit this
  *         implementation... but for now, it feels an awful lot like OPJ wanted this to be easy to do :).
  */
-export const selectSociability = createSelector([selectSurvey], (survey) => getFacet("Sociability", [1,16,31,46], survey))
-export const selectAssertiveness = createSelector([selectSurvey], (survey) => getFacet("Assertiveness", [6,21,36,51], survey))
-export const selectEnergyLevel = createSelector([selectSurvey], (survey) => getFacet("Energy Level", [11,26,41,56], survey))
-export const selectCompassion = createSelector([selectSurvey], (survey) => getFacet("Compassion", [2,17,32,47], survey))
-export const selectRespectfulness = createSelector([selectSurvey], (survey) => getFacet("Respectfulness", [7,22,37,52], survey))
-export const selectTrust = createSelector([selectSurvey], (survey) => getFacet("Trust", [12,27,42,57], survey))
-export const selectOrganization = createSelector([selectSurvey], (survey) => getFacet("Organization", [3,18,33,48], survey))
-export const selectProductiveness = createSelector([selectSurvey], (survey) => getFacet("Productiveness", [8,23,38,53], survey))
-export const selectResponsibility = createSelector([selectSurvey], (survey) => getFacet("Responsibility", [13,28,43,48], survey))
-export const selectAnxiety = createSelector([selectSurvey], (survey) => getFacet("Anxiety", [4,19,34,49], survey))
-export const selectDepression = createSelector([selectSurvey], (survey) => getFacet("Depression", [9,24,39,54], survey))
-export const selectEmotionalVolatility = createSelector([selectSurvey], (survey) => getFacet("Emotional Volatility", [14,29,44,59], survey))
-export const selectIntellectualCuriosity = createSelector([selectSurvey], (survey) => getFacet("Intellectual Curiosity", [10,25,40,55], survey))
-export const selectAestheticSensitivity = createSelector([selectSurvey], (survey) => getFacet("Aesthetic Sensitivity", [5,20,35,50], survey))
-export const selectCreativeImagination = createSelector([selectSurvey], (survey) => getFacet("Creative Imagination", [15,30,45,60], survey))
-
-export const {nextQuestion, previousQuestion, saveQuestion, resetPersonalityQuiz} = bfi2Slice.actions;
-
-export default bfi2Slice.reducer;
-
-
+export const selectSociability = memoize((state: { bigfive2: FiveFactorModelState }) => getFacet("Sociability", [1,16,31,46], state.bigfive2.survey))
+export const selectAssertiveness = memoize((state: { bigfive2: FiveFactorModelState }) => getFacet("Assertiveness", [6,21,36,51], state.bigfive2.survey))
+export const selectEnergyLevel = memoize((state: { bigfive2: FiveFactorModelState }) => getFacet("Energy Level", [11,26,41,56], state.bigfive2.survey))
+export const selectCompassion = memoize((state: { bigfive2: FiveFactorModelState }) => getFacet("Compassion", [2,17,32,47], state.bigfive2.survey))
+export const selectRespectfulness = memoize((state: { bigfive2: FiveFactorModelState }) => getFacet("Respectfulness", [7,22,37,52], state.bigfive2.survey))
+export const selectTrust = memoize((state: { bigfive2: FiveFactorModelState }) => getFacet("Trust", [12,27,42,57], state.bigfive2.survey))
+export const selectOrganization = memoize((state: { bigfive2: FiveFactorModelState }) => getFacet("Organization", [3,18,33,48], state.bigfive2.survey))
+export const selectProductiveness = memoize((state: { bigfive2: FiveFactorModelState }) => getFacet("Productiveness", [8,23,38,53], state.bigfive2.survey))
+export const selectResponsibility = memoize((state: { bigfive2: FiveFactorModelState }) => getFacet("Responsibility", [13,28,43,48], state.bigfive2.survey))
+export const selectAnxiety = memoize((state: { bigfive2: FiveFactorModelState }) => getFacet("Anxiety", [4,19,34,49], state.bigfive2.survey))
+export const selectDepression = memoize((state: { bigfive2: FiveFactorModelState }) => getFacet("Depression", [9,24,39,54], state.bigfive2.survey))
+export const selectEmotionalVolatility = memoize((state: { bigfive2: FiveFactorModelState }) => getFacet("Emotional Volatility", [14,29,44,59], state.bigfive2.survey))
+export const selectIntellectualCuriosity = memoize((state: { bigfive2: FiveFactorModelState }) => getFacet("Intellectual Curiosity", [10,25,40,55], state.bigfive2.survey))
+export const selectAestheticSensitivity = memoize((state: { bigfive2: FiveFactorModelState }) => getFacet("Aesthetic Sensitivity", [5,20,35,50], state.bigfive2.survey))
+export const selectCreativeImagination = memoize((state: { bigfive2: FiveFactorModelState }) => getFacet("Creative Imagination", [15,30,45,60], state.bigfive2.survey))

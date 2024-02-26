@@ -35,10 +35,6 @@ import {useSharedValue} from "react-native-reanimated";
 import {useDispatch, useSelector} from "react-redux";
 
 import {
-    nextQuestion,
-    previousQuestion,
-    saveQuestion,
-    resetPersonalityQuiz,
     selectCurrentQuestion,
     selectSurveySize,
     selectSociability,
@@ -70,10 +66,14 @@ import * as Haptics from 'expo-haptics'
 import {makeCardHeader, makeCardFooter, makeResetFooter, statusBar, ButtonCallback, factorBar} from "./shared";
 import {AppDispatch} from "../../store";
 import {getSurvey, saveSurvey} from "../../backend/survey";
+import {useSliceActions} from "../../components/SliceProvider";
 
 export function BigFiveInventory2Screen(): React.JSX.Element {
     const dispatch = useDispatch<AppDispatch>();
-
+    const { nextQuestion,
+        previousQuestion,
+        saveQuestion,
+        resetPersonalityQuiz} = useSliceActions()
     /*
      * There's probably a better way to handle this... feels like too many state variables.
      * But I'm rushed for time right now so it's what we're going live with.
