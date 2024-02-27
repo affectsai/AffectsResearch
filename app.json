@@ -1,12 +1,12 @@
 {
   "expo": {
-    "name": "AffectsResearch",
-    "slug": "AffectsResearch",
+    "name": "SweeneyCounseling",
+    "slug": "SweeneyCounseling",
     "version": "1.0.1",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
     "userInterfaceStyle": "light",
-    "scheme": "affectsai",
+    "scheme": "sweeney",
     "owner": "affectsai",
     "githubUrl": "https://github.com/affectsai/AffectsResearch",
     "splash": {
@@ -19,9 +19,8 @@
       "assets/images/*"
     ],
     "ios": {
-      "appStoreUrl": "https://apps.apple.com/us/app/affects-research/id6478344304",
       "supportsTablet": true,
-      "bundleIdentifier": "ai.affects.apps.research.AffectSurvey",
+      "bundleIdentifier": "com.sweeneycounseling.apps.research.AffectSurvey",
       "config": {
         "usesNonExemptEncryption": false
       }
@@ -31,7 +30,7 @@
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
-      "package": "ai.affects.apps.research.affectsurvey"
+      "package": "com.sweeneycounseling.apps.research.affectsurvey"
     },
     "web": {
       "favicon": "./assets/favicon.png"
