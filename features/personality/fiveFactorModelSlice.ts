@@ -32,6 +32,7 @@ import {
 import {createSurvey, getSurvey, saveSurvey} from "../../backend/survey"
 import {randomUUID} from "expo-crypto";
 import {AsyncThunkConfig} from "@reduxjs/toolkit/dist/createAsyncThunk";
+const _ = require('lodash')
 
 export const createFiveFactorModelSlice = ({ name, initialState, reducers}) =>
 {
@@ -73,14 +74,14 @@ export const createFiveFactorModelSlice = ({ name, initialState, reducers}) =>
           state.currentIndex--;
       },
       saveQuestion: (state, action: SaveSurveyQuestionAction) => {
-        const newSurvey = {...state.survey}
+        const newSurvey = _.clone(state.survey)
         updateQuestionInSurvey(newSurvey, action.payload.question)
         state.survey = newSurvey
       },
       resetPersonalityQuiz: (state) => {
         console.log("Resetting")
         state._id = initialState._id
-        state.survey = {...initialState.survey}
+        const newSurvey = _.clone(initialState.survey)
         state.currentIndex = 1
         console.log("Resetting")
 

@@ -12,6 +12,7 @@ export const USER_SERVICE_API = `${Constants.expoConfig?.extra?.affectsai.restAP
 export const AUTH_SERVICE_API = `${Constants.expoConfig?.extra?.affectsai.restAPI}/authentication`
 export const SURVEY_SERVICE_API = `${Constants.expoConfig?.extra?.affectsai.restAPI}/surveys`
 
+console.log(SURVEY_SERVICE_API)
 
 const feathersApp = feathers()
 export const feathersClient = rest("https://api.affects.ai");
