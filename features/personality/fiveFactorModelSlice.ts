@@ -43,7 +43,8 @@ export const createFiveFactorModelSlice = ({ name, initialState, reducers}) =>
   const updateSurveyInBackend = createAsyncThunk(
       `${name}/updateSurveyInBackend`,
       async(survey: FiveFactoryModel, {getState}) => {
-        return await saveSurvey(getState().bigfive2._id, survey)
+        const id = name == 'bfi1' ? getState().bigfive1._id : getState().bigfive2._id
+        return await saveSurvey(id, survey)
       }
   );
 
@@ -79,11 +80,9 @@ export const createFiveFactorModelSlice = ({ name, initialState, reducers}) =>
         state.survey = newSurvey
       },
       resetPersonalityQuiz: (state) => {
-        console.log("Resetting")
         state._id = initialState._id
-        const newSurvey = _.clone(initialState.survey)
+        state.survey = _.clone(initialState.survey)
         state.currentIndex = 1
-        console.log("Resetting")
 
       },
       ...reducers,
