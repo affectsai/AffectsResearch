@@ -11,4 +11,6 @@
 
 export default {
     licence: require('../assets/images/license_overview.png'),
+    lowval: require('../assets/images/sam/lowval.png'),
+    sammy1: require('../assets/images/sam/sammy.jpeg')
 }

@@ -44,7 +44,7 @@ export const styles = StyleSheet.create({
     margin: 20,
     width: "95%",
     justifyContent: 'center',
-    minHeight: 250
+    minHeight: 580
   },
   scoreCard: {
     width: "95%",
