@@ -30,31 +30,12 @@ import {HomeIcon, SurveyIcon, LegalIcon} from "./icons";
 import {IdState, selectIdentity, validateParticipantID} from "../features/identification/idSlice";
 import {AppDispatch} from "../store";
 import {SAMScreen} from "../features/personality/sam_screen.component";
+import {createStackNavigator} from "@react-navigation/stack";
+import {MainTabsComponent} from "./maintabs.component";
 
 SplashScreen.preventAutoHideAsync().then(() => {});
 
-const {Navigator, Screen} = createBottomTabNavigator();
-
-const BottomTabBar = ({navigation, state}) => (
-    <BottomNavigation
-        selectedIndex={state.index}
-        onSelect={index => navigation.navigate(state.routeNames[index])}>
-        <BottomNavigationTab title='Home' icon={HomeIcon}/>
-        <BottomNavigationTab title='Big 5 Inventory' icon={SurveyIcon}/>
-        <BottomNavigationTab title='Legal' icon={LegalIcon}/>
-        <BottomNavigationTab title='CUADS' icon={SurveyIcon}/>
-    </BottomNavigation>
-);
-
-const TabNavigator = () => (
-    <Navigator screenOptions={{headerShown: false}} tabBar={props => <BottomTabBar {...props} />}>
-        <Screen name='Home' component={ParticipantIDScreen}/>
-        <Screen name='Big 5 Inventory' component={BigFiveInventoryScreen}/>
-        <Screen name='Legal' component={LegalScreen}/>
-        <Screen name='CUADS' component={SAMScreen} />
-    </Navigator>
-);
-
+const {Navigator, Screen} = createStackNavigator();
 
 /**
  * MainComponent is the top-level element which defines the BottomTabBar.
@@ -62,24 +43,12 @@ const TabNavigator = () => (
  * @constructor
  */
 export function MainComponent(): React.JSX.Element | null {
-    const dispatch = useDispatch<AppDispatch>()
     const theme: string = useSelector(selectTheme)
     const [fontsLoaded, fontError] = useFonts({
         'Montserrat-SemiBold': require('../assets/fonts/Montserrat-SemiBold.ttf'),
         'Montserrat-Bold': require('../assets/fonts/Montserrat-Bold.ttf'),
         'Montserrat-Regular': require('../assets/fonts/Montserrat-Regular.ttf'),
     });
-
-    let identity = useSelector(selectIdentity);
-    const [isLoggedIn, setLoggedIn] = useState(false)
-
-    useEffect(() => {
-        console.log('Attempting to login using identity: ' + identity)
-        dispatch(validateParticipantID({
-            participantId: identity,
-            validation: identity
-        } as IdState))
-    }, [identity])
 
     /*
      * Wait for fonts to load before hiding the splash screen...
@@ -114,7 +83,11 @@ export function MainComponent(): React.JSX.Element | null {
                 <GestureHandlerRootView style={{flex: 1, height: '100%'}}>
                     <SafeAreaView style={{flex: 1, height: '100%'}}>
                         <NavigationContainer onReady={onNavigationReady}>
-                            <TabNavigator/>
+                            <Navigator screenOptions={{
+                                headerShown: false
+                            }}>
+                                <Screen name='MainTabs' component={MainTabsComponent} />
+                            </Navigator>
                         </NavigationContainer>
                     </SafeAreaView>
                 </GestureHandlerRootView>
