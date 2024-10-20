@@ -114,4 +114,12 @@ export const homeScreenStyles = StyleService.create({
     justifyContent: 'center',
     minHeight: 580
   },
+  footerContainer: {
+    flexDirection: 'row',
+    justifyContent: 'flex-end',
+    alignContent: 'flex-end',
+  },
+  footerControl: {
+    marginHorizontal: 2,
+  },
 });

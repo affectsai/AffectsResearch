@@ -29,9 +29,10 @@ import {LegalScreen} from "./legalscreen.component";
 import {HomeIcon, SurveyIcon, LegalIcon} from "./icons";
 import {IdState, selectIdentity, validateParticipantID} from "../features/identification/idSlice";
 import {AppDispatch} from "../store";
-import {SAMScreen} from "../features/personality/sam_screen.component";
+import {SAMScreen} from "./cuads_tab.component";
 import {createStackNavigator} from "@react-navigation/stack";
 import {MainTabsComponent} from "./maintabs.component";
+import {CuadsComponent} from "../features/cuads/cuads.component";
 
 SplashScreen.preventAutoHideAsync().then(() => {});
 
@@ -87,6 +88,7 @@ export function MainComponent(): React.JSX.Element | null {
                                 headerShown: false
                             }}>
                                 <Screen name='MainTabs' component={MainTabsComponent} />
+                                <Screen name='CUADS' component={CuadsComponent} />
                             </Navigator>
                         </NavigationContainer>
                     </SafeAreaView>

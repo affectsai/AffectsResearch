@@ -29,7 +29,7 @@ import {LegalScreen} from "./legalscreen.component";
 import {HomeIcon, SurveyIcon, LegalIcon} from "./icons";
 import {IdState, selectIdentity, validateParticipantID} from "../features/identification/idSlice";
 import {AppDispatch} from "../store";
-import {SAMScreen} from "../features/personality/sam_screen.component";
+import {SAMScreen} from "./cuads_tab.component";
 
 SplashScreen.preventAutoHideAsync().then(() => {});
 

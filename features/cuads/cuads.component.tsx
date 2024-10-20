@@ -22,7 +22,7 @@ import {Card, Divider, Layout, Text, useStyleSheet} from '@ui-kitten/components'
 
 import {homeScreenStyles, styles} from '../../components/styles';
 
-import {makeCardFooter, makeCardHeader} from "./shared";
+import {makeCardFooter, makeCardHeader} from "../personality/shared";
 import {AffectiveSlider} from "../../components/AffectiveSlider";
 import {Dimensions, View} from "react-native";
 import VideoPlayer from 'expo-video-player'
@@ -32,7 +32,7 @@ import { setStatusBarHidden } from 'expo-status-bar'
 import * as ScreenOrientation from 'expo-screen-orientation'
 import {useNavigation, useNavigationContainerRef} from "@react-navigation/native";
 
-export function SAMScreen(): React.JSX.Element {
+export function CuadsComponent(): React.JSX.Element {
     const [viewWidth, setViewWidth] = useState(0);
     const [viewHeight, setViewHeight] = useState(0);
 
@@ -84,7 +84,7 @@ export function SAMScreen(): React.JSX.Element {
                 style={{
                     videoBackgroundColor: 'black',
                     width: inFullscreen2 ? (Dimensions.get('screen').height) : 340,
-                    height: inFullscreen2 ? (Dimensions.get('screen').width-100)  : 212,
+                    height: inFullscreen2 ? (Dimensions.get('screen').width-20)  : 212,
                 }}
             />
 
@@ -110,7 +110,7 @@ export function SAMScreen(): React.JSX.Element {
             <Card disabled={true}
                   style={styles.card}
                   header={makeCardHeader(`Watch and rate the video`, descriptiveText(), 1, 3)}
-                  footer={makeCardFooter(false, false, ()=>{}, ()=>{})}>
+                  footer={makeCardFooter(false, false, ()=>{}, ()=>{navigation.goBack()})}>
                 <View style={{marginTop: 10, marginBottom: 20, width: "100%"}}
                       onLayout={(event) => {
                           const {height, width} = event.nativeEvent.layout
