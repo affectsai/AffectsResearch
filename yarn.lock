@@ -6490,6 +6490,11 @@ react-native-tab-view@^3.5.2:
   dependencies:
     use-latest-callback "^0.1.5"
 
+react-native-video@^6.7.0:
+  version "6.7.0"
+  resolved "https://registry.yarnpkg.com/react-native-video/-/react-native-video-6.7.0.tgz#0fa3dc1a3274a07ac66740cbbb85dad36325ef93"
+  integrity sha512-9516km2AorwEbeJtpODCeZa7BJGYxoMtyArzZANqCWLioNJPWAbZJjbWp+JIKnoXvb/qniNuTJ1989Zdohc8XQ==
+
 react-native-web@~0.19.6:
   version "0.19.10"
   resolved "https://registry.yarnpkg.com/react-native-web/-/react-native-web-0.19.10.tgz#5f7205f8909c0889bc89c9fde7c6e287defa7c63"

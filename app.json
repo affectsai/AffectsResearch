@@ -16,7 +16,8 @@
     },
     "assetBundlePatterns": [
       "assets/fonts/*",
-      "assets/images/*"
+      "assets/images/*",
+      "assets/media/*"
     ],
     "ios": {
       "appStoreUrl": "https://apps.apple.com/us/app/affects-research/id6478344304",
