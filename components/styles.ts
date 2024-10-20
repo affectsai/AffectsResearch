@@ -109,4 +109,9 @@ export const homeScreenStyles = StyleService.create({
   forgotPasswordButton: {
     paddingHorizontal: 0,
   },
+  card: {
+    margin: 20,
+    justifyContent: 'center',
+    minHeight: 580
+  },
 });

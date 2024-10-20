@@ -29,6 +29,7 @@ import {LegalScreen} from "./legalscreen.component";
 import {HomeIcon, SurveyIcon, LegalIcon} from "./icons";
 import {IdState, selectIdentity, validateParticipantID} from "../features/identification/idSlice";
 import {AppDispatch} from "../store";
+import {SAMScreen} from "../features/personality/sam_screen.component";
 
 SplashScreen.preventAutoHideAsync().then(() => {});
 
@@ -41,6 +42,7 @@ const BottomTabBar = ({navigation, state}) => (
         <BottomNavigationTab title='Home' icon={HomeIcon}/>
         <BottomNavigationTab title='Big 5 Inventory' icon={SurveyIcon}/>
         <BottomNavigationTab title='Legal' icon={LegalIcon}/>
+        <BottomNavigationTab title='CUADS' icon={SurveyIcon}/>
     </BottomNavigation>
 );
 
@@ -49,6 +51,7 @@ const TabNavigator = () => (
         <Screen name='Home' component={ParticipantIDScreen}/>
         <Screen name='Big 5 Inventory' component={BigFiveInventoryScreen}/>
         <Screen name='Legal' component={LegalScreen}/>
+        <Screen name='CUADS' component={SAMScreen} />
     </Navigator>
 );
 
@@ -108,8 +111,8 @@ export function MainComponent(): React.JSX.Element | null {
                 {...eva}
                 theme={{...getTheme(theme), ...affectsai_theme}}
                 customMapping={affectsai_mapping}>
-                <GestureHandlerRootView style={{flex: 1}}>
-                    <SafeAreaView style={{flex: 1}}>
+                <GestureHandlerRootView style={{flex: 1, height: '100%'}}>
+                    <SafeAreaView style={{flex: 1, height: '100%'}}>
                         <NavigationContainer onReady={onNavigationReady}>
                             <TabNavigator/>
                         </NavigationContainer>

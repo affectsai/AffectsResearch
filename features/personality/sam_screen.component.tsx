@@ -17,27 +17,80 @@
  *      https://www.ocf.berkeley.edu/~johnlab/index.htm
  */
 
-import React, {useEffect, useRef, useState} from 'react';
-import {
-    Layout,
-    Card,
-    Text, Divider
-} from '@ui-kitten/components';
+import React, {MutableRefObject, useEffect, useRef, useState} from 'react';
+import {Card, Divider, Layout, Text, useStyleSheet} from '@ui-kitten/components';
 
-import {styles} from '../../components/styles';
+import {homeScreenStyles, styles} from '../../components/styles';
 
-import {makeCardHeader, makeCardFooter, makeResetFooter, statusBar, ButtonCallback, factorBar} from "./shared";
+import {makeCardFooter, makeCardHeader} from "./shared";
 import {AffectiveSlider} from "../../components/AffectiveSlider";
-import {View} from "react-native";
-import Video, {VideoRef} from "react-native-video";
+import {Dimensions, View} from "react-native";
+import VideoPlayer from 'expo-video-player'
+import {AVPlaybackStatus, ResizeMode, Video} from "expo-av";
 import media from "../../components/media";
-import images from "../../components/images";
+import { setStatusBarHidden } from 'expo-status-bar'
+import * as ScreenOrientation from 'expo-screen-orientation'
+import {useNavigation, useNavigationContainerRef} from "@react-navigation/native";
 
 export function SAMScreen(): React.JSX.Element {
-    const [videoWidth, setVideoWidth] = useState(0);
-    const [videoHeight, setVideoHeight] = useState(0);
+    const [viewWidth, setViewWidth] = useState(0);
+    const [viewHeight, setViewHeight] = useState(0);
 
-    const videoRef = useRef<VideoRef>(null)
+    const [isPlaying, setIsPlaying] = useState(false);
+    const [inFullscreen2, setInFullscreen2] = useState(false)
+
+    const videoPlayerRef: MutableRefObject<Video> = useRef<Video>(null)
+    const navigation = useNavigation();
+
+    const styles = useStyleSheet(homeScreenStyles);
+
+
+    useEffect(()=>{
+        console.log(navigation)
+        console.log(navigation.getState())
+    },[])
+
+    const VideoElement = ({}) => {
+        return <VideoPlayer
+                videoProps={{
+                    shouldPlay: false,
+                    resizeMode: ResizeMode.CONTAIN,
+                    source: media.video_107,
+                    ref: videoPlayerRef
+                }}
+                fullscreen={{
+                    inFullscreen: inFullscreen2,
+                    enterFullscreen: async () => {
+                        if ( videoPlayerRef.current ) {
+                            navigation.getParent()?.setOptions({ tabBarStyle: { display: 'none' }, tabBarVisible: false });
+                            setStatusBarHidden(true, 'fade')
+                            setInFullscreen2(!inFullscreen2)
+                            await ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.LANDSCAPE_LEFT)
+                            await videoPlayerRef.current.setStatusAsync({
+                                shouldPlay: true,
+                            })
+                        }
+                    },
+                    exitFullscreen: async () => {
+                        setInFullscreen2(!inFullscreen2)
+                        console.log("Exit")
+                        if ( videoPlayerRef.current ) {
+                            setStatusBarHidden(false, 'fade')
+                            setInFullscreen2(!inFullscreen2)
+                            await ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.DEFAULT)
+                        }
+                    },
+                }}
+                style={{
+                    videoBackgroundColor: 'black',
+                    width: inFullscreen2 ? (Dimensions.get('screen').height) : 340,
+                    height: inFullscreen2 ? (Dimensions.get('screen').width-100)  : 212,
+                }}
+            />
+
+    }
+
+
     const descriptiveText = () => {
         return (
             <Text category='p1'>Please rate the picture using
@@ -50,29 +103,31 @@ export function SAMScreen(): React.JSX.Element {
         )
     }
 
+
     const SAMScreenCard = () => (
         <Layout style={styles.container}>
+            <Layout styles={styles.formContainer}>
             <Card disabled={true}
                   style={styles.card}
                   header={makeCardHeader(`Watch and rate the video`, descriptiveText(), 1, 3)}
                   footer={makeCardFooter(false, false, ()=>{}, ()=>{})}>
-                <View style={{marginTop: 10, marginBottom: 20}}
+                <View style={{marginTop: 10, marginBottom: 20, width: "100%"}}
                       onLayout={(event) => {
-                          const {width} = event.nativeEvent.layout
-                          setVideoWidth(Math.floor(width))
-                          setVideoHeight(Math.floor(width*0.625))
-                          console.log(`${videoWidth}X${videoHeight}`)
+                          const {height, width} = event.nativeEvent.layout
+                          setViewWidth(Math.floor(width))
+                          setViewHeight(Math.floor(height))
+                          console.log(`${viewWidth}X${viewHeight}`)
                       }}
                 >
-                    <Video paused={true} poster={images.happy} playInBackground={false} style={{width: "100%", aspectRatio: 1.6}} resizeMode='contain' source={media.video_107} ref={videoRef} controls={true} resizeMode={'cover'}/>
+                    <VideoElement/>
+
+                    {/*<Video paused={true} poster={images.happy} playInBackground={false} fullscreenAutorotate={true} fullscreenOrientation='landscape' style={{width: "100%", aspectRatio: 1.6}} resizeMode='contain' source={media.video_107} ref={videoRef} controls={true} resizeMode={'cover'}/>*/}
                 </View>
                 <Divider />
                 <AffectiveSlider/>
             </Card>
-        </Layout>
+        </Layout></Layout>
     )
 
-    return (
-        <SAMScreenCard/>
-    );
+    return inFullscreen2?<VideoElement/>:<SAMScreenCard/>
 }

@@ -48,9 +48,6 @@ export function BigFiveInventoryScreen(): React.JSX.Element {
                         <BigFiveInventory1Screen/>
                     </SliceProvider>
                 </Tab>
-                <Tab title='SAM'>
-                        <SAMScreen/>
-                </Tab>
             </TabView>
         </ScrollView>
     );
