@@ -36,19 +36,38 @@ export function CuadsComponent(): React.JSX.Element {
     const [viewWidth, setViewWidth] = useState(0);
     const [viewHeight, setViewHeight] = useState(0);
 
-    const [isPlaying, setIsPlaying] = useState(false);
+    const isPlaying = useRef(false);
     const [inFullscreen2, setInFullscreen2] = useState(false)
 
-    const videoPlayerRef: MutableRefObject<Video> = useRef<Video>(null)
+    const videoPlayerRef: MutableRefObject<Video> = useRef<Video>(null) as MutableRefObject<Video>
     const navigation = useNavigation();
 
     const styles = useStyleSheet(homeScreenStyles);
 
 
     useEffect(()=>{
-        console.log(navigation)
-        console.log(navigation.getState())
+
     },[])
+
+    const exitFullScreen = async () => {
+        setInFullscreen2(!inFullscreen2)
+        if ( videoPlayerRef.current ) {
+            setStatusBarHidden(false, 'fade')
+            setInFullscreen2(false)
+            await ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.DEFAULT)
+            await videoPlayerRef.current.setStatusAsync({ shouldPlay: false }).then((status)=>{console.log("Set shouldPlay: false")})
+        }
+    }
+
+    const enterFullScreen = async () => {
+        console.log("Enter full screen")
+        if ( videoPlayerRef.current ) {
+            setStatusBarHidden(true, 'fade')
+            setInFullscreen2(true)
+            await ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.LANDSCAPE_LEFT)
+            await videoPlayerRef.current.setStatusAsync({ shouldPlay: true, positionMillis: 0 }).then((status)=>{console.log("Set shouldPlay: true")})
+        }
+    }
 
     const VideoElement = ({}) => {
         return <VideoPlayer
@@ -56,30 +75,25 @@ export function CuadsComponent(): React.JSX.Element {
                     shouldPlay: false,
                     resizeMode: ResizeMode.CONTAIN,
                     source: media.video_107,
-                    ref: videoPlayerRef
+                    ref: videoPlayerRef,
+                }}
+                slider={{
+                    visible: false
                 }}
                 fullscreen={{
                     inFullscreen: inFullscreen2,
-                    enterFullscreen: async () => {
-                        if ( videoPlayerRef.current ) {
-                            navigation.getParent()?.setOptions({ tabBarStyle: { display: 'none' }, tabBarVisible: false });
-                            setStatusBarHidden(true, 'fade')
-                            setInFullscreen2(!inFullscreen2)
-                            await ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.LANDSCAPE_LEFT)
-                            await videoPlayerRef.current.setStatusAsync({
-                                shouldPlay: true,
-                            })
-                        }
-                    },
-                    exitFullscreen: async () => {
-                        setInFullscreen2(!inFullscreen2)
-                        console.log("Exit")
-                        if ( videoPlayerRef.current ) {
-                            setStatusBarHidden(false, 'fade')
-                            setInFullscreen2(!inFullscreen2)
-                            await ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.DEFAULT)
-                        }
-                    },
+                    enterFullscreen: enterFullScreen,
+                    exitFullscreen: exitFullScreen,
+                }}
+                playbackCallback={async (playbackStatus: AVPlaybackStatus) => {
+                    if (playbackStatus.didJustFinish) {
+                        await exitFullScreen()
+                        isPlaying.current = false;
+                    }
+
+                    if ( playbackStatus.isPlaying && ! inFullscreen2 ) {
+                        await enterFullScreen();
+                    }
                 }}
                 style={{
                     videoBackgroundColor: 'black',
@@ -120,7 +134,6 @@ export function CuadsComponent(): React.JSX.Element {
                       }}
                 >
                     <VideoElement/>
-
                     {/*<Video paused={true} poster={images.happy} playInBackground={false} fullscreenAutorotate={true} fullscreenOrientation='landscape' style={{width: "100%", aspectRatio: 1.6}} resizeMode='contain' source={media.video_107} ref={videoRef} controls={true} resizeMode={'cover'}/>*/}
                 </View>
                 <Divider />
