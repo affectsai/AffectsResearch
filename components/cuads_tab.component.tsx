@@ -32,8 +32,12 @@ import { setStatusBarHidden } from 'expo-status-bar'
 import * as ScreenOrientation from 'expo-screen-orientation'
 import {useNavigation, useNavigationContainerRef} from "@react-navigation/native";
 import {useSharedValue} from "react-native-reanimated";
+import {useDispatch} from "react-redux";
+import {AppDispatch} from "../store";
+import {initializeNewCUADSStudy, resetCurrentMediaIndex} from "../features/cuads/cuadsSlice";
 
 export function SAMScreen(): React.JSX.Element {
+    const dispatch = useDispatch<AppDispatch>();
     const [viewWidth, setViewWidth] = useState(0);
     const [viewHeight, setViewHeight] = useState(0);
 
@@ -47,10 +51,6 @@ export function SAMScreen(): React.JSX.Element {
     const valence = useSharedValue(50);
     const arousal = useSharedValue(50);
 
-    useEffect(()=>{
-        console.log(navigation)
-        console.log(navigation.getState())
-    },[])
 
     const VideoElement = ({}) => {
         return <VideoPlayer
@@ -117,6 +117,7 @@ export function SAMScreen(): React.JSX.Element {
                         status='basic'
                         onPress={()=>{
                             console.log("YAY")
+                            dispatch(initializeNewCUADSStudy())
                             navigation.push('CUADS')
                         }}
                     >

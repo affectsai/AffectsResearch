@@ -9,105 +9,119 @@
  *    https://creativecommons.org/licenses/by-nc-sa/4.0/deed.en
  */
 
-import {createAsyncThunk, createSlice} from "@reduxjs/toolkit";
+import {createAsyncThunk, createReducer, createSelector, createSlice} from "@reduxjs/toolkit";
+import {CUADSDataCollection, CUADSMediaRating, CUADSMediaItem, setMediaRating} from "./cuadsModel";
+import {selectCurrentIndex, selectSurvey} from "../personality/bigFiveInventory1Slice";
 import {randomUUID} from "expo-crypto";
-import feathersApp, {
-  createUser,
-  defineUser,
-  getAuthToken,
-  getCurrentUser,
-  setAuthorizationHeader
-} from "../../backend/affectsBackend";
-import Constants from 'expo-constants'
 
-export interface IdState {
-  participantId: string;
-  validation: string;
-  authenticated: boolean;
+export interface CUADSDataCollectionState {
+  currentIndex: number;
+  dataCollection: CUADSDataCollection;
 }
 
-const initialState = {
-  participantId: randomUUID(),
-  validation: randomUUID(),
-  authenticated: false
-} as IdState
+const dummyMediaRating = {
+  mediaItem: {mediaIdentifier: ""},
+  valence: -1,
+  arousal: -1,
+  didWatchFullVideo: false,
+  mediaStartTime: 0,
+  mediaEndTime: 0,
+  mediaPauseCount: 0,
+} as CUADSMediaRating
 
-interface SetIdentityAction {
+function shuffleArray(array: any[]) {
+  for (let i = array.length - 1; i >= 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [array[i], array[j]] = [array[j], array[i]];
+  }
+  return array
+}
+
+const initialCUADSMediaRatings = [
+  {...dummyMediaRating, mediaItem: { mediaIdentifier: "video_30" }} as CUADSMediaRating,
+  {...dummyMediaRating, mediaItem: { mediaIdentifier: "video_52" }} as CUADSMediaRating,
+  {...dummyMediaRating, mediaItem: { mediaIdentifier: "video_53" }} as CUADSMediaRating,
+  {...dummyMediaRating, mediaItem: { mediaIdentifier: "video_55" }} as CUADSMediaRating,
+  {...dummyMediaRating, mediaItem: { mediaIdentifier: "video_58" }} as CUADSMediaRating,
+  {...dummyMediaRating, mediaItem: { mediaIdentifier: "video_69" }} as CUADSMediaRating,
+  {...dummyMediaRating, mediaItem: { mediaIdentifier: "video_73" }} as CUADSMediaRating,
+  {...dummyMediaRating, mediaItem: { mediaIdentifier: "video_79" }} as CUADSMediaRating,
+  {...dummyMediaRating, mediaItem: { mediaIdentifier: "video_80" }} as CUADSMediaRating,
+  {...dummyMediaRating, mediaItem: { mediaIdentifier: "video_90" }} as CUADSMediaRating,
+  {...dummyMediaRating, mediaItem: { mediaIdentifier: "video_107" }} as CUADSMediaRating,
+  {...dummyMediaRating, mediaItem: { mediaIdentifier: "video_111" }} as CUADSMediaRating,
+  {...dummyMediaRating, mediaItem: { mediaIdentifier: "video_138" }} as CUADSMediaRating,
+  {...dummyMediaRating, mediaItem: { mediaIdentifier: "video_146" }} as CUADSMediaRating,
+  {...dummyMediaRating, mediaItem: { mediaIdentifier: "video_cats_f" }} as CUADSMediaRating,
+  {...dummyMediaRating, mediaItem: { mediaIdentifier: "video_dallas_f" }} as CUADSMediaRating,
+  {...dummyMediaRating, mediaItem: { mediaIdentifier: "video_detroit_f" }} as CUADSMediaRating,
+  {...dummyMediaRating, mediaItem: { mediaIdentifier: "video_earworm_f" }} as CUADSMediaRating,
+  {...dummyMediaRating, mediaItem: { mediaIdentifier: "video_funny_f" }} as CUADSMediaRating,
+  {...dummyMediaRating, mediaItem: { mediaIdentifier: "video_newyork_f" }} as CUADSMediaRating,
+] as Array<CUADSMediaRating>
+
+const createInitialState = () => {
+  return {
+    currentIndex: 0,
+    dataCollection: {
+      trialId: randomUUID(),
+      mediaRatings: shuffleArray([...initialCUADSMediaRatings])
+    } as CUADSDataCollection
+  } as CUADSDataCollectionState
+}
+
+const initialState = createInitialState()
+
+interface SetMediaRatingAction {
   type: string,
   payload: {
-    participantId: string,
+    mediaRating: CUADSMediaRating,
   }
 }
 
-export const validateParticipantID = createAsyncThunk(
-    'identity/validateParticipantID',
-    async(participantData: IdState, thunkAPI) => {
-      let authId;
-      try {
-        if (participantData.validation == undefined || participantData.validation.trim().length==0) {
-          participantData.validation = participantData.participantId
-        }
-        authId = await getAuthToken(participantData.participantId, participantData.validation)
-        if (authId == undefined )
-        {
-          console.log("ParticipantID is invalid, creating a new one: " + participantData.participantId + " " + participantData.validation)
-          await createUser(participantData.participantId, participantData.validation)
-          authId = await getAuthToken(participantData.participantId, participantData.validation)
-        }
-
-        if (authId) {
-          setAuthorizationHeader(authId)
-          return getCurrentUser()
-        }
-      } catch (e) {
-        console.log("An error occurred validating the participant ID: " + e)
-      }
-
-      return {}
-    }
-);
+interface SetParticipantIDAction {
+  type: string,
+  payload: {
+    participantID: string,
+  }
+}
 
 /**
  * identitySlice manages the ParticipantID code...
  */
-const identitySlice = createSlice({
-  name: 'identity',
+const cuadsSlice = createSlice({
+  name: 'cuads',
   initialState,
   reducers: {
-    resetID(state) {
-      state.participantId = randomUUID();
-      state.validation = randomUUID();
-      state.authenticated = false;
+    setParticipantID(state, action: SetParticipantIDAction) {
+      state.dataCollection.participantId = action.payload.participantID;
+      console.log("Saved participant ID: " + state.dataCollection.participantId)
     },
-    setID(state, action: SetIdentityAction) {
-      state.participantId = action.payload.participantId;
-      state.validation = randomUUID()
-      state.authenticated = false
-      console.log(action.payload.participantId)
+    saveMediaRating(state, action: SetMediaRatingAction) {
+      setMediaRating(state.dataCollection, action.payload.mediaRating)
     },
-    clearID(state) {
-      state.participantId = '';
-      state.authenticated = false;
+    incrementCurrentMediaIndex(state) {
+      if ( state.currentIndex < (state.dataCollection.mediaRatings.length-1) )
+        state.currentIndex = state.currentIndex + 1;
     },
-  },
-  extraReducers: (builder) => {
-    // Add reducers for additional action types here, and handle loading state as needed
-    builder.addCase(validateParticipantID.fulfilled, (state, action) => {
-      // Add user to the state array
-      if ((action.payload as IdState).participantId === state.participantId) {
-        state.authenticated = true
-      }
-    })
+    resetCurrentMediaIndex(state) {
+      console.log("Reset media index to 0")
+      state.currentIndex = 0;
+    },
+    initializeNewCUADSStudy: () => createInitialState()
   },
 })
 
+export const {setParticipantID, saveMediaRating, incrementCurrentMediaIndex, resetCurrentMediaIndex, initializeNewCUADSStudy} = cuadsSlice.actions;
+export const selectParticipantID = (state: { cuads: CUADSDataCollectionState }) => state.cuads.dataCollection.participantId;
 
+export const selectCUADSDataCollection = (state: { cuads: CUADSDataCollectionState }) => state.cuads.dataCollection;
+export const selectCurrentMediaIndex = (state: { cuads: CUADSDataCollectionState }) => state.cuads.currentIndex
+export const selectNumberOfMediaFiles = (state: { cuads: CUADSDataCollectionState }) => state.cuads.dataCollection.mediaRatings.length
+export const selectCurrentMediaRating = createSelector([selectCurrentMediaIndex, selectCUADSDataCollection], (index, dataCollection) => {
+  return dataCollection.mediaRatings[index];
+});
 
-export const {clearID, resetID, setID} = identitySlice.actions;
-export const selectIdentity = (state: { identity: IdState }) => state.identity.participantId;
-export const selectValidation = (state: { identity: IdState }) => state.identity.validation;
-export const selectAuthenticated = (state: { identity: IdState }) => state.identity.authenticated;
-
-export default identitySlice.reducer;
+export default cuadsSlice.reducer;
 
 
