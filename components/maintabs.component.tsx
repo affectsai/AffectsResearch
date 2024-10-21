@@ -26,7 +26,7 @@ import {ParticipantIDScreen} from "./homescreen.component";
 import {BigFiveInventoryScreen} from "./bigfiveinventory.component";
 import {GestureHandlerRootView} from "react-native-gesture-handler";
 import {LegalScreen} from "./legalscreen.component";
-import {HomeIcon, SurveyIcon, LegalIcon} from "./icons";
+import {HomeIcon, SurveyIcon, LegalIcon, CuadsIcon} from "./icons";
 import {IdState, selectIdentity, validateParticipantID} from "../features/identification/idSlice";
 import {AppDispatch} from "../store";
 import {SAMScreen} from "./cuads_tab.component";
@@ -41,8 +41,8 @@ const BottomTabBar = ({navigation, state}) => (
         onSelect={index => navigation.navigate(state.routeNames[index])}>
         <BottomNavigationTab title='Home' icon={HomeIcon}/>
         <BottomNavigationTab title='Big 5 Inventory' icon={SurveyIcon}/>
+        <BottomNavigationTab title='CUADS' icon={CuadsIcon}/>
         <BottomNavigationTab title='Legal' icon={LegalIcon}/>
-        <BottomNavigationTab title='CUADS' icon={SurveyIcon}/>
     </BottomNavigation>
 );
 
@@ -50,8 +50,8 @@ const TabNavigator = () => (
     <Navigator screenOptions={{headerShown: false}} tabBar={props => <BottomTabBar {...props} />}>
         <Screen name='Home' component={ParticipantIDScreen}/>
         <Screen name='Big 5 Inventory' component={BigFiveInventoryScreen}/>
-        <Screen name='Legal' component={LegalScreen}/>
         <Screen name='CUADS' component={SAMScreen} />
+        <Screen name='Legal' component={LegalScreen}/>
     </Navigator>
 );
 

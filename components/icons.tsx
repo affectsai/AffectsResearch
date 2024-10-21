@@ -24,3 +24,7 @@ export const SurveyIcon = (
 export const LegalIcon = (
     props?: Partial<ImageProps>,
 ): React.ReactElement<ImageProps> => <Icon {...props} name="info"/>;
+
+export const CuadsIcon = (
+    props?: Partial<ImageProps>,
+): React.ReactElement<ImageProps> => <Icon {...props} name="save"/>;
