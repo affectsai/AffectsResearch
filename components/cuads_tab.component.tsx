@@ -31,6 +31,7 @@ import media from "./media";
 import { setStatusBarHidden } from 'expo-status-bar'
 import * as ScreenOrientation from 'expo-screen-orientation'
 import {useNavigation, useNavigationContainerRef} from "@react-navigation/native";
+import {useSharedValue} from "react-native-reanimated";
 
 export function SAMScreen(): React.JSX.Element {
     const [viewWidth, setViewWidth] = useState(0);
@@ -43,7 +44,8 @@ export function SAMScreen(): React.JSX.Element {
     const navigation = useNavigation();
 
     const styles = useStyleSheet(homeScreenStyles);
-
+    const valence = useSharedValue(50);
+    const arousal = useSharedValue(50);
 
     useEffect(()=>{
         console.log(navigation)
@@ -171,7 +173,7 @@ export function SAMScreen(): React.JSX.Element {
                         Go ahead and move these sliders around to assess how you're feeling right now!
                     </Text>
                     <Divider />
-                    <AffectiveSlider/>
+                    <AffectiveSlider arousal={arousal} valence={valence}/>
                     <Divider />
                     <Text category='s2' style={{paddingTop: 10}}>Are You Ready?</Text>
                     <Text category='p2' style={{paddingTop: 3}}>

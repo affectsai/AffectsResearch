@@ -24,25 +24,32 @@ import {homeScreenStyles, styles} from '../../components/styles';
 
 import {makeCardFooter, makeCardHeader} from "../personality/shared";
 import {AffectiveSlider} from "../../components/AffectiveSlider";
-import {Dimensions, View} from "react-native";
+import {Dimensions, View, ViewProps} from "react-native";
 import VideoPlayer from 'expo-video-player'
 import {AVPlaybackStatus, ResizeMode, Video} from "expo-av";
 import media from "../../components/media";
 import { setStatusBarHidden } from 'expo-status-bar'
 import * as ScreenOrientation from 'expo-screen-orientation'
 import {useNavigation, useNavigationContainerRef} from "@react-navigation/native";
+import {useSharedValue} from "react-native-reanimated";
 
 export function CuadsComponent(): React.JSX.Element {
+    const navigation = useNavigation();
+    const styles = useStyleSheet(homeScreenStyles);
+
     const [viewWidth, setViewWidth] = useState(0);
     const [viewHeight, setViewHeight] = useState(0);
+    const [inFullscreen, setInFullscreen] = useState(false)
 
     const isPlaying = useRef(false);
-    const [inFullscreen2, setInFullscreen2] = useState(false)
 
     const videoPlayerRef: MutableRefObject<Video> = useRef<Video>(null) as MutableRefObject<Video>
-    const navigation = useNavigation();
 
-    const styles = useStyleSheet(homeScreenStyles);
+
+
+    const valence = useSharedValue(50);
+    const arousal = useSharedValue(50);
+    const didPlayFullVideo = useRef(false);
 
 
     useEffect(()=>{
@@ -50,10 +57,10 @@ export function CuadsComponent(): React.JSX.Element {
     },[])
 
     const exitFullScreen = async () => {
-        setInFullscreen2(!inFullscreen2)
+        setInFullscreen(!inFullscreen)
         if ( videoPlayerRef.current ) {
             setStatusBarHidden(false, 'fade')
-            setInFullscreen2(false)
+            setInFullscreen(false)
             await ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.DEFAULT)
             await videoPlayerRef.current.setStatusAsync({ shouldPlay: false }).then((status)=>{console.log("Set shouldPlay: false")})
         }
@@ -63,7 +70,7 @@ export function CuadsComponent(): React.JSX.Element {
         console.log("Enter full screen")
         if ( videoPlayerRef.current ) {
             setStatusBarHidden(true, 'fade')
-            setInFullscreen2(true)
+            setInFullscreen(true)
             await ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.LANDSCAPE_LEFT)
             await videoPlayerRef.current.setStatusAsync({ shouldPlay: true, positionMillis: 0 }).then((status)=>{console.log("Set shouldPlay: true")})
         }
@@ -81,50 +88,57 @@ export function CuadsComponent(): React.JSX.Element {
                     visible: false
                 }}
                 fullscreen={{
-                    inFullscreen: inFullscreen2,
+                    inFullscreen: inFullscreen,
                     enterFullscreen: enterFullScreen,
                     exitFullscreen: exitFullScreen,
                 }}
                 playbackCallback={async (playbackStatus: AVPlaybackStatus) => {
                     if (playbackStatus.didJustFinish) {
                         await exitFullScreen()
+                        didPlayFullVideo.current = true;
                         isPlaying.current = false;
                     }
 
-                    if ( playbackStatus.isPlaying && ! inFullscreen2 ) {
+                    if ( playbackStatus.isPlaying && ! inFullscreen ) {
                         await enterFullScreen();
                     }
                 }}
                 style={{
                     videoBackgroundColor: 'black',
-                    width: inFullscreen2 ? (Dimensions.get('screen').height) : 340,
-                    height: inFullscreen2 ? (Dimensions.get('screen').width-20)  : 212,
+                    width: inFullscreen ? (Dimensions.get('screen').height) : 340,
+                    height: inFullscreen ? (Dimensions.get('screen').width-20)  : 212,
                 }}
             />
-
     }
 
-
-    const descriptiveText = () => {
-        return (
-            <Text category='p1'>Please rate the picture using
+    const makeCuadsCardHeader = (currentQuestion: number, totalQuestions: number) => {
+        return (props: ViewProps): React.ReactElement => (
+            <View {...props}>
+                <Text category='s1'>
+                    Presentation {currentQuestion} of {totalQuestions}
+                </Text>
+                <Text category='p1'>After watching the video, rate your feelings using
                     <Text category='p1' style={{fontWeight: 'bold'}}> BOTH sliders </Text>
-                (their order of appearance will change randomly).
+                    (their order of appearance will change randomly).
                     <Text category='p1' style={{fontWeight: 'bold'}}> Don't think too much</Text> about it, just
                     <Text category='p1' style={{fontWeight: 'bold'}}> rate how you feel</Text> when watching it.
-            </Text>
-
-        )
+                </Text>
+            </View>
+        );
     }
 
+    const storeResponses = () => {
+        console.log(arousal.value)
+        console.log(valence.value)
+    }
 
     const SAMScreenCard = () => (
         <Layout style={styles.container}>
             <Layout styles={styles.formContainer}>
             <Card disabled={true}
                   style={styles.card}
-                  header={makeCardHeader(`Watch and rate the video`, descriptiveText(), 1, 3)}
-                  footer={makeCardFooter(false, false, ()=>{}, ()=>{navigation.goBack()})}>
+                  header={makeCuadsCardHeader(1, 3)}
+                  footer={makeCardFooter(false, false, storeResponses, ()=>{navigation.goBack()})}>
                 <View style={{marginTop: 10, marginBottom: 20, width: "100%"}}
                       onLayout={(event) => {
                           const {height, width} = event.nativeEvent.layout
@@ -137,10 +151,10 @@ export function CuadsComponent(): React.JSX.Element {
                     {/*<Video paused={true} poster={images.happy} playInBackground={false} fullscreenAutorotate={true} fullscreenOrientation='landscape' style={{width: "100%", aspectRatio: 1.6}} resizeMode='contain' source={media.video_107} ref={videoRef} controls={true} resizeMode={'cover'}/>*/}
                 </View>
                 <Divider />
-                <AffectiveSlider/>
+                <AffectiveSlider valence={valence} arousal={arousal}/>
             </Card>
         </Layout></Layout>
     )
 
-    return inFullscreen2?<VideoElement/>:<SAMScreenCard/>
+    return inFullscreen?<VideoElement/>:<SAMScreenCard/>
 }

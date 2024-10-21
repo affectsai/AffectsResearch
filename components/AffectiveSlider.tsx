@@ -1,8 +1,7 @@
 import React, {useState} from "react";
 import {Slider} from "react-native-awesome-slider";
-import {styles} from "./styles";
 import {SharedValue, useSharedValue} from "react-native-reanimated";
-import {Falsy, Image, ImageSourcePropType, RecursiveArray, RegisteredStyle, View, ViewStyle} from "react-native";
+import {Image, ImageSourcePropType, View} from "react-native";
 import Svg, {Defs, LinearGradient, Path, Stop} from "react-native-svg";
 import images from "./images";
 import {Divider, Text} from "@ui-kitten/components";
@@ -19,17 +18,21 @@ interface IntensitySliderProps {
     value: SharedValue<number>;
 }
 
-export function AffectiveSlider(): React.JSX.Element {
+interface AffectiveSliderProps {
+    valence: SharedValue<number>;
+    arousal: SharedValue<number>;
+}
+
+export function AffectiveSlider({valence, arousal}: AffectiveSliderProps): React.JSX.Element {
     const [viewWidth, setViewWidth] = useState(0);
 
     const min = useSharedValue(0)
     const max = useSharedValue(100)
     const mid = useSharedValue(50)
-    const step = 1
     const sliderHeight = 5
 
-    let valence = useSharedValue(50)
-    let arousal = useSharedValue(50)
+    let valenceSharedVal = valence
+    let arousalSharedVal = arousal
 
     const IntensityQueue = ({style, height}: IntensityQueueProps) => {
         const intensityQueueHeight = height
@@ -58,44 +61,51 @@ export function AffectiveSlider(): React.JSX.Element {
         );
     };
 
-    const IntensitySlider = ({style, lowImage, highImage, value}: IntensitySliderProps) => (
-        <View style={[style, { flexDirection: 'row', width: "100%"}]}>
-            <Image style={{ flex: 1, resizeMode: "center", height: '100%', width: "100%", padding: 0}}
-                   source={lowImage}/>
 
-            <View
-                style={{ flex: 6, flexDirection: 'column'}}
-                onLayout={(event) => {
-                    const {width} = event.nativeEvent.layout
-                    setViewWidth(width)
-                }}
-            >
-                <Slider style={{flex: 1}}
-                    progress={value}
-                    minimumValue={min}
-                    maximumValue={max}
-                    bubbleMaxWidth={0}
-                    renderBubble={()=>(<></>)}
-                    snapToStep={false}
-                    step={step}
-                    sliderHeight={sliderHeight}
-                    thumbWidth={Math.ceil(sliderHeight*1.1*3)}
 
-                    theme={{
-                        disableMinTrackTintColor: '#fff',
-                        maximumTrackTintColor: '#aaaaaa',
-                        minimumTrackTintColor: '#666666',
-                        cacheTrackTintColor: '#333',
-                        bubbleBackgroundColor: '#000000',
+    const IntensitySlider = ({style, lowImage, highImage, value}: IntensitySliderProps) => {
+        const updateProgress = (newValue) => {
+            value.value = Math.round(10*Math.max(min.value, Math.min(newValue, max.value)))/10;
+        };
+
+        return (
+            <View style={[style, {flexDirection: 'row', width: "100%"}]}>
+                <Image style={{flex: 1, resizeMode: "center", height: '100%', width: "100%", padding: 0}}
+                       source={lowImage}/>
+
+                <View
+                    style={{flex: 6, flexDirection: 'column'}}
+                    onLayout={(event) => {
+                        const {width} = event.nativeEvent.layout
+                        setViewWidth(width)
                     }}
-                />
-                <IntensityQueue style={{flex: 1, marginTop: 10}} height={10}/>
-            </View>
+                >
+                    <Slider style={{flex: 1}}
+                            progress={value}
+                            minimumValue={min}
+                            maximumValue={max}
+                            bubbleMaxWidth={0}
+                            renderBubble={() => (<></>)}
+                            sliderHeight={sliderHeight}
+                            thumbWidth={Math.ceil(sliderHeight * 1.1 * 3)}
+                            onValueChange={updateProgress}
 
-            <Image style={{ flex: 1, resizeMode: "center", height: '100%', width: "100%", padding: 0}}
-                   source={highImage}/>
-        </View>
-    )
+                            theme={{
+                                disableMinTrackTintColor: '#fff',
+                                maximumTrackTintColor: '#aaaaaa',
+                                minimumTrackTintColor: '#666666',
+                                cacheTrackTintColor: '#333',
+                                bubbleBackgroundColor: '#000000',
+                            }}
+                    />
+                    <IntensityQueue style={{flex: 1, marginTop: 10}} height={10}/>
+                </View>
+
+                <Image style={{flex: 1, resizeMode: "center", height: '100%', width: "100%", padding: 0}}
+                       source={highImage}/>
+            </View>
+        )
+    }
 
     return (
         <View >
@@ -103,13 +113,13 @@ export function AffectiveSlider(): React.JSX.Element {
             <Text style={{marginBottom: 5}} category='p1'>
                 Move the slider to rate your level of pleasure
             </Text>
-            <IntensitySlider value={valence} style={{marginTop: 10, marginBottom: 20}} lowImage={images.unhappy} highImage={images.happy}/>
+            <IntensitySlider value={valenceSharedVal} style={{marginTop: 10, marginBottom: 20}} lowImage={images.unhappy} highImage={images.happy}/>
             <Divider />
 
             <Text style={{marginBottom: 5, marginTop: 20}} category='p1'>
                 Move the slider to rate your level of arousal
             </Text>
-            <IntensitySlider value={arousal} style={{marginTop: 20, marginBottom: 10}}lowImage={images.sleepy} highImage={images.awake}/>
+            <IntensitySlider value={arousalSharedVal} style={{marginTop: 20, marginBottom: 10}}lowImage={images.sleepy} highImage={images.awake}/>
         </View>
     )
 }

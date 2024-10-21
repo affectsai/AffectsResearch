@@ -77,7 +77,6 @@ export const makeCardFooter = (firstQuestion: boolean, lastQuestion: boolean, ne
                 </Button>
             </View>
         </Layout>
-
     );
 }
 
