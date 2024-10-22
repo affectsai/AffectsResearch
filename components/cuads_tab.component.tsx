@@ -27,7 +27,7 @@ import {AffectiveSlider} from "./AffectiveSlider";
 import {Dimensions, ScrollView, View, ViewProps} from "react-native";
 import VideoPlayer from 'expo-video-player'
 import {AVPlaybackStatus, ResizeMode, Video} from "expo-av";
-import media from "./media";
+import media from "../features/cuads/cuads_media";
 import { setStatusBarHidden } from 'expo-status-bar'
 import * as ScreenOrientation from 'expo-screen-orientation'
 import {useNavigation, useNavigationContainerRef} from "@react-navigation/native";
