@@ -11,4 +11,10 @@
 
 export default {
     licence: require('../assets/images/license_overview.png'),
+    lowval: require('../assets/images/sam/lowval.png'),
+    sammy1: require('../assets/images/sam/sammy.jpeg'),
+    happy: require('../assets/images/sam/AS_happy.png'),
+    unhappy: require('../assets/images/sam/AS_unhappy.png'),
+    sleepy: require('../assets/images/sam/AS_sleepy.png'),
+    awake: require('../assets/images/sam/AS_wideawake.png'),
 }

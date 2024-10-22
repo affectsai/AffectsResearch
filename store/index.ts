@@ -7,8 +7,9 @@ import {bigFiveInventory1Slice} from '../features/personality/bigFiveInventory1S
 import {bigFiveInventory2Slice} from '../features/personality/bigFiveInventory2Slice'
 import authReducer from '../features/authentication/authenticationSlice';
 import identityReducer from '../features/identification/idSlice'
-
+import cuadsReducer from '../features/cuads/cuadsSlice'
 import createSecureStore from "redux-persist-expo-securestore";
+import cuadsSlice from "../features/cuads/cuadsSlice";
 
 
 const persistThemeConfig = {
@@ -42,6 +43,13 @@ const persistIDConfig = {
 }
 const persistIDReducer = persistReducer(persistIDConfig, identityReducer);
 
+const persistCUADSConfig = {
+    key: 'affectsresearch-cuads',
+    storage: AsyncStorage,
+}
+const persistCUADSReducer = persistReducer(persistCUADSConfig, cuadsReducer);
+
+
 export const store = configureStore({
   reducer: {
       theme: persistedThemeReducer,
@@ -49,6 +57,7 @@ export const store = configureStore({
       bigfive2: persisteBigFive2Reducer,
       auth: persisteAuthReducer,
       identity: persistIDReducer,
+      cuads: persistCUADSReducer,
   },
   devTools: process.env.NODE_ENV !== 'production',
   middleware: (getDefaultMiddleware) =>

@@ -14,8 +14,10 @@ import { Provider } from 'react-redux';
 import { PersistGate } from 'redux-persist/integration/react'
 import {store,persistor} from './store';
 import { MainComponent } from './components/main.component';
+import * as ScreenOrientation from 'expo-screen-orientation'
 
 function App(): React.JSX.Element {
+    ScreenOrientation.unlockAsync()
   return (
     <>
       <Provider store={store}>

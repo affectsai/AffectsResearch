@@ -16,7 +16,8 @@
     },
     "assetBundlePatterns": [
       "assets/fonts/*",
-      "assets/images/*"
+      "assets/images/*",
+      "assets/media/*"
     ],
     "ios": {
       "appStoreUrl": "https://apps.apple.com/us/app/affects-research/id6478344304",
@@ -38,6 +39,12 @@
     },
     "plugins": [
       [
+        "expo-screen-orientation",
+        {
+          "initialOrientation": "DEFAULT"
+        }
+      ],
+      [
         "expo-font",
         {
           "fonts": [
@@ -58,8 +65,7 @@
           "android": {
             "kotlinVersion": "1.9.0"
           },
-          "ios": {
-          }
+          "ios": {}
         }
       ]
     ],

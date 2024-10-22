@@ -11,6 +11,7 @@ import {selectIdentity} from "../features/identification/idSlice";
 export const USER_SERVICE_API = `${Constants.expoConfig?.extra?.affectsai.restAPI}/users`
 export const AUTH_SERVICE_API = `${Constants.expoConfig?.extra?.affectsai.restAPI}/authentication`
 export const SURVEY_SERVICE_API = `${Constants.expoConfig?.extra?.affectsai.restAPI}/surveys`
+export const CUADS_SERVICE_API = `${Constants.expoConfig?.extra?.affectsai.restAPI}/cuads`
 
 console.log(SURVEY_SERVICE_API)
 
@@ -43,9 +44,10 @@ export const getAuthToken = async ( participantId: string, validationCode: strin
         }).then((response) => {
             token = response.data.accessToken
         }).catch((reason) => {
-
+            console.error(reason)
         })
     } catch (e) {
+        console.error(JSON.stringify(e))
     }
 
     return token
@@ -69,6 +71,7 @@ export const createUser = async ( participantId: string, validationCode: string 
     ).then((response) => {
         return true;
     }).catch((reason) => {
+        console.error(JSON.stringify(reason))
         return false;
     })
 
@@ -87,7 +90,7 @@ export const getCurrentUser = async (  ) => {
     ).then((response) => {
         result = response.data.data[0];
     }).catch((reason) => {
-        console.log("Err: " + reason)
+        console.log(JSON.stringify(reason))
     })
 
     return result;

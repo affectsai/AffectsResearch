@@ -44,7 +44,7 @@ export const styles = StyleSheet.create({
     margin: 20,
     width: "95%",
     justifyContent: 'center',
-    minHeight: 250
+    minHeight: 580
   },
   scoreCard: {
     width: "95%",
@@ -108,5 +108,18 @@ export const homeScreenStyles = StyleService.create({
   },
   forgotPasswordButton: {
     paddingHorizontal: 0,
+  },
+  card: {
+    margin: 20,
+    justifyContent: 'center',
+    minHeight: 580
+  },
+  footerContainer: {
+    flexDirection: 'row',
+    justifyContent: 'flex-end',
+    alignContent: 'flex-end',
+  },
+  footerControl: {
+    marginHorizontal: 2,
   },
 });

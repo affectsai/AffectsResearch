@@ -24,8 +24,17 @@ import {
 } from 'react-native';
 import {styles} from '../../components/styles';
 import {Factor} from "./fiveFactoryModel";
+import {render} from "react-dom";
 
 export type ButtonCallback = (() => void) | undefined;
+
+const renderDescription = (description: string | React.JSX.Element) => {
+    if ( typeof(description) == "string" ) {
+        return <Text category='p1'>{description}</Text>
+    } else {
+        return description;
+    }
+}
 
 export const makeCardHeader = (title: string, description: string, currentQuestion: number, totalQuestions: number) => {
     return (props: ViewProps): React.ReactElement => (
@@ -36,9 +45,7 @@ export const makeCardHeader = (title: string, description: string, currentQuesti
         <Text style={{marginTop: 5}} category='s1'>
             {title}
             </Text>
-            <Text category='p1'>
-            {description}
-            </Text>
+            {renderDescription(description)}
             </View>
     );
 }
@@ -70,7 +77,6 @@ export const makeCardFooter = (firstQuestion: boolean, lastQuestion: boolean, ne
                 </Button>
             </View>
         </Layout>
-
     );
 }
 
