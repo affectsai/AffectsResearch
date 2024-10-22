@@ -9,6 +9,15 @@
  *    https://creativecommons.org/licenses/by-nc-sa/4.0/deed.en
  */
 
+/**
+ * IMPORTANT:
+ *
+ * These media files are not committed to the git repository because we they are only made available to the research
+ * community. Similarly, the CUADS feature is not enabled in public builds of this application.
+ *
+ * The media files are retrieved from the server at build time using the eas-build-hooks/post-install.sh script.
+ */
+
 export default {
     video_demo: require('../../assets/media/demo_film.mp4'),
     video_30: require('../../assets/media/video_30_fixation.mp4'),
