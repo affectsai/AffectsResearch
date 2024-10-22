@@ -20,21 +20,21 @@
 import React, {MutableRefObject, useEffect, useRef, useState} from 'react';
 import {Button, Card, Divider, Layout, Text, useStyleSheet} from '@ui-kitten/components';
 
-import {homeScreenStyles, styles} from './styles';
+import {homeScreenStyles, styles} from '../../components/styles';
 
-import {ButtonCallback, makeCardFooter, makeCardHeader} from "../features/personality/shared";
-import {AffectiveSlider} from "./AffectiveSlider";
+import {ButtonCallback, makeCardFooter, makeCardHeader} from "../personality/shared";
+import {AffectiveSlider} from "../../components/AffectiveSlider";
 import {Dimensions, ScrollView, View, ViewProps} from "react-native";
 import VideoPlayer from 'expo-video-player'
 import {AVPlaybackStatus, ResizeMode, Video} from "expo-av";
-import media from "../features/cuads/cuads_media";
+import media from "./cuads_media";
 import { setStatusBarHidden } from 'expo-status-bar'
 import * as ScreenOrientation from 'expo-screen-orientation'
 import {useNavigation, useNavigationContainerRef} from "@react-navigation/native";
 import {useSharedValue} from "react-native-reanimated";
 import {useDispatch} from "react-redux";
-import {AppDispatch} from "../store";
-import {initializeNewCUADSStudy, resetCurrentMediaIndex} from "../features/cuads/cuadsSlice";
+import {AppDispatch} from "../../store";
+import {initializeNewCUADSStudy, resetCurrentMediaIndex} from "./cuadsSlice";
 
 export function SAMScreen(): React.JSX.Element {
     const dispatch = useDispatch<AppDispatch>();

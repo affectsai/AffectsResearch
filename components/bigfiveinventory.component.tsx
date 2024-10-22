@@ -23,7 +23,6 @@ import {BigFiveInventory2Screen} from "../features/personality/bfi2_screen.compo
 import SliceProvider from "./SliceProvider";
 import {bigFiveInventory2Slice} from "../features/personality/bigFiveInventory2Slice";
 import {bigFiveInventory1Slice} from "../features/personality/bigFiveInventory1Slice";
-import {SAMScreen} from "./cuads_tab.component";
 
 /**
  * Displays a TopTabBar with tabs for the BFI1 and BFI2 personality surveys.

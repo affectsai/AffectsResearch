@@ -5,9 +5,9 @@
 mkdir -p ${EAS_BUILD_WORKINGDIR}/assets/media
 if [ -z "${MEDIA_RETRIEVAL_PRIVATE_KEY}" ]; then
   echo "WARNING: MEDIA_RETRIEVAL_PRIVATE_KEY not set ... retrieval of CUADS media bundle may fail."
-  scp tim_affects_ai@api.affects.ai:~/cuads_media.tgz ${EAS_BUILD_WORKINGDIR}/assets/media/cuads_media.tgz
+  scp -o StrictHostKeyChecking=no tim_affects_ai@api.affects.ai:~/cuads_media.tgz ${EAS_BUILD_WORKINGDIR}/assets/media/cuads_media.tgz
 else
-  scp -i ${MEDIA_RETRIEVAL_PRIVATE_KEY} tim_affects_ai@api.affects.ai:~/cuads_media.tgz ${EAS_BUILD_WORKINGDIR}/assets/media/cuads_media.tgz
+  scp -o StrictHostKeyChecking=no -i ${MEDIA_RETRIEVAL_PRIVATE_KEY} tim_affects_ai@api.affects.ai:~/cuads_media.tgz ${EAS_BUILD_WORKINGDIR}/assets/media/cuads_media.tgz
 fi
 
 tar -C ${EAS_BUILD_WORKINGDIR}/assets/media/ -zxvf ${EAS_BUILD_WORKINGDIR}/assets/media/cuads_media.tgz

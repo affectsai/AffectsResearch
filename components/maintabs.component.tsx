@@ -29,22 +29,24 @@ import {LegalScreen} from "./legalscreen.component";
 import {HomeIcon, SurveyIcon, LegalIcon, CuadsIcon} from "./icons";
 import {IdState, selectIdentity, validateParticipantID} from "../features/identification/idSlice";
 import {AppDispatch} from "../store";
-import {SAMScreen} from "./cuads_tab.component";
+import {SAMScreen} from "../features/cuads/cuads_tab.component";
+import Constants from "expo-constants";
 
 SplashScreen.preventAutoHideAsync().then(() => {});
 
 const {Navigator, Screen} = createBottomTabNavigator();
 
-const BottomTabBar = ({navigation, state}) => (
-    <BottomNavigation
-        selectedIndex={state.index}
-        onSelect={index => navigation.navigate(state.routeNames[index])}>
-        <BottomNavigationTab title='Home' icon={HomeIcon}/>
-        <BottomNavigationTab title='Big 5 Inventory' icon={SurveyIcon}/>
-        <BottomNavigationTab title='CUADS' icon={CuadsIcon}/>
-        <BottomNavigationTab title='Legal' icon={LegalIcon}/>
-    </BottomNavigation>
-);
+const BottomTabBar = ({navigation, state}) => {
+    return <BottomNavigation
+            selectedIndex={state.index}
+            onSelect={index => navigation.navigate(state.routeNames[index])}>
+            <BottomNavigationTab title='Home' icon={HomeIcon}/>
+            <BottomNavigationTab title='Big 5 Inventory' icon={SurveyIcon}/>
+            <BottomNavigationTab title='CUADS' icon={CuadsIcon} />
+            <BottomNavigationTab title='Legal' icon={LegalIcon}/>
+        </BottomNavigation>
+}
+
 
 const TabNavigator = () => (
     <Navigator screenOptions={{headerShown: false}} tabBar={props => <BottomTabBar {...props} />}>
